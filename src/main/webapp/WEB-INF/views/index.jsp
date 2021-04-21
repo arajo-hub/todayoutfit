@@ -22,18 +22,15 @@
         <section>
 
             <div id="outfit" class="mainbox">
-                <div> 오늘은 니트, 가디건, 후드티, 맨투맨, 청바지, 면바지, 슬랙스, 원피스를 추천합니다.
-                일교차가 크니 겉옷을 챙기시는 게 좋겠어요.
-                </div>
+                <div> 위치를 찾으면 옷차림을 추천합니다.</div>
             </div>
 
             <div id="weather" class="mainbox">
 
-                <small>현재</small><h3 id="nowTemp">19도</h3>
+                <small>현재</small><h3 id="nowTemp">-도</h3>
 
                 <div>
-                    <div>최고기온 <span id="maxTemp">20</span>도 / 최저기온 <span id="minTemp">15</span>도</div>
-                    <div>강수확률 15%</div>
+                    <div>최고기온 <span id="maxTemp">-</span>도 / 최저기온 <span id="minTemp">-</span>도</div>
                 </div>
 
             </div>
@@ -96,6 +93,7 @@
 
             getWeather(point_x, point_y);
 
+
             }, function(error) {
                 console.error(error);
             }, {
@@ -119,6 +117,16 @@
                 $("#maxTemp").html(maxTemp);
                 $("#minTemp").html(minTemp);
 
+                // 기온에 따라 옷차림 추천해주는 ajax
+                $.ajax({
+                    url:"/recommend.action",
+                    data: {temp: temp},
+                    dataType: "json",
+                    success: function(data) {
+                        $("#outfit > div").html(data.temp);
+                    }
+
+                });
             })
 
         }
