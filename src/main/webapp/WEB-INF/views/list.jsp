@@ -24,12 +24,12 @@
 
             <div id="search" class="mainbox">
 
-                <h4>'강남구'의 옷차림</h4>
+                <h4><%=request.getAttribute("location")%>의 옷차림</h4>
 
                 <form method="get">
                     <div>
                         <div class="input-group">
-                        <input type="text" class="form-control" placeholder="강남구">
+                        <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
                         <span class="input-group-btn">
                             <input type="submit" class="btn btn-default" id="searchBtn" value="검색">
                         </span>
@@ -111,9 +111,10 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">오늘 당신의 옷차림을 알려주세요</h5>
           </div>
-          <form action="board/add.action" method="POST">
+          <form action="add.action" method="POST">
           <div class="modal-body">
             <textarea id="content" name="content" class="form-control"></textarea>
+            <input type="hidden" name="nowLocation" id="nowLocation" value=""/>
           </div>
           <div class="modal-footer">
             <input type="submit" class="btn btn-general" value="저장">
@@ -141,6 +142,8 @@
                     success: function(data) {
 
                         $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
+                        $("#nowLocation").val(data.documents[0].address["region_2depth_name"]);
+
 
                     }
 

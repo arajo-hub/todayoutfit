@@ -1,13 +1,21 @@
 package com.ara.todayoutfit;
 
+import com.ara.todayoutfit.board.Post;
+import com.ara.todayoutfit.board.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class WebController {
+
+    @Autowired
+    private PostRepository repository;
 
     @RequestMapping("/")
     public String jspCheck() {
@@ -15,11 +23,30 @@ public class WebController {
         return "index";
     }
 
-    @RequestMapping(value = "/board.action", method={RequestMethod.GET})
-    public String goToBoard() {
-        System.out.println("WebController.goToBoard");
+    @RequestMapping(value = "/board/list.action", method={RequestMethod.GET})
+    public String showList(HttpServletRequest request, Model model) {
+        String location = request.getParameter("location");
+        model.addAttribute("location", location);
 
-        return "board";
+        return "list";
+    }
+
+    @RequestMapping(value = "/board/add.action", method={RequestMethod.POST})
+    public String addPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        String location = request.getParameter("nowLocation");
+        String content = request.getParameter("content");
+
+        Post post = new Post();
+
+        post.setLocation(location);
+        post.setContent(content);
+
+        repository.save(post);
+
+        redirectAttributes.addAttribute("location", location);
+
+        return "redirect:/board/list.action";
     }
 
 }

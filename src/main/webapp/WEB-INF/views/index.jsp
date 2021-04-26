@@ -15,6 +15,7 @@
             <div id="now">
                 <span class="glyphicon glyphicon-map-marker"></span>
                 <span id="currentLocation">위치찾는 중</span>
+                <button type="button" class="btn btn-secondary" id="searchByMyLocation">내 위치로 검색</button>
             </span>
 
         </header>
@@ -39,10 +40,10 @@
 
                 <h4>다른 사람들은 뭘 입었을까 궁금하다면?</h4>
 
-                <form method="get" action="/board.action">
+                <form method="GET" action="/board/list.action">
                     <div>
                         <div class="input-group">
-                        <input type="text" class="form-control" placeholder="위치를 입력해주세요.">
+                        <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
                         <span class="input-group-btn">
                             <input type="submit" class="btn btn-default" id="searchBtn" value="검색">
                         </span>
@@ -86,6 +87,9 @@
                 success: function(data) {
 
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
+                    $('#searchByMyLocation').click(function(){
+                        location.href="/board/list.action?location="+data.documents[0].address["region_2depth_name"];
+                    });
 
                 }
 
