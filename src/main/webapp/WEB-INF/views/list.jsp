@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="inc/asset.jsp" flush="false"/>
 
 <link rel="stylesheet" href="/resources/css/main.css">
@@ -46,38 +46,19 @@
 
             </div>
 
+            <c:forEach items="${posts}" var="post">
+
             <div id="outfit" class="mainbox">
-                <div> 오늘은 니트, 가디건, 후드티, 맨투맨, 청바지, 면바지, 슬랙스, 원피스를 추천합니다.
-                일교차가 크니 겉옷을 챙기시는 게 좋겠어요.
+                <div>${post.content}
                 </div>
                 <div id="eachBtn">
                     <span id="recommend" class="glyphicon glyphicon-thumbs-up"></span>
-                    <span>10</span>
+                    <span>${post.recommendcnt}</span>
                     <span id="declare" class="glyphicon glyphicon-ban-circle"></span>
                 </div>
             </div>
 
-            <div id="outfit" class="mainbox">
-                <div> 오늘은 니트, 가디건, 후드티, 맨투맨, 청바지, 면바지, 슬랙스, 원피스를 추천합니다.
-                일교차가 크니 겉옷을 챙기시는 게 좋겠어요.
-                </div>
-                <div id="eachBtn">
-                    <span id="recommend" class="glyphicon glyphicon-thumbs-up"></span>
-                    <span>10</span>
-                    <span id="declare" class="glyphicon glyphicon-ban-circle"></span>
-                </div>
-            </div>
-
-            <div id="outfit" class="mainbox">
-                <div> 오늘은 니트, 가디건, 후드티, 맨투맨, 청바지, 면바지, 슬랙스, 원피스를 추천합니다.
-                일교차가 크니 겉옷을 챙기시는 게 좋겠어요.
-                </div>
-                <div id="eachBtn">
-                    <span id="recommend" class="glyphicon glyphicon-thumbs-up"></span>
-                    <span>10</span>
-                    <span id="declare" class="glyphicon glyphicon-ban-circle"></span>
-                </div>
-            </div>
+            </c:forEach>
 
               <nav aria-label="Page navigation example" id="pagination">
                 <ul class="pagination">
