@@ -3,6 +3,7 @@ package com.ara.todayoutfit.board;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -30,6 +31,9 @@ public class Post {
     @Column
     @Enumerated(EnumType.STRING)
     private Declare declare;
+
+    @Column
+    private Date writedate;
 
     public Post() {
 

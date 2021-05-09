@@ -49,12 +49,11 @@
             <c:forEach items="${posts}" var="post">
 
             <div id="outfit" class="mainbox">
-                <div>${post.content}
+                <div>${post.content}<small>${post.writedate}</small>
                 </div>
                 <div id="eachBtn">
-                    <span id="recommend" class="glyphicon glyphicon-thumbs-up"></span>
-                    <span>${post.recommendcnt}</span>
-                    <span id="declare" class="glyphicon glyphicon-ban-circle"></span>
+                    <button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq=${post.id} value="${post.recommendcnt}">${post.recommendcnt}</button>
+                    <button id="declare" class="glyphicon glyphicon-ban-circle" data-seq=${post.id}></button>
                 </div>
             </div>
 
@@ -140,6 +139,30 @@
             } else {
                 alert('GPS를 지원하지 않습니다');
             }
+
+        // 게시물 좋아요 수 올리는 ajax
+        $("#outfit > #eachBtn > #recommend").on('click', function() {
+            var me = this;
+            $.ajax({
+                url:"/board/recommendup.action",
+                data:{seq: $(this).data("seq")},
+                success: function(data) {
+                    $(me).text(data);
+                }
+            });
+        });
+
+        // 게시물 신고하는 ajax
+        $("#outfit > #eachBtn > #declare").on('click', function() {
+            var me = this;
+            $.ajax({
+                url:"/board/declare.action",
+                data:{seq: $(this).data("seq")},
+                success: function(data) {
+                    console.log("declare success");
+                }
+            });
+        });
 
     </script>
 
