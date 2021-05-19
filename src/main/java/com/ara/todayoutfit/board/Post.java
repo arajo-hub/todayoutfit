@@ -38,6 +38,7 @@ public class Post {
     public Post() {
 
         declare = Declare.NOT_DECLARED;
+        writedate = TimeService.getNow();
 
     }
 }

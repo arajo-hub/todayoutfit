@@ -1,10 +1,10 @@
 package com.ara.todayoutfit;
 
-import com.ara.todayoutfit.board.Declare;
-import com.ara.todayoutfit.board.Post;
-import com.ara.todayoutfit.board.PostRepository;
-import com.ara.todayoutfit.board.PostSpecifications;
+import com.ara.todayoutfit.board.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Date;
 
 @Controller
 public class WebController {
@@ -35,10 +38,26 @@ public class WebController {
     @RequestMapping(value = "/board/list.action", method={RequestMethod.GET})
     public String showList(HttpServletRequest request, Model model) {
         String location = request.getParameter("location");
+        Date today = TimeService.getTodayToDate();
+        Date now = TimeService.getNow();
 
-        Specification<Post> postSpecification = Specification.where(PostSpecifications.equalToSpecificLocation(location));
+        System.out.println("today = " + today);
+        System.out.println("now = " + now);
 
-        List<Post> posts = repository.findAll(postSpecification);
+        PageRequest pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "writedate"));
+
+//        Page<Post> selected = repository.findByLocation(location, pageRequest);
+//        List<Post> posts = selected.getContent();
+
+//        Page<Post> all = repository.findAll(pageRequest);
+//        List<Post> posts = all.getContent();
+
+//        Specification<Post> postSpecification = Specification.where(PostSpecifications.equalToSpecificLocation(location))
+//                                                    .and(PostSpecifications.findAllTodayPosts(today, now));
+
+        List<Post> posts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
+                                                                .and(PostSpecifications.findNotDeclared())
+                                                                .and(PostSpecifications.findAllTodayPosts(today, now)), new Sort(Sort.Direction.DESC, "writedate"));
 
         model.addAttribute("location", location);
         model.addAttribute("posts", posts);
