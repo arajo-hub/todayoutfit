@@ -3,14 +3,20 @@ package com.ara.todayoutfit.board;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
 @Table(name="post")
+@SequenceGenerator(
+        name = "POST_SEQ_GENERATOR",
+        sequenceName = "seqpost",
+        initialValue = 1, allocationSize = 1)
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "POST_SEQ_GENERATOR")
     private long id;
 
     @Column
@@ -26,4 +32,13 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private Declare declare;
 
+    @Column
+    private Date writedate;
+
+    public Post() {
+
+        declare = Declare.NOT_DECLARED;
+        writedate = TimeService.getNow();
+
+    }
 }
