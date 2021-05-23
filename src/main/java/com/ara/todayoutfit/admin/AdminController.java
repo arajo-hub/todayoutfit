@@ -1,5 +1,6 @@
 package com.ara.todayoutfit.admin;
 
+import com.ara.todayoutfit.board.Declare;
 import com.ara.todayoutfit.board.Post;
 import com.ara.todayoutfit.board.PostRepository;
 import com.ara.todayoutfit.board.PostSpecifications;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,13 +58,14 @@ public class AdminController {
                 model.addAttribute("admin", loggedInAdmin);
 
                 return "admin/list";
+
             } else {
-                return "admin/login";
+                return "redirect:/admin/login.action";
             }
 
         } else {
             // 찾는 아이디가 없음
-            return "admin/login";
+            return "redirect:/admin/login.action";
         }
     }
 
@@ -72,6 +77,30 @@ public class AdminController {
         model.addAttribute("posts", posts);
 
         return "admin/list";
+    }
+
+    @RequestMapping(value = "/board/del.action", method = {RequestMethod.GET})
+    public String delPost(HttpServletRequest request) {
+
+        Long id = Long.parseLong(request.getParameter("id"));
+
+        Post deletedPost = postRepository.getOne(id);
+
+        postRepository.delete(deletedPost);
+
+        return "redirect:/admin/board/list.action";
+    }
+
+    @RequestMapping(value = "/board/canceldeclare.action", method = {RequestMethod.GET})
+    public void cancelDeclare(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Long id = Long.parseLong(request.getParameter("id"));
+        Post cancel = postRepository.getOne(id);
+        cancel.setDeclare(Declare.NOT_DECLARED);
+        postRepository.saveAndFlush(cancel);
+
+        PrintWriter writer = response.getWriter();
+        writer.print(cancel.getDeclare());
+        writer.close();
     }
 
 }

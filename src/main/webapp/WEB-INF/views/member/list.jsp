@@ -159,7 +159,7 @@
                 url:"/board/declare.action",
                 data:{seq: $(this).data("seq")},
                 success: function(data) {
-                    console.log("declare success");
+                    console.log("declare succeeded");
                 }
             });
         });
