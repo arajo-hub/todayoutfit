@@ -30,11 +30,7 @@ public class AdminController {
     private PostRepository postRepository;
 
     @RequestMapping(value = "/login.action", method = {RequestMethod.GET})
-    public String login(Model model) {
-
-        List<Admin> all = adminRepository.findAll();
-
-        model.addAttribute("all", all);
+    public String login() {
 
         return "admin/login";
     }
@@ -57,15 +53,15 @@ public class AdminController {
 
                 model.addAttribute("admin", loggedInAdmin);
 
-                return "admin/list";
+                return "redirect:/admin/board/list.action";
 
             } else {
-                return "redirect:/admin/login.action";
+                return "admin/login";
             }
 
         } else {
             // 찾는 아이디가 없음
-            return "redirect:/admin/login.action";
+            return "admin/login";
         }
     }
 
@@ -101,6 +97,12 @@ public class AdminController {
         PrintWriter writer = response.getWriter();
         writer.print(cancel.getDeclare());
         writer.close();
+    }
+
+    @RequestMapping(value = "/logout.action", method = {RequestMethod.GET})
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/admin/login.action";
     }
 
 }

@@ -16,6 +16,8 @@
 
         <section>
 
+            <button onclick="location.href='/admin/logout.action'" class="form form-control" id="logoutbtn">로그아웃</button>
+
             <table id="posttable" class="table">
 
                 <tr>
@@ -67,7 +69,7 @@
                 <form action="del.action" method="GET">
                     <div class="modal-body">
                         <div>정말 삭제하시겠습니까?</div>
-                        <input type="text" id="id" name="id">
+                        <input type="hidden" id="id" name="id">
                     </div>
                     <div class="modal-footer">
                         <input type="submit" class="btn btn-general" value="삭제">
