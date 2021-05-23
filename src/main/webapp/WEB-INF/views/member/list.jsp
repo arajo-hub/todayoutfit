@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="inc/asset.jsp" flush="false"/>
+<jsp:include page="/WEB-INF/views/inc/asset.jsp" flush="false"/>
 
-<link rel="stylesheet" href="/resources/css/main.css">
-<link rel="stylesheet" href="/resources/css/board.css">
+<link rel="stylesheet" href="/resources/css/member/main.css">
+<link rel="stylesheet" href="/resources/css/member/board.css">
 
 <body>
 

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<jsp:include page="inc/asset.jsp" flush="false"/>
+<jsp:include page="/WEB-INF/views/inc/asset.jsp" flush="false"/>
 
-<link rel="stylesheet" href="/resources/css/main.css">
+<link rel="stylesheet" href="/resources/css/member/main.css">
 
 <body>
 
