@@ -27,19 +27,23 @@
                     <th class="col-md-1">조정</th>
                 </tr>
 
+                <c:forEach items="${posts}" var="post">
                 <tr>
-                    <td>1</td>
-                    <td>내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.</td>
-                    <td>강남구</td>
-                    <td>10</td>
-                    <td>2021-05-23</td>
+                    <td>${post.id}</td>
+                    <td>${post.content}</td>
+                    <td>${post.location}</td>
+                    <td>${post.recommendcnt}</td>
+                    <td>${post.writedate}</td>
                     <td>
                         <div id="btns">
                             <button type="button" class="form form-control btn-general">삭제</button>
-                            <button type="button" class="form form-control btn-general">신고취소</button>
+                            <c:if test="${post.declare eq 'DECLARED'}">
+                                <button type="button" class="form form-control btn-general">신고취소</button>
+                            </c:if>
                         </div>
                     </td>
                 </tr>
+                </c:forEach>
 
             </table>
 
