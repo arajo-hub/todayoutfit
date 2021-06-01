@@ -29,25 +29,50 @@
                     <th class="col-md-1">조정</th>
                 </tr>
 
-                <c:forEach items="${posts}" var="post">
-                <tr>
-                    <td>${post.id}</td>
-                    <td>${post.content}</td>
-                    <td>${post.location}</td>
-                    <td>${post.recommendcnt}</td>
-                    <td>${post.writedate}</td>
-                    <td>
-                        <div id="btns">
-                            <button type="button" id="delbtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" data-seq="${post.id}">삭제</button>
-                            <c:if test="${post.declare eq 'DECLARED'}">
-                                <button type="button" id="cancelbtn" class="form form-control btn-general" data-seq="${post.id}">신고취소</button>
-                            </c:if>
-                        </div>
-                    </td>
-                </tr>
-                </c:forEach>
+                <c:if test="${totalPosts != null}">
+                    <c:forEach items="${totalPosts.content}" var="post">
+                    <tr>
+                        <td>${post.id}</td>
+                        <td>${post.content}</td>
+                        <td>${post.location}</td>
+                        <td>${post.recommendcnt}</td>
+                        <td>${post.writedate}</td>
+                        <td>
+                            <div id="btns">
+                                <button type="button" id="delbtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" data-seq="${post.id}">삭제</button>
+                                <c:if test="${post.declare eq 'DECLARED'}">
+                                    <button type="button" id="cancelbtn" class="form form-control btn-general" data-seq="${post.id}">신고취소</button>
+                                </c:if>
+                            </div>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                </c:if>
 
             </table>
+
+            <nav aria-label="Page navigation example" id="pagination">
+                <ul class="pagination">
+
+                    <!-- 이전버튼 -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
+
+                    <!-- 페이지그룹 -->
+                    <c:forEach begin="${startPage}" end="${endPage}" var="i">
+                        <c:choose>
+                            <c:when test="${totalPosts.pageable.pageNumber+1 == i}">
+                                <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <!-- 다음버튼 -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
+                </ul>
+              </nav>
 
         </section>
 

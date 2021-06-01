@@ -5,6 +5,7 @@ import com.ara.todayoutfit.board.Post;
 import com.ara.todayoutfit.board.PostRepository;
 import com.ara.todayoutfit.board.PostSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,11 +67,36 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/board/list.action", method = {RequestMethod.GET})
-    public String showList(Model model) {
+    public String showList(HttpServletRequest request, Model model) {
 
-        List<Post> posts = postRepository.findAll();
+        int page;
+        // 테스트용 코드
+        if (request.getParameter("page") == null) {
+            page = 1;
+        } else {
 
-        model.addAttribute("posts", posts);
+            if (Integer.parseInt(request.getParameter("page")) <= 0) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        }
+
+        // 페이지네이션해줄 PageRequest 생성
+        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writedate").descending());
+
+        Page<Post> totalPosts = postRepository.findAll(pageRequest);
+
+        int nowPage = totalPosts.getPageable().getPageNumber(); // 현재 페이지
+        int totalPages = totalPosts.getTotalPages(); // 총 페이지 수
+        int pageBlock = 10;
+        int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
+        int endPage = startPage + pageBlock - 1;
+        endPage = totalPages < endPage? totalPages:endPage;
+
+        model.addAttribute("totalPosts", totalPosts);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "admin/list";
     }
