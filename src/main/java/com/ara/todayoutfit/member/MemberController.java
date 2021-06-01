@@ -1,4 +1,4 @@
-package com.ara.todayoutfit;
+package com.ara.todayoutfit.member;
 
 import com.ara.todayoutfit.board.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Date;
 
 @Controller
-public class WebController {
+public class MemberController {
 
     @Autowired
     private PostRepository repository;
@@ -32,7 +32,7 @@ public class WebController {
     @RequestMapping("/")
     public String jspCheck() {
         System.out.println("WebController.jspCheck");
-        return "index";
+        return "member/index";
     }
 
     @RequestMapping(value = "/board/list.action", method={RequestMethod.GET})
@@ -62,7 +62,7 @@ public class WebController {
         model.addAttribute("location", location);
         model.addAttribute("posts", posts);
 
-        return "list";
+        return "member/list";
     }
 
     @RequestMapping(value = "/board/add.action", method={RequestMethod.POST})
