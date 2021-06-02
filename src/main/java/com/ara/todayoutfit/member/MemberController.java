@@ -41,26 +41,36 @@ public class MemberController {
         Date today = TimeService.getTodayToDate();
         Date now = TimeService.getNow();
 
-        System.out.println("today = " + today);
-        System.out.println("now = " + now);
+        int page;
+        // 테스트용 코드
+        if (request.getParameter("page") == null) {
+            page = 1;
+        } else {
 
-        PageRequest pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "writedate"));
+            if (Integer.parseInt(request.getParameter("page")) <= 0) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        }
 
-//        Page<Post> selected = repository.findByLocation(location, pageRequest);
-//        List<Post> posts = selected.getContent();
+        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writedate").descending());
 
-//        Page<Post> all = repository.findAll(pageRequest);
-//        List<Post> posts = all.getContent();
-
-//        Specification<Post> postSpecification = Specification.where(PostSpecifications.equalToSpecificLocation(location))
-//                                                    .and(PostSpecifications.findAllTodayPosts(today, now));
-
-        List<Post> posts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
+        Page<Post> totalPosts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
                                                                 .and(PostSpecifications.findNotDeclared())
-                                                                .and(PostSpecifications.findAllTodayPosts(today, now)), new Sort(Sort.Direction.DESC, "writedate"));
+                                                                .and(PostSpecifications.findAllTodayPosts(today, now)), pageRequest);
+
+        int nowPage = totalPosts.getPageable().getPageNumber(); // 현재 페이지
+        int totalPages = totalPosts.getTotalPages(); // 총 페이지 수
+        int pageBlock = 10;
+        int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
+        int endPage = startPage + pageBlock - 1;
+        endPage = totalPages < endPage? totalPages:endPage;
 
         model.addAttribute("location", location);
-        model.addAttribute("posts", posts);
+        model.addAttribute("totalPosts", totalPosts);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "member/list";
     }
