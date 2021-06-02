@@ -14,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
 //    Page<Post> findByLocation(String location, Pageable pageable);
     Page<Post> findByLocation(String location, String today, Pageable pageable);
 
+    Page<Post> findAll(Pageable pageable);
+
 }

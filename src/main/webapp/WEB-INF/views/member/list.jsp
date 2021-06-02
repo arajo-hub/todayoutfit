@@ -46,28 +46,42 @@
 
             </div>
 
-            <c:forEach items="${posts}" var="post">
+            <c:if test="${totalPosts != null}">
+                <c:forEach items="${totalPosts.content}" var="post">
+                    <div id="outfit" class="mainbox">
+                        <div>${post.content}<small>${post.writedate}</small>
+                        </div>
+                        <div id="eachBtn">
+                            <button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq=${post.id} value="${post.recommendcnt}">${post.recommendcnt}</button>
+                            <button id="declare" class="glyphicon glyphicon-ban-circle" data-seq=${post.id}></button>
+                        </div>
+                    </div>
 
-            <div id="outfit" class="mainbox">
-                <div>${post.content}<small>${post.writedate}</small>
-                </div>
-                <div id="eachBtn">
-                    <button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq=${post.id} value="${post.recommendcnt}">${post.recommendcnt}</button>
-                    <button id="declare" class="glyphicon glyphicon-ban-circle" data-seq=${post.id}></button>
-                </div>
-            </div>
+                </c:forEach>
+            </c:if>
 
-            </c:forEach>
-
-              <nav aria-label="Page navigation example" id="pagination">
+            <nav aria-label="Page navigation example" id="pagination">
                 <ul class="pagination">
-                  <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+
+                    <!-- 이전버튼 -->
+                    <!-- <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${totalPosts.number-1}">&laquo;</a></li> -->
+
+                    <!-- 페이지그룹 -->
+                    <c:forEach begin="${startPage}" end="${endPage}" var="i">
+                        <c:choose>
+                            <c:when test="${totalPosts.pageable.pageNumber+1 == i}">
+                                <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${i}">${i}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${i}">${i}</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <!-- 다음버튼 -->
+                    <!-- <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${totalPosts.number+2}">&raquo;</a></li> -->
                 </ul>
-              </nav>
+            </nav>
 
         </section>
 
