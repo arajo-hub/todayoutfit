@@ -31,13 +31,13 @@ public class AdminController {
     private PostRepository postRepository;
 
     @RequestMapping(value = "/login.action", method = {RequestMethod.GET})
-    public String login() {
+    public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         return "admin/login";
     }
 
     @RequestMapping(value = "/login.action", method = {RequestMethod.POST})
-    public String login(HttpServletRequest request, HttpSession session, Model model) {
+    public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
 
         String name = request.getParameter("name");
         String pw = request.getParameter("pw");
@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/board/list.action", method = {RequestMethod.GET})
-    public String showList(HttpServletRequest request, Model model) {
+    public String adminShowList(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
 
         int page;
         // 테스트용 코드
@@ -102,7 +102,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/board/del.action", method = {RequestMethod.GET})
-    public String delPost(HttpServletRequest request) {
+    public String adminDelPost(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         Long id = Long.parseLong(request.getParameter("id"));
 
@@ -114,7 +114,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/board/canceldeclare.action", method = {RequestMethod.GET})
-    public void cancelDeclare(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void adminCancelDeclare(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Long id = Long.parseLong(request.getParameter("id"));
         Post cancel = postRepository.getOne(id);
         cancel.setDeclare(Declare.NOT_DECLARED);
@@ -126,7 +126,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/logout.action", method = {RequestMethod.GET})
-    public String logout(HttpSession session) {
+    public String adminLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login.action";
     }
