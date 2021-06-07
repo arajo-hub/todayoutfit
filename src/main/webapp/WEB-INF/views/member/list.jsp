@@ -45,8 +45,13 @@
                 <button class="btn btn-general" onclick="location.href='/'">메인으로</button>
 
             </div>
+            <c:if test="${totalPosts.totalPages == 0}">
+                <div id="outfit" class="mainbox">
+                    <div>게시물이 없습니다</div>
+                </div>
+            </c:if>
 
-            <c:if test="${totalPosts != null}">
+            <c:if test="${totalPosts.totalPages != 0}">
                 <c:forEach items="${totalPosts.content}" var="post">
                     <div id="outfit" class="mainbox">
                         <div>${post.content}<small>${post.writedate}</small>

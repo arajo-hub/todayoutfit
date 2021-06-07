@@ -60,6 +60,10 @@ public class MemberController {
                                                                 .and(PostSpecifications.findNotDeclared())
                                                                 .and(PostSpecifications.findAllTodayPosts(today, now)), pageRequest);
 
+        for (Post totalPost : totalPosts) {
+            System.out.println("totalPost.getContent() = " + totalPost.getContent());
+        }
+
         int nowPage = totalPosts.getPageable().getPageNumber(); // 현재 페이지
         int totalPages = totalPosts.getTotalPages(); // 총 페이지 수
         int pageBlock = 10;
