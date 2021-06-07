@@ -29,7 +29,13 @@
                     <th class="col-md-1">조정</th>
                 </tr>
 
-                <c:if test="${totalPosts != null}">
+                <c:if test="${totalPosts.totalPages == 0}">
+                    <tr>
+                        <td colspan="6">게시물이 없습니다</td>
+                    </tr>
+                </c:if>
+
+                <c:if test="${totalPosts.totalPages != 0}">
                     <c:forEach items="${totalPosts.content}" var="post">
                     <tr>
                         <td>${post.id}</td>
@@ -51,29 +57,30 @@
 
             </table>
 
-            <nav aria-label="Page navigation example" id="pagination">
-                <ul class="pagination">
+            <c:if test="${totalPosts != null}">
+                <nav aria-label="Page navigation example" id="pagination">
+                    <ul class="pagination">
 
-                    <!-- 이전버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
+                        <!-- 이전버튼 -->
+                        <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
 
-                    <!-- 페이지그룹 -->
-                    <c:forEach begin="${startPage}" end="${endPage}" var="i">
-                        <c:choose>
-                            <c:when test="${totalPosts.pageable.pageNumber+1 == i}">
-                                <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+                        <!-- 페이지그룹 -->
+                        <c:forEach begin="${startPage}" end="${endPage}" var="i">
+                            <c:choose>
+                                <c:when test="${totalPosts.pageable.pageNumber+1 == i}">
+                                    <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${i}">${i}</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
 
-                    <!-- 다음버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
-                </ul>
-              </nav>
-
+                        <!-- 다음버튼 -->
+                        <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
+                    </ul>
+                </nav>
+            </c:if>
         </section>
 
         <footer>

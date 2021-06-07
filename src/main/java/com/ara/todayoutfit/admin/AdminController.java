@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/login.action", method = {RequestMethod.POST})
-    public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
+    public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model){
 
         String name = request.getParameter("name");
         String pw = request.getParameter("pw");
@@ -50,9 +51,7 @@ public class AdminController {
 
             if (pw.equals(loggedInAdmin.getPw())) {
 
-                session.setAttribute("id", loggedInAdmin.getId());
-
-                model.addAttribute("admin", loggedInAdmin);
+                session.setAttribute("name", loggedInAdmin.getName());
 
                 return "redirect:/admin/board/list.action";
 
@@ -93,6 +92,8 @@ public class AdminController {
         int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
         int endPage = startPage + pageBlock - 1;
         endPage = totalPages < endPage? totalPages:endPage;
+
+        System.out.println(totalPosts);
 
         model.addAttribute("totalPosts", totalPosts);
         model.addAttribute("startPage", startPage);
