@@ -54,8 +54,8 @@
             <c:if test="${totalPosts.totalPages != 0}">
                 <c:forEach items="${totalPosts.content}" var="post">
                     <div id="outfit" class="mainbox">
-                        <div>${post.content}<small>${post.writedate}</small>
-                        </div>
+                        <div>${post.content}</div>
+                        <small>${post.writedate}</small>
                         <div id="eachBtn">
                             <button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq=${post.id} value="${post.recommendcnt}">${post.recommendcnt}</button>
                             <button id="declare" class="glyphicon glyphicon-ban-circle" data-seq=${post.id}></button>
