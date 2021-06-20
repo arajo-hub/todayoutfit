@@ -53,7 +53,8 @@ dependencies {
 
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile files('lib/ojdbc6.jar')
+//    compile files('lib/ojdbc6.jar')
+    compile 'mysql:mysql-connector-java'
 
 }
 

@@ -118,11 +118,11 @@ public class AdminController {
     public void adminCancelDeclare(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Long id = Long.parseLong(request.getParameter("id"));
         Post cancel = postRepository.getOne(id);
-        cancel.setDeclare(Declare.NOT_DECLARED);
+        cancel.setDeclared(Declare.NOT_DECLARED);
         postRepository.saveAndFlush(cancel);
 
         PrintWriter writer = response.getWriter();
-        writer.print(cancel.getDeclare());
+        writer.print(cancel.getDeclared());
         writer.close();
     }
 
