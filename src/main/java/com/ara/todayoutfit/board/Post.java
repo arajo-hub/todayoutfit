@@ -8,15 +8,10 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name="post")
-@SequenceGenerator(
-        name = "POST_SEQ_GENERATOR",
-        sequenceName = "seqpost",
-        initialValue = 1, allocationSize = 1)
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                    generator = "POST_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -30,14 +25,14 @@ public class Post {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Declare declare;
+    private Declare declared;
 
     @Column
     private Date writedate;
 
     public Post() {
 
-        declare = Declare.NOT_DECLARED;
+        declared = Declare.NOT_DECLARED;
         writedate = TimeService.getNow();
 
     }
