@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<jsp:include page="/WEB-INF/views/inc/asset.jsp" flush="false"/>
-
-<link rel="stylesheet" href="/resources/css/member/main.css">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="/inc/asset.html::asset" />
+<link rel="stylesheet" th:href="@{/css/member/main.css}">
 
 <body>
 
@@ -16,7 +15,7 @@
                 <span class="glyphicon glyphicon-map-marker"></span>
                 <span id="currentLocation">위치찾는 중</span>
                 <button type="button" class="btn btn-secondary" id="searchByMyLocation">내 위치로 검색</button>
-            </span>
+            </div>
 
         </header>
 
@@ -40,7 +39,7 @@
 
                 <h4>다른 사람들은 뭘 입었을까 궁금하다면?</h4>
 
-                <form method="GET" action="/board/list.action">
+                <form method="GET" name="searchform" action="/board/list.action">
                     <div>
                         <div class="input-group">
                         <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
@@ -59,7 +58,7 @@
 
             <div>
                 <span class="glyphicon glyphicon-envelope"></span>
-                <a href="mailto:joara9566@naver.com">관리자에게 메일쓰기</a>
+                <a th:href="@{mailto:joara9566@naver.com}">관리자에게 메일쓰기</a>
             </div>
 
             <copyright>Copyright 2021.조아라. All rights reserved.</copyright>
@@ -134,7 +133,6 @@
             })
 
         }
-
 
     </script>
 

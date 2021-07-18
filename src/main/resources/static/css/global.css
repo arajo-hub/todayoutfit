@@ -1,0 +1,69 @@
+/* 전체 적용 CSS */
+
+/* 1. 제목(예스체) */
+@font-face {
+    font-family: 'YES24';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YES24.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 2. 일반(나눔스퀘어라운드) */
+
+@font-face {
+    font-family: 'NanumSquareRound';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 3. 글꼴 + 태그 선택자 */
+body, p, div, span, ul, ol, li, dl, dt, dd, table, th, td, a, blockquote, textarea, fieldset, small, strong, b, i, em {
+    font-family: 'NanumSquareRound';
+    color:#555;
+    line-height:2em;
+    font-size:17px;
+}
+
+/* 4. 헤딩 설정 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'YES24';
+    color:#9C89B8;
+}
+
+html, body {
+    height: 100%;
+}
+
+.container {
+    width:1000px;
+    height:100%;
+    background-color:#F0E6EF;
+    overflow:scroll;
+}
+
+header {
+    margin:50px 0;
+    text-align:center;
+}
+
+section {
+    min-height:75%;
+    position:relative;
+}
+
+footer {
+    font-size:0.7em;
+    text-align:center;
+}
+
+#btns {
+    width:100%;
+    text-align:center;
+    margin:20px 0;
+}
+
+.btn-general {
+    background-color: #9C89B8;
+    color:white;
+}

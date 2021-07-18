@@ -1,9 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/views/inc/asset.jsp" flush="false"/>
-
-<link rel="stylesheet" href="/resources/css/member/main.css">
-<link rel="stylesheet" href="/resources/css/member/board.css">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="/inc/asset.html::asset" />
+<link rel="stylesheet" th:href="@{/css/member/main.css}">
+<link rel="stylesheet" th:href="@{/css/member/board.css}">
 
 <body>
 
@@ -16,7 +15,7 @@
             <div id="now">
                 <span class="glyphicon glyphicon-map-marker"></span>
                 <span id="currentLocation">위치찾는 중</span>
-            </span>
+            </div>
 
         </header>
 
@@ -24,7 +23,7 @@
 
             <div id="search" class="mainbox">
 
-                <h4><%=request.getAttribute("location")%>의 옷차림</h4>
+                <h4 th:text="|${location}의 옷차림|" />
 
                 <form method="get">
                     <div>
@@ -45,56 +44,49 @@
                 <button class="btn btn-general" onclick="location.href='/'">메인으로</button>
 
             </div>
-            <c:if test="${totalPosts.totalPages == 0}">
+            <div th:if="${totalPosts.totalPages == 0}">
                 <div id="outfit" class="mainbox">
                     <div>게시물이 없습니다</div>
                 </div>
-            </c:if>
+            </div>
 
-            <c:if test="${totalPosts.totalPages != 0}">
-                <c:forEach items="${totalPosts.content}" var="post">
-                    <div id="outfit" class="mainbox">
-                        <div>${post.content}</div>
-                        <small>${post.writedate}</small>
-                        <div id="eachBtn">
-                            <button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq=${post.id} value="${post.recommendcnt}">${post.recommendcnt}</button>
-                            <button id="declare" class="glyphicon glyphicon-ban-circle" data-seq=${post.id}></button>
-                        </div>
+            <div th:unless="${totalPosts.totalPages == 0}">
+                <div id="outfit" class="mainbox" th:each="post : ${totalPosts.content}">
+                    <div th:text="${post.content}"></div>
+                    <small th:text="${post.writedate}"></small>
+                    <div id="eachBtn">
+                        <button id="recommend" class="glyphicon glyphicon-thumbs-up" th:data-seq=${post.id} value="${post.recommendcnt}" th:text="${post.recommendcnt}"></button>
+                        <button id="declare" class="glyphicon glyphicon-ban-circle" th:data-seq=${post.id}></button>
                     </div>
+                </div>
 
-                </c:forEach>
-            </c:if>
+                <th:if test="${totalPosts != null}">
+                    <nav aria-label="Page navigation example" id="pagination">
+                        <ul class="pagination">
 
-            <nav aria-label="Page navigation example" id="pagination">
-                <ul class="pagination">
+                            <!-- 이전버튼 -->
+                            <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
 
-                    <!-- 이전버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${totalPosts.number-1}">&laquo;</a></li> -->
+                            <!-- 페이지그룹 -->
+                            <th:block th:with="start=${startPage}, end=${endPage}">
+                                <li class="page-item" th:with="start = ${startPage}, end = ${endPage}" th:each="pageButton : ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="@{/board/list.action?location={location}&page={page} (location = ${location}, page = ${pageButton})}" th:text=${pageButton}></a>
+                                </li>
+                            </th:block>
 
-                    <!-- 페이지그룹 -->
-                    <c:forEach begin="${startPage}" end="${endPage}" var="i">
-                        <c:choose>
-                            <c:when test="${totalPosts.pageable.pageNumber+1 == i}">
-                                <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${i}">${i}</a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${i}">${i}</a></li>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-
-                    <!-- 다음버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/board/list.action?location=${location}&page=${totalPosts.number+2}">&raquo;</a></li> -->
-                </ul>
-            </nav>
-
+                            <!-- 다음버튼 -->
+                            <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
+                        </ul>
+                    </nav>
+                </th:if>
+            </div>
         </section>
 
         <footer>
 
             <div>
                 <span class="glyphicon glyphicon-envelope"></span>
-                <a href="mailto:joara9566@naver.com">관리자에게 메일쓰기</a>
+                <a th:href="@{mailto:joara9566@naver.com}">관리자에게 메일쓰기</a>
             </div>
 
             <copyright>Copyright 2021.조아라. All rights reserved.</copyright>

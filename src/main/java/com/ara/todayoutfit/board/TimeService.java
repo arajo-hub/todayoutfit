@@ -1,10 +1,13 @@
 package com.ara.todayoutfit.board;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
+@Slf4j
 public class TimeService {
 
     public static Date getTodayToDate() {

@@ -1,0 +1,34 @@
+/* 메인화면 CSS */
+
+#now {
+    width:60%;
+    margin:0 auto;
+}
+
+.mainbox {
+    width: 80%;
+    padding:20px;
+    border-radius: 25px;
+    margin-bottom:20px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#outfit {
+    position:relative;
+    background-color:#B8BEDD;
+}
+
+#weather {
+    border:1px solid #F0E6EF;
+    background-color:white;
+}
+
+#search {
+    text-align:center;
+}
+
+#searchBtn:hover {
+    background-color:#9C89B8;
+    color:white;
+}
