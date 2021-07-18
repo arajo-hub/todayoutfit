@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/inc/asset.html::asset" />
+<th:block th:include="/inc/asset.html::asset" />
 <link rel="stylesheet" th:href="@{/css/member/main.css}">
 
 <body>
@@ -39,7 +39,7 @@
 
                 <h4>다른 사람들은 뭘 입었을까 궁금하다면?</h4>
 
-                <form method="GET" name="searchform" action="/board/list.action" onsubmit="return locationNullCheck();">
+                <form method="GET" name="searchform" action="/board/list.action">
                     <div>
                         <div class="input-group">
                         <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
@@ -133,15 +133,6 @@
             })
 
         }
-
-        function locationNullCheck() {
-            if ($("#location").val() == undefined) {
-                alert("검색할 지역을 입력해주세요!");
-                return false;
-            }
-            return true;
-        };
-
 
     </script>
 
