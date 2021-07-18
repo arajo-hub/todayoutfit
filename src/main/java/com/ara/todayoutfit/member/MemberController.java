@@ -1,6 +1,7 @@
 package com.ara.todayoutfit.member;
 
 import com.ara.todayoutfit.board.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Date;
 
+@Slf4j
 @Controller
 public class MemberController {
 
@@ -32,7 +34,6 @@ public class MemberController {
 
     @RequestMapping("/")
     public String jspCheck() {
-        System.out.println("WebController.jspCheck");
         return "member/index";
     }
 
@@ -56,7 +57,6 @@ public class MemberController {
         }
 
         PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writedate").descending());
-
         Page<Post> totalPosts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
                                                                 .and(PostSpecifications.findNotDeclared())
                                                                 .and(PostSpecifications.findAllTodayPosts(today, now)), pageRequest);
@@ -83,11 +83,16 @@ public class MemberController {
         String content = request.getParameter("content");
 
         Post post = new Post();
-
         post.setLocation(location);
         post.setContent(content);
 
         repository.save(post);
+
+        List<Post> all = repository.findAll();
+
+        for (Post post1 : all) {
+            log.info("" + post1.getContent() + "" + post1.getWritedate());
+        }
 
         redirectAttributes.addAttribute("location", location);
 
@@ -96,8 +101,6 @@ public class MemberController {
 
     @RequestMapping(value = "/board/recommendup.action", method = RequestMethod.GET)
     public void recommendUp(HttpServletResponse resp, String seq) throws IOException {
-        System.out.println("WebController.recommendUp");
-
         Post post = repository.getOne(Long.parseLong(seq));
         post.setRecommendcnt(post.getRecommendcnt()+1);
         repository.saveAndFlush(post);

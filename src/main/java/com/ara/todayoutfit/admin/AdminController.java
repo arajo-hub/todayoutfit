@@ -4,6 +4,7 @@ import com.ara.todayoutfit.board.Declare;
 import com.ara.todayoutfit.board.Post;
 import com.ara.todayoutfit.board.PostRepository;
 import com.ara.todayoutfit.board.PostSpecifications;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -92,8 +94,6 @@ public class AdminController {
         int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
         int endPage = startPage + pageBlock - 1;
         endPage = totalPages < endPage? totalPages:endPage;
-
-        System.out.println(totalPosts);
 
         model.addAttribute("totalPosts", totalPosts);
         model.addAttribute("startPage", startPage);
