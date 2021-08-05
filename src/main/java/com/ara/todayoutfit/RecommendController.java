@@ -1,6 +1,7 @@
 package com.ara.todayoutfit;
 
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class RecommendController {
 
@@ -27,6 +29,9 @@ public class RecommendController {
         recommend.put("temp", comment);
 
         try {
+
+            log.info("[{}] Recommend = {}",
+                    Thread.currentThread().getStackTrace()[1].getMethodName(), comment);
 
             response.setCharacterEncoding("UTF-8");
             response.getWriter().print(gson.toJson(recommend));

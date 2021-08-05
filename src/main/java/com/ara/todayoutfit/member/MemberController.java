@@ -73,6 +73,10 @@ public class MemberController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
+        log.info("[{}] location = {}, totalPosts = {}, startPage = {}, endPage = {}",
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                location, totalPages, startPage, endPage);
+
         return "member/list";
     }
 
@@ -90,11 +94,11 @@ public class MemberController {
 
         List<Post> all = repository.findAll();
 
-        for (Post post1 : all) {
-            log.info("" + post1.getContent() + "" + post1.getWritedate());
-        }
-
         redirectAttributes.addAttribute("location", location);
+
+        log.info("[{}] location = {}, content = {}",
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                location, content);
 
         return "redirect:/board/list.action";
     }
@@ -109,6 +113,9 @@ public class MemberController {
         writer.print(post.getRecommendcnt());
         writer.close();
 
+        log.info("[{}] Recommend Up completed",
+                Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 
     @RequestMapping(value = "/board/declare.action", method = RequestMethod.GET)
@@ -117,6 +124,9 @@ public class MemberController {
         Post post = repository.getOne(Long.parseLong(seq));
         post.setDeclared(Declare.DECLARED);
         repository.saveAndFlush(post);
+
+        log.info("[{}] Declare completed",
+                Thread.currentThread().getStackTrace()[1].getMethodName());
 
     }
 
