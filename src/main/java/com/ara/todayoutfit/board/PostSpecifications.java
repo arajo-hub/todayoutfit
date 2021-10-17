@@ -8,7 +8,7 @@ public class PostSpecifications {
     public static Specification<Post> equalToSpecificLocation(String location) {
 
         return (Specification<Post>) ((root, query, builder) ->
-            builder.equal(root.get("location"), location)
+            builder.like(root.get("location"), "%" + location + "%")
         );
 
     }
