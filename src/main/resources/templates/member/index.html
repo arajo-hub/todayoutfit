@@ -84,10 +84,9 @@
                 type:'GET',
                 headers: {'Authorization' : 'KakaoAK efc1f6089ac80c3fdbe8f867eadb5c47'},
                 success: function(data) {
-
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
                     $('#searchByMyLocation').click(function(){
-                        location.href="/board/list.action?location="+data.documents[0].address["region_2depth_name"];
+                        location.href="/board/list.action?location="+data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"];
                     });
 
                 }

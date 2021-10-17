@@ -133,7 +133,7 @@
                     success: function(data) {
 
                         $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
-                        $("#nowLocation").val(data.documents[0].address["region_2depth_name"]);
+                        $("#nowLocation").val(data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"]);
 
 
                     }
