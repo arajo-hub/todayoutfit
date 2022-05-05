@@ -35,7 +35,8 @@ public class AdminController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET})
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
+        log.info("[{}]",
+                Thread.currentThread().getStackTrace()[1].getMethodName());
         return "admin/login";
     }
 
@@ -55,13 +56,25 @@ public class AdminController {
 
                 session.setAttribute("name", loggedInAdmin.getName());
 
+                log.info("[{}] Logged in = {}",
+                        Thread.currentThread().getStackTrace()[1].getMethodName(),
+                        loggedInAdmin.getId(), loggedInAdmin.getName(), loggedInAdmin.getPw());
+
                 return "redirect:/admin/board/list";
 
             } else {
+
+                log.info("[{}] Password not equal",
+                        Thread.currentThread().getStackTrace()[1].getMethodName());
+
                 return "admin/login";
             }
 
         } else {
+
+            log.info("[{}] Id not found",
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+
             // 찾는 아이디가 없음
             return "admin/login";
         }
@@ -99,6 +112,10 @@ public class AdminController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
+        log.info("[{}] totalPosts = {}, startPage = {}, endPage = {}",
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                totalPages, startPage, endPage);
+
         return "admin/list";
     }
 
@@ -110,6 +127,9 @@ public class AdminController {
         Post deletedPost = postRepository.getOne(postSeq);
 
         postRepository.delete(deletedPost);
+
+        log.info("[{}] Delete completed",
+                Thread.currentThread().getStackTrace()[1].getMethodName());
 
         return "redirect:/admin/board/list";
     }
@@ -124,11 +144,15 @@ public class AdminController {
         PrintWriter writer = response.getWriter();
         writer.print(cancel.getDeclared_yn());
         writer.close();
+
+        log.info("[{}] Declare canceled",
+                Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @RequestMapping(value = "/logout", method = {RequestMethod.GET})
     public String adminLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         session.invalidate();
+        log.info("[{}] Logout");
         return "redirect:/admin/login";
     }
 
