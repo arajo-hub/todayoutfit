@@ -33,13 +33,13 @@ public class AdminController {
     @Autowired
     private PostRepository postRepository;
 
-    @RequestMapping(value = "/login.action", method = {RequestMethod.GET})
+    @RequestMapping(value = "/login", method = {RequestMethod.GET})
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         return "admin/login";
     }
 
-    @RequestMapping(value = "/login.action", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login", method = {RequestMethod.POST})
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model){
 
         String name = request.getParameter("name");
@@ -55,7 +55,7 @@ public class AdminController {
 
                 session.setAttribute("name", loggedInAdmin.getName());
 
-                return "redirect:/admin/board/list.action";
+                return "redirect:/admin/board/list";
 
             } else {
                 return "admin/login";
@@ -67,7 +67,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/board/list.action", method = {RequestMethod.GET})
+    @RequestMapping(value = "/board/list", method = {RequestMethod.GET})
     public String adminShowList(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
 
         int page;
@@ -84,7 +84,7 @@ public class AdminController {
         }
 
         // 페이지네이션해줄 PageRequest 생성
-        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writedate").descending());
+        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "write_date").descending());
 
         Page<Post> totalPosts = postRepository.findAll(pageRequest);
 
@@ -102,34 +102,34 @@ public class AdminController {
         return "admin/list";
     }
 
-    @RequestMapping(value = "/board/del.action", method = {RequestMethod.GET})
+    @RequestMapping(value = "/board/del", method = {RequestMethod.GET})
     public String adminDelPost(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
-        Long id = Long.parseLong(request.getParameter("id"));
+        int postSeq = Integer.parseInt(request.getParameter("id"));
 
-        Post deletedPost = postRepository.getOne(id);
+        Post deletedPost = postRepository.getOne(postSeq);
 
         postRepository.delete(deletedPost);
 
-        return "redirect:/admin/board/list.action";
+        return "redirect:/admin/board/list";
     }
 
-    @RequestMapping(value = "/board/canceldeclare.action", method = {RequestMethod.GET})
+    @RequestMapping(value = "/board/cancelDeclare", method = {RequestMethod.GET})
     public void adminCancelDeclare(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        Long id = Long.parseLong(request.getParameter("id"));
-        Post cancel = postRepository.getOne(id);
-        cancel.setDeclared(Declare.NOT_DECLARED);
+        int postSeq = Integer.parseInt(request.getParameter("id"));
+        Post cancel = postRepository.getOne(postSeq);
+        cancel.setDeclared_yn(Declare.NOT_DECLARED.getCode());
         postRepository.saveAndFlush(cancel);
 
         PrintWriter writer = response.getWriter();
-        writer.print(cancel.getDeclared());
+        writer.print(cancel.getDeclared_yn());
         writer.close();
     }
 
-    @RequestMapping(value = "/logout.action", method = {RequestMethod.GET})
+    @RequestMapping(value = "/logout", method = {RequestMethod.GET})
     public String adminLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         session.invalidate();
-        return "redirect:/admin/login.action";
+        return "redirect:/admin/login";
     }
 
 }

@@ -11,8 +11,9 @@ import java.util.Date;
 public class Post {
 
     @Id
+    @Column(name="post_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int postSeq;
 
     @Column
     private String content;
@@ -20,20 +21,19 @@ public class Post {
     @Column
     private String location;
 
-    @Column
-    private long recommendcnt;
+    @Column(name="recommend_cnt")
+    private long recommendCnt;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private Declare declared;
+    private String declared_yn;
 
-    @Column
-    private Date writedate;
+    @Column(name="write_date")
+    private Date writeDate;
 
     public Post() {
 
-        declared = Declare.NOT_DECLARED;
-        writedate = TimeService.getNow();
+        declared_yn = Declare.NOT_DECLARED.getCode();
+        writeDate = TimeService.getNow();
 
     }
 }

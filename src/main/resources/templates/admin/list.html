@@ -15,7 +15,7 @@
 
     <section>
 
-        <button onclick="location.href='/admin/logout.action'" class="form form-control" id="logoutbtn">로그아웃</button>
+        <button onclick="location.href='/admin/logout'" class="form form-control" id="logoutbtn">로그아웃</button>
 
         <table id="posttable" class="table">
 
@@ -36,11 +36,11 @@
 
             <div th:unless="${totalPosts.totalPages == 0}">
                 <tr th:each="post : ${totalPosts.content}">
-                    <td th:text="${post.id}"></td>
+                    <td th:text="${post.i}"></td>
                     <td th:text="${post.content}"></td>
                     <td th:text="${post.location}"></td>
-                    <td th:text="${post.recommendcnt}"></td>
-                    <td th:text="${post.writedate}"></td>
+                    <td th:text="${post.recommendCnt}"></td>
+                    <td th:text="${post.writeDate}"></td>
                     <td>
                         <div id="btns">
                             <button type="button" id="delbtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" th:data-seq="${post.id}">삭제</button>
@@ -59,17 +59,17 @@
                 <ul class="pagination">
 
                     <!-- 이전버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number-1}">&laquo;</a></li> -->
 
                     <!-- 페이지그룹 -->
                     <th:block th:with="start=${startPage}, end=${endPage}">
                         <li class="page-item" th:with="start = ${startPage}, end = ${endPage}" th:each="pageButton : ${#numbers.sequence(start, end)}">
-                            <a class="page-link" th:href="@{/admin/board/list.action?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
+                            <a class="page-link" th:href="@{/admin/board/list?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
                         </li>
                     </th:block>
 
                     <!-- 다음버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number+2}">&raquo;</a></li> -->
                 </ul>
             </nav>
         </th:if>
@@ -90,7 +90,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">삭제 확인</h5>
             </div>
-            <form action="del.action" method="GET">
+            <form action="del" method="GET">
                 <div class="modal-body">
                     <div>정말 삭제하시겠습니까?</div>
                     <input type="hidden" id="id" name="id">
@@ -116,7 +116,7 @@
             var me = this;
             console.log($(this).data("seq"));
             $.ajax({
-                url:"/admin/board/canceldeclare.action",
+                url:"/admin/board/canceldeclare",
                 data:{id: $(this).data("seq")},
                 success: function(data) {
                     if (data == 'NOT_DECLARED') {

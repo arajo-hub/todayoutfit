@@ -16,7 +16,7 @@ public class PostSpecifications {
     public static Specification<Post> findAllTodayPosts(Date today, Date now) {
 
         return (Specification<Post>) ((root, query, builder) ->
-                builder.between(root.get("writedate"), today, now)
+                builder.between(root.get("writeDate"), today, now)
         );
 
     }
@@ -24,7 +24,7 @@ public class PostSpecifications {
     public static Specification<Post> findNotDeclared() {
 
         return (Specification<Post>) ((root, query, builder) ->
-                builder.equal(root.get("declared"), Declare.NOT_DECLARED)
+                builder.equal(root.get("declared_yn"), Declare.NOT_DECLARED.getCode())
         );
 
     }

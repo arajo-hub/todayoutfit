@@ -37,7 +37,7 @@ public class MemberController {
         return "member/index";
     }
 
-    @RequestMapping(value = "/board/list.action", method={RequestMethod.GET})
+    @RequestMapping(value = "/board/list", method={RequestMethod.GET})
     public String showList(HttpServletRequest request, Model model) {
         String location = request.getParameter("location");
         Date today = TimeService.getTodayToDate();
@@ -56,7 +56,7 @@ public class MemberController {
             }
         }
 
-        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writedate").descending());
+        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writeDate").descending());
         Page<Post> totalPosts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
                                                                 .and(PostSpecifications.findNotDeclared())
                                                                 .and(PostSpecifications.findAllTodayPosts(today, now)), pageRequest);
@@ -76,7 +76,7 @@ public class MemberController {
         return "member/list";
     }
 
-    @RequestMapping(value = "/board/add.action", method={RequestMethod.POST})
+    @RequestMapping(value = "/board/add", method={RequestMethod.POST})
     public String addPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         String location = request.getParameter("nowLocation");
@@ -91,31 +91,31 @@ public class MemberController {
         List<Post> all = repository.findAll();
 
         for (Post post1 : all) {
-            log.info("" + post1.getContent() + "" + post1.getWritedate());
+            log.info("" + post1.getContent() + "" + post1.getWriteDate());
         }
 
         redirectAttributes.addAttribute("location", location);
 
-        return "redirect:/board/list.action";
+        return "redirect:/board/list";
     }
 
-    @RequestMapping(value = "/board/recommendup.action", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/recommendUp", method = RequestMethod.GET)
     public void recommendUp(HttpServletResponse resp, String seq) throws IOException {
-        Post post = repository.getOne(Long.parseLong(seq));
-        post.setRecommendcnt(post.getRecommendcnt()+1);
+        Post post = repository.getOne(Integer.parseInt(seq));
+        post.setRecommendCnt(post.getRecommendCnt()+1);
         repository.saveAndFlush(post);
 
         PrintWriter writer = resp.getWriter();
-        writer.print(post.getRecommendcnt());
+        writer.print(post.getRecommendCnt());
         writer.close();
 
     }
 
-    @RequestMapping(value = "/board/declare.action", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/declare", method = RequestMethod.GET)
     public void declare(HttpServletResponse resp, String seq) throws IOException {
 
-        Post post = repository.getOne(Long.parseLong(seq));
-        post.setDeclared(Declare.DECLARED);
+        Post post = repository.getOne(Integer.parseInt(seq));
+        post.setDeclared_yn(Declare.DECLARED.getCode());
         repository.saveAndFlush(post);
 
     }
