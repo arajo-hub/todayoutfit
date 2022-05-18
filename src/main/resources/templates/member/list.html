@@ -21,9 +21,12 @@
 
         <section>
 
+            <input type="hidden" id="page" name="page" th:value="${page}">
+            <input type="hidden" id="size" name="size" th:value="${size}">
+
             <div id="search" class="mainbox">
 
-                <h4 th:text="|${location}의 옷차림|" />
+                <h4 id="location" th:text="|${location}의 옷차림|" />
 
                 <form method="get">
                     <div>
@@ -44,42 +47,14 @@
                 <button class="btn btn-general" onclick="location.href='/'">메인으로</button>
 
             </div>
-            <div th:if="${totalPosts.totalPages == 0}">
+            <div id="postArea">
                 <div id="outfit" class="mainbox">
                     <div>게시물이 없습니다</div>
+                    <!-- dynamic data -->
                 </div>
             </div>
 
-            <div th:unless="${totalPosts.totalPages == 0}">
-                <div id="outfit" class="mainbox" th:each="post : ${totalPosts.content}">
-                    <div th:text="${post.content}"></div>
-                    <small th:text="${post.writeDate}"></small>
-                    <div id="eachBtn">
-                        <button id="recommend" class="glyphicon glyphicon-thumbs-up" th:data-seq=${post.postSeq} value="${post.recommendCnt}" th:text="${post.recommendCnt}"></button>
-                        <button id="declare" class="glyphicon glyphicon-ban-circle" th:data-seq=${post.postSeq}></button>
-                    </div>
-                </div>
 
-                <th:if test="${totalPosts != null}">
-                    <nav aria-label="Page navigation example" id="pagination">
-                        <ul class="pagination">
-
-                            <!-- 이전버튼 -->
-                            <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number-1}">&laquo;</a></li> -->
-
-                            <!-- 페이지그룹 -->
-                            <th:block th:with="start=${startPage}, end=${endPage}">
-                                <li class="page-item" th:with="start = ${startPage}, end = ${endPage}" th:each="pageButton : ${#numbers.sequence(start, end)}">
-                                    <a class="page-link" th:href="@{/board/list?location={location}&page={page} (location = ${location}, page = ${pageButton})}" th:text=${pageButton}></a>
-                                </li>
-                            </th:block>
-
-                            <!-- 다음버튼 -->
-                            <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number+2}">&raquo;</a></li> -->
-                        </ul>
-                    </nav>
-                </th:if>
-            </div>
         </section>
 
         <footer>
@@ -102,13 +77,13 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">오늘 당신의 옷차림을 알려주세요</h5>
           </div>
-          <form action="add" method="POST">
+          <form>
           <div class="modal-body">
             <textarea id="content" name="content" class="form-control"></textarea>
             <input type="hidden" name="nowLocation" id="nowLocation" value=""/>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-general" value="저장">
+            <button type="button" id="saveBtn" class="btn btn-general" value="저장">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
           </div>
           </form>
@@ -118,29 +93,42 @@
 
     <script>
 
-        if (navigator.geolocation) { // GPS를 지원하면
-                navigator.geolocation.getCurrentPosition(function(position) {
+        $(() => memberListView.init());
 
-                // 좌표
-                const point_x=position.coords.longitude;
-                const point_y=position.coords.latitude;
+        var memberListView = {};
 
-                // 좌표정보 -> 위치정보 ajax
-                $.ajax({
-                    url:"https://dapi.kakao.com/v2/local/geo/coord2address.json?x="+point_x+"&y="+point_y+"&input_coord=WGS84",
-                    type:'GET',
-                    headers: {'Authorization' : 'KakaoAK efc1f6089ac80c3fdbe8f867eadb5c47'},
-                    success: function(data) {
+        memberListView.init = function() {
+            this.findLocation();
+            this.listInit();
+            this.recommend();
+            this.declare();
+            this.addPost();
+        };
 
-                        $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
-                        $("#nowLocation").val(data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"]);
+        memberListView.findLocation = function() {
+            if (navigator.geolocation) { // GPS를 지원하면
+                navigator.geolocation.getCurrentPosition(function (position) {
+
+                    // 좌표
+                    const point_x = position.coords.longitude;
+                    const point_y = position.coords.latitude;
+
+                    // 좌표정보 -> 위치정보 ajax
+                    $.ajax({
+                        url: "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=" + point_x + "&y=" + point_y + "&input_coord=WGS84",
+                        type: 'GET',
+                        headers: {'Authorization': 'KakaoAK efc1f6089ac80c3fdbe8f867eadb5c47'},
+                        success: function (data) {
+
+                            $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
+                            $("#nowLocation").val(data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"]);
 
 
-                    }
+                        }
 
-                });
+                    });
 
-                }, function(error) {
+                }, function (error) {
                     console.error(error);
                 }, {
                     enableHighAccuracy: false,
@@ -150,30 +138,138 @@
             } else {
                 alert('GPS를 지원하지 않습니다');
             }
+        };
+
+        memberListView.listInit = function() {
+            var requestParam = {
+                page: $("#page").val(),
+                size: $("#size").val(),
+                location: $("#location").text().replace("의 옷차림", ""),
+            };
+
+            console.log(requestParam);
+
+            $.ajax({
+                url 		: "/board/listAjax",
+                type 		: "POST",
+                data 		: requestParam,
+                dataType 	: "JSON",
+            })
+                .done(function(result) {
+
+                    var row = '';
+
+                    if (result.list.content.length == 0) {
+                        row = '<div id="outfit" class="mainbox">'
+                            + '<div>게시물이 없습니다</div>'
+                            + '</div>';
+                    } else {
+                        result.list.content.forEach((element, index, array) => {
+                            row += '<div id="outfit" class="mainbox">'
+                                + '<div>' + element.content + '</div>'
+                                + '<small>' + element.writeDate + '</small>'
+                                + '<div id="eachBtn">'
+                                + '<button id="recommend" class="glyphicon glyphicon-thumbs-up" data-seq="' + element.postSeq + '">' + element.recommendCnt + '</button>'
+                                + '<button id="declare" class="glyphicon glyphicon-ban-circle" data-seq="' + element.postSeq + '"></button>'
+                                + '</div>'
+                                + '</div>';
+                        });
+
+                        var page = '';
+                        for (var i = 0; i < result.list.totalPages; i++) {
+                            page += '<li class="page-item">'
+                                + '<a href="#" class="page-link">' + (i + 1) + '</a>'
+                                + '</li>';
+                        }
+                    }
+
+                    $("#postArea").html(row);
+                    $("ul.pagination").html(page);
+                })
+                .fail(function() {
+                    $("tbody").html('<div id="outfit" class="mainbox"><div>게시물이 없습니다</div></div>');
+                })
+        };
 
         // 게시물 좋아요 수 올리는 ajax
-        $("#outfit > #eachBtn > #recommend").on('click', function() {
-            var me = this;
-            $.ajax({
-                url:"/board/recommendUp",
-                data:{seq: $(this).data("seq")},
-                success: function(data) {
-                    $(me).text(data);
-                }
+        memberListView.recommend = function() {
+            var that = this;
+            $(document).on('click', '#outfit > #eachBtn > #recommend', function(e) {
+                $.ajax({
+                    url         : "/board/recommendAjax",
+                    type 		: "POST",
+                    data        : {id: e.target.dataset.seq},
+                    dataType 	: "JSON",
+                })
+                .done(function (result) {
+                    console.log(result);
+                    if (result.responseCode == "SUCCESS") {
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("좋아요할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                });
             });
-        });
+        };
 
         // 게시물 신고하는 ajax
-        $("#outfit > #eachBtn > #declare").on('click', function() {
-            var me = this;
-            $.ajax({
-                url:"/board/declare",
-                data:{seq: $(this).data("seq")},
-                success: function(data) {
-                    console.log("declare succeeded");
-                }
+        memberListView.declare = function() {
+            var that = this;
+            $(document).on('click', '#outfit > #eachBtn > #declare', function(e) {
+                $.ajax({
+                    url         : "/board/declareAjax",
+                    type 		: "POST",
+                    data        : {id: e.target.dataset.seq},
+                    dataType 	: "JSON",
+                })
+                .done(function (result) {
+                    if (result.responseCode == "SUCCESS") {
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("신고할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                })
             });
-        });
+        };
+
+        memberListView.addPost = function() {
+            var that = this;
+            $("#saveBtn").on('click', function () {
+                var requestParam = {
+                    content: $("#content").val(),
+                    location: $("#nowLocation").val(),
+                };
+                $.ajax({
+                    url         : "/board/addAjax",
+                    type 		: "POST",
+                    data        : requestParam,
+                    dataType 	: "JSON",
+                })
+                .done(function (result) {
+                    if (result.responseCode == "SUCCESS") {
+                        $("#writeModal > btn.btn-secondary").click();
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("신고할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                })
+            });
+        };
 
     </script>
 

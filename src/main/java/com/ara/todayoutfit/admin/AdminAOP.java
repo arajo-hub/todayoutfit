@@ -34,7 +34,7 @@ public class AdminAOP {
         HttpSession session = (HttpSession) args[2];
 
         if (session.getAttribute("name") == null
-            || !session.getAttribute("name").equals("adminara")) {
+            || !session.getAttribute("name").equals("admin")) {
 
             try {
 

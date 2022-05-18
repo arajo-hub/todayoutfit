@@ -1,26 +1,20 @@
 package com.ara.todayoutfit.admin;
 
-import com.ara.todayoutfit.board.Declare;
-import com.ara.todayoutfit.board.Post;
-import com.ara.todayoutfit.board.PostRepository;
-import com.ara.todayoutfit.board.PostSpecifications;
+import com.ara.todayoutfit.board.*;
+import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -28,125 +22,50 @@ import java.util.Optional;
 public class AdminController {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminService adminService;
 
     @Autowired
-    private PostRepository postRepository;
+    private PostService postService;
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET})
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-        log.info("[{}]",
-                Thread.currentThread().getStackTrace()[1].getMethodName());
+        log.info("[{}]", Thread.currentThread().getStackTrace()[1].getMethodName());
         return "admin/login";
     }
 
-    @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model){
-
-        String name = request.getParameter("name");
-        String pw = request.getParameter("pw");
-
-        Optional<Admin> attemptedToLogin = adminRepository.findOne(AdminSpecifications.findOneAdmin(name));
-
-        if (attemptedToLogin.isPresent()) {
-
-            Admin loggedInAdmin = attemptedToLogin.get();
-
-            if (pw.equals(loggedInAdmin.getPw())) {
-
-                session.setAttribute("name", loggedInAdmin.getName());
-
-                log.info("[{}] Logged in = {}",
-                        Thread.currentThread().getStackTrace()[1].getMethodName(),
-                        loggedInAdmin.getId(), loggedInAdmin.getName(), loggedInAdmin.getPw());
-
-                return "redirect:/admin/board/list";
-
-            } else {
-
-                log.info("[{}] Password not equal",
-                        Thread.currentThread().getStackTrace()[1].getMethodName());
-
-                return "admin/login";
-            }
-
-        } else {
-
-            log.info("[{}] Id not found",
-                    Thread.currentThread().getStackTrace()[1].getMethodName());
-
-            // 찾는 아이디가 없음
-            return "admin/login";
-        }
+    @ResponseBody
+    @RequestMapping(value = "/loginAjax", method = {RequestMethod.POST})
+    public BaseResult loginAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, Admin admin) {
+        // 유효성 체크
+        log.info(admin.toString());
+        return adminService.login(session, admin);
     }
 
     @RequestMapping(value = "/board/list", method = {RequestMethod.GET})
-    public String adminShowList(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
-
-        int page;
-        // 테스트용 코드
-        if (request.getParameter("page") == null) {
-            page = 1;
-        } else {
-
-            if (Integer.parseInt(request.getParameter("page")) <= 0) {
-                page = 1;
-            } else {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-        }
-
-        // 페이지네이션해줄 PageRequest 생성
-        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "write_date").descending());
-
-        Page<Post> totalPosts = postRepository.findAll(pageRequest);
-
-        int nowPage = totalPosts.getPageable().getPageNumber(); // 현재 페이지
-        int totalPages = totalPosts.getTotalPages(); // 총 페이지 수
-        int pageBlock = 10;
-        int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
-        int endPage = startPage + pageBlock - 1;
-        endPage = totalPages < endPage? totalPages:endPage;
-
-        model.addAttribute("totalPosts", totalPosts);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-
-        log.info("[{}] totalPosts = {}, startPage = {}, endPage = {}",
-                Thread.currentThread().getStackTrace()[1].getMethodName(),
-                totalPages, startPage, endPage);
-
+    public String list(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
+        model.addAttribute("page", 1);
+        model.addAttribute("size", 10);
         return "admin/list";
     }
 
-    @RequestMapping(value = "/board/del", method = {RequestMethod.GET})
-    public String adminDelPost(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-        int postSeq = Integer.parseInt(request.getParameter("id"));
-
-        Post deletedPost = postRepository.getOne(postSeq);
-
-        postRepository.delete(deletedPost);
-
-        log.info("[{}] Delete completed",
-                Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        return "redirect:/admin/board/list";
+    @ResponseBody
+    @RequestMapping(value = "/board/listAjax", method = {RequestMethod.POST})
+    public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, SearchParam searchParam) {
+        searchParam.setPage((searchParam.getPage() <= 0) ? 1 : searchParam.getPage());
+        PageResult result = postService.list(searchParam);
+        return result;
     }
 
-    @RequestMapping(value = "/board/cancelDeclare", method = {RequestMethod.GET})
-    public void adminCancelDeclare(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        int postSeq = Integer.parseInt(request.getParameter("id"));
-        Post cancel = postRepository.getOne(postSeq);
-        cancel.setDeclared_yn(Declare.NOT_DECLARED.getCode());
-        postRepository.saveAndFlush(cancel);
+    @ResponseBody
+    @RequestMapping(value = "/board/deletePostAjax", method = {RequestMethod.POST})
+    public BaseResult deletePostAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, String id) {
+        return postService.deletePost(Integer.parseInt(id));
+    }
 
-        PrintWriter writer = response.getWriter();
-        writer.print(cancel.getDeclared_yn());
-        writer.close();
-
-        log.info("[{}] Declare canceled",
-                Thread.currentThread().getStackTrace()[1].getMethodName());
+    @ResponseBody
+    @RequestMapping(value = "/board/cancelDeclareAjax", method = {RequestMethod.POST})
+    public BaseResult cancelDeclareAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, String id) {
+        return postService.cancelDeclare(Integer.parseInt(id));
     }
 
     @RequestMapping(value = "/logout", method = {RequestMethod.GET})

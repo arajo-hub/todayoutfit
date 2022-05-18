@@ -1,7 +1,8 @@
 package com.ara.todayoutfit.board;
 
 import org.springframework.data.jpa.domain.Specification;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 public class PostSpecifications {
 
@@ -13,10 +14,10 @@ public class PostSpecifications {
 
     }
 
-    public static Specification<Post> findAllTodayPosts(Date today, Date now) {
+    public static Specification<Post> findAllTodayPosts(LocalDateTime now) {
 
         return (Specification<Post>) ((root, query, builder) ->
-                builder.between(root.get("writeDate"), today, now)
+                builder.between(root.get("writeDate"), now.toLocalDate().atStartOfDay(), now)
         );
 
     }

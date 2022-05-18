@@ -1,13 +1,15 @@
 package com.ara.todayoutfit.board;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
 @Table(name="post")
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -28,12 +30,18 @@ public class Post {
     private String declared_yn;
 
     @Column(name="write_date")
-    private Date writeDate;
+    private LocalDateTime writeDate;
 
-    public Post() {
-
-        declared_yn = Declare.NOT_DECLARED.getCode();
-        writeDate = TimeService.getNow();
-
+    public Post(String content, String location) {
+        this.content = content;
+        this.location = location;
+        this.setRecommendCnt(0);
+        this.setDeclared_yn(Declare.NOT_DECLARED.getCode());
     }
+
+    public Post(String content, String location, LocalDateTime writeDate) {
+        this(content, location);
+        this.setWriteDate(writeDate);
+    }
+
 }

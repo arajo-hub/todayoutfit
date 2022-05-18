@@ -1,137 +1,71 @@
 package com.ara.todayoutfit.member;
 
 import com.ara.todayoutfit.board.*;
+import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Date;
 
 @Slf4j
 @Controller
 public class MemberController {
 
     @Autowired
-    private PostRepository repository;
+    private PostService postService;
 
     @RequestMapping("/")
     public String jspCheck() {
         return "member/index";
     }
 
-    @RequestMapping(value = "/board/list", method={RequestMethod.GET})
-    public String showList(HttpServletRequest request, Model model) {
-        String location = request.getParameter("location");
-        Date today = TimeService.getTodayToDate();
-        Date now = TimeService.getNow();
-
-        int page;
-        // 테스트용 코드
-        if (request.getParameter("page") == null) {
-            page = 1;
-        } else {
-
-            if (Integer.parseInt(request.getParameter("page")) <= 0) {
-                page = 1;
-            } else {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-        }
-
-        PageRequest pageRequest = new PageRequest(page-1, 10, new Sort(Sort.Direction.DESC, "writeDate").descending());
-        Page<Post> totalPosts = repository.findAll(PostSpecifications.equalToSpecificLocation(location)
-                                                                .and(PostSpecifications.findNotDeclared())
-                                                                .and(PostSpecifications.findAllTodayPosts(today, now)), pageRequest);
-
-        int nowPage = totalPosts.getPageable().getPageNumber(); // 현재 페이지
-        int totalPages = totalPosts.getTotalPages(); // 총 페이지 수
-        int pageBlock = 10;
-        int startPage = ((nowPage)/pageBlock) * pageBlock + 1;
-        int endPage = startPage + pageBlock - 1;
-        endPage = totalPages < endPage? totalPages:endPage;
-
+    @RequestMapping(value = "/board/list", method = {RequestMethod.GET})
+    public String list(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model, String location) {
+        model.addAttribute("page", 1);
+        model.addAttribute("size", 10);
         model.addAttribute("location", location);
-        model.addAttribute("totalPosts", totalPosts);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-
-        log.info("[{}] location = {}, totalPosts = {}, startPage = {}, endPage = {}",
-                Thread.currentThread().getStackTrace()[1].getMethodName(),
-                location, totalPages, startPage, endPage);
-
         return "member/list";
     }
 
-    @RequestMapping(value = "/board/add", method={RequestMethod.POST})
-    public String addPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-
-        String location = request.getParameter("nowLocation");
-        String content = request.getParameter("content");
-
-        Post post = new Post();
-        post.setLocation(location);
-        post.setContent(content);
-
-        repository.save(post);
-
-        List<Post> all = repository.findAll();
-
-        for (Post post1 : all) {
-            log.info("" + post1.getContent() + "" + post1.getWriteDate());
-        }
-
-        redirectAttributes.addAttribute("location", location);
-
-        log.info("[{}] location = {}, content = {}",
-                Thread.currentThread().getStackTrace()[1].getMethodName(),
-                location, content);
-
-        return "redirect:/board/list";
+    @ResponseBody
+    @RequestMapping(value = "/board/listAjax", method={RequestMethod.POST})
+    public PageResult listAjax(HttpServletRequest request, Model model, SearchParam searchParam) {
+        searchParam.setPage((searchParam.getPage() <= 0) ? 1 : searchParam.getPage());
+        PageResult result = postService.listByLocation(searchParam);
+        return result;
     }
 
-    @RequestMapping(value = "/board/recommendUp", method = RequestMethod.GET)
-    public void recommendUp(HttpServletResponse resp, String seq) throws IOException {
-        Post post = repository.getOne(Integer.parseInt(seq));
-        post.setRecommendCnt(post.getRecommendCnt()+1);
-        repository.saveAndFlush(post);
+    @ResponseBody
+    @RequestMapping(value = "/board/addAjax", method={RequestMethod.POST})
+    public BaseResult addPostAjax(HttpServletRequest request, Post post) {
+        log.info(post.toString());
+        post.setWriteDate(LocalDateTime.now());
+        post.setDeclared_yn(Declare.NOT_DECLARED.getCode());
+        return postService.add(post);
+    }
 
-        PrintWriter writer = resp.getWriter();
-        writer.print(post.getRecommendCnt());
-        writer.close();
-
-        log.info("[{}] Recommend Up completed",
-                Thread.currentThread().getStackTrace()[1].getMethodName());
+    @ResponseBody
+    @RequestMapping(value = "/board/recommendAjax", method = RequestMethod.POST)
+    public BaseResult recommendAjax(HttpServletResponse resp, String id) throws IOException {
+        return postService.recommend(Integer.parseInt(id));
 
     }
 
-    @RequestMapping(value = "/board/declare", method = RequestMethod.GET)
-    public void declare(HttpServletResponse resp, String seq) throws IOException {
-
-        Post post = repository.getOne(Integer.parseInt(seq));
-        post.setDeclared_yn(Declare.DECLARED.getCode());
-        repository.saveAndFlush(post);
-
-        log.info("[{}] Declare completed",
-                Thread.currentThread().getStackTrace()[1].getMethodName());
-
+    @ResponseBody
+    @RequestMapping(value = "/board/declareAjax", method = RequestMethod.POST)
+    public BaseResult declareAjax(HttpServletResponse resp, String id) throws IOException {
+        return postService.declare(Integer.parseInt(id));
     }
 
 }
