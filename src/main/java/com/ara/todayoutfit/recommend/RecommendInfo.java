@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
 @Table(name="recommendinfo")
-public class RecommendInfo {
+public class RecommendInfo implements Serializable {
 
     @Id
     @Column(name="recommendinfo_seq")
