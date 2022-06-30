@@ -69,6 +69,7 @@
 
 </body>
 
+    <script type="text/javascript" src="apikey.js"></script>
     <script>
 
        if (navigator.geolocation) { // GPS를 지원하면
@@ -82,7 +83,7 @@
             $.ajax({
                 url:"https://dapi.kakao.com/v2/local/geo/coord2address.json?x="+point_x+"&y="+point_y+"&input_coord=WGS84",
                 type:'GET',
-                headers: {'Authorization' : 'KakaoAK efc1f6089ac80c3fdbe8f867eadb5c47'},
+                headers: {'Authorization' : config.apikey},
                 success: function(data) {
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
                     $('#searchByMyLocation').click(function(){
