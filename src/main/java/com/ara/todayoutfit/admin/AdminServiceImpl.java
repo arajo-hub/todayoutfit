@@ -18,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
 
     public BaseResult login(HttpSession session, Admin admin) {
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Admin> attemptedToLogin = adminRepository.findById(admin.getId());
+        Optional<Admin> attemptedToLogin = adminRepository.findById(String.valueOf(admin.getId()));
 
         if (attemptedToLogin.isPresent()) {
             Admin loggedInAdmin = attemptedToLogin.get();

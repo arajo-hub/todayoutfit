@@ -56,6 +56,9 @@ dependencies {
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // ehcache
+    compile group: 'org.ehcache', name: 'ehcache', version: '3.8.1'
+
 }
 
 test {
