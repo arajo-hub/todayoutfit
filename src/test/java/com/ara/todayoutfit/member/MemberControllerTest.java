@@ -1,8 +1,9 @@
 package com.ara.todayoutfit.member;
 
-import com.ara.todayoutfit.board.Declare;
-import com.ara.todayoutfit.board.Post;
-import com.ara.todayoutfit.board.PostRepository;
+import com.ara.todayoutfit.board.model.Declare;
+import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.member.controller.MemberController;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,14 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 @Slf4j
 @SpringBootTest

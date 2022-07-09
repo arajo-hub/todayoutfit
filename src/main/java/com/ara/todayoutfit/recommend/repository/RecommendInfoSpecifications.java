@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.recommend;
+package com.ara.todayoutfit.recommend.repository;
 
-import com.ara.todayoutfit.admin.Admin;
+import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import org.springframework.data.jpa.domain.Specification;
 
 public class RecommendInfoSpecifications {

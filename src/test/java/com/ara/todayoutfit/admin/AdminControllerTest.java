@@ -1,8 +1,11 @@
 package com.ara.todayoutfit.admin;
 
-import com.ara.todayoutfit.board.Declare;
-import com.ara.todayoutfit.board.Post;
-import com.ara.todayoutfit.board.PostRepository;
+import com.ara.todayoutfit.admin.controller.AdminController;
+import com.ara.todayoutfit.admin.model.Admin;
+import com.ara.todayoutfit.admin.repository.AdminRepository;
+import com.ara.todayoutfit.board.model.Declare;
+import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -11,20 +14,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

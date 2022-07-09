@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.admin;
+package com.ara.todayoutfit.admin.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

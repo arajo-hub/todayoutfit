@@ -1,4 +1,6 @@
-package com.ara.todayoutfit.recommend;
+package com.ara.todayoutfit.recommend.service;
+
+import com.ara.todayoutfit.recommend.model.RecommendInfo;
 
 import java.util.List;
 

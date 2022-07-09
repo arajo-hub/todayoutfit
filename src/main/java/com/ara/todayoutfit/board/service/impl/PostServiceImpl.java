@@ -1,5 +1,10 @@
-package com.ara.todayoutfit.board;
+package com.ara.todayoutfit.board.service.impl;
 
+import com.ara.todayoutfit.board.model.Declare;
+import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.board.repository.PostSpecifications;
+import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.ResponseCode;

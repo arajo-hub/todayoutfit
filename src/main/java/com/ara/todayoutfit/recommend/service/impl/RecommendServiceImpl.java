@@ -1,5 +1,9 @@
-package com.ara.todayoutfit.recommend;
+package com.ara.todayoutfit.recommend.service.impl;
 
+import com.ara.todayoutfit.recommend.model.RecommendInfo;
+import com.ara.todayoutfit.recommend.repository.RecommendInfoSpecifications;
+import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.recommend.service.RecommendInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

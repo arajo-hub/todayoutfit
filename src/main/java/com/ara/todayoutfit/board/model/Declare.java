@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.board;
+package com.ara.todayoutfit.board.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

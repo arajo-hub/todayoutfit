@@ -1,8 +1,6 @@
-package com.ara.todayoutfit.recommend;
+package com.ara.todayoutfit.recommend.repository;
 
-import com.ara.todayoutfit.board.Post;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

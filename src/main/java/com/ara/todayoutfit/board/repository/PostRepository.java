@@ -1,12 +1,11 @@
-package com.ara.todayoutfit.board;
+package com.ara.todayoutfit.board.repository;
 
+import com.ara.todayoutfit.board.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.Cacheable;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecificationExecutor<Post> {

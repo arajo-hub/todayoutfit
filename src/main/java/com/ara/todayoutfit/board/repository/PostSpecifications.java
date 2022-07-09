@@ -1,5 +1,7 @@
-package com.ara.todayoutfit.board;
+package com.ara.todayoutfit.board.repository;
 
+import com.ara.todayoutfit.board.model.Declare;
+import com.ara.todayoutfit.board.model.Post;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;

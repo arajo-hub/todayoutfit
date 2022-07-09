@@ -1,10 +1,9 @@
-package com.ara.todayoutfit.board;
+package com.ara.todayoutfit.board.model;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data

@@ -1,6 +1,8 @@
-package com.ara.todayoutfit.member;
+package com.ara.todayoutfit.member.controller;
 
-import com.ara.todayoutfit.board.*;
+import com.ara.todayoutfit.board.model.Declare;
+import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.SearchParam;
@@ -11,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.admin;
+package com.ara.todayoutfit.admin.repository;
 
-import com.ara.todayoutfit.board.Post;
+import com.ara.todayoutfit.admin.model.Admin;
 import org.springframework.data.jpa.domain.Specification;
 
 public class AdminSpecifications {
