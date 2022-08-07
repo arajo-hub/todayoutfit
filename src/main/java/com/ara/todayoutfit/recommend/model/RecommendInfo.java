@@ -1,27 +1,27 @@
 package com.ara.todayoutfit.recommend.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="recommendinfo")
 public class RecommendInfo implements Serializable {
 
     @Id
     @Column(name="recommendinfo_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int recommendInfoSeq;
+    private Integer recommendInfoSeq;
 
     @Column(name="max_temp")
-    private double maxTemp;
+    private Double maxTemp;
 
     @Column(name="min_temp")
-    private double minTemp;
+    private Double minTemp;
 
     @Column
     private String message;

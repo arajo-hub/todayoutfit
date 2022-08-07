@@ -2,6 +2,7 @@ package com.ara.todayoutfit.recommend.controller;
 
 import com.ara.todayoutfit.recommend.service.RecommendInfoService;
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class RecommendController {
 
