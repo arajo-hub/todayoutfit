@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="user")
+@Table(name="admin")
 public class Admin {
 
     @Id
