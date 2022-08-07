@@ -39,7 +39,7 @@
 
                 <h4>다른 사람들은 뭘 입었을까 궁금하다면?</h4>
 
-                <form method="GET" name="searchform" action="/board/list.action">
+                <form method="GET" name="searchform" action="/board/list">
                     <div>
                         <div class="input-group">
                         <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
@@ -69,6 +69,7 @@
 
 </body>
 
+    <script type="text/javascript" src="js/apikey.js"></script>
     <script>
 
        if (navigator.geolocation) { // GPS를 지원하면
@@ -82,12 +83,11 @@
             $.ajax({
                 url:"https://dapi.kakao.com/v2/local/geo/coord2address.json?x="+point_x+"&y="+point_y+"&input_coord=WGS84",
                 type:'GET',
-                headers: {'Authorization' : 'KakaoAK efc1f6089ac80c3fdbe8f867eadb5c47'},
+                headers: {'Authorization' : config.apikey},
                 success: function(data) {
-
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
                     $('#searchByMyLocation').click(function(){
-                        location.href="/board/list.action?location="+data.documents[0].address["region_2depth_name"];
+                        location.href="/board/list?location="+data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"];
                     });
 
                 }
@@ -122,10 +122,11 @@
 
                 // 기온에 따라 옷차림 추천해주는 ajax
                 $.ajax({
-                    url:"/recommend.action",
+                    url:"/recommend",
                     data: {temp: temp},
                     dataType: "json",
                     success: function(data) {
+                        console.log(data);
                         $("#outfit > div").html(data.temp);
                     }
 

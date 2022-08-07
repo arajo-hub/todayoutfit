@@ -1,5 +1,6 @@
-package com.ara.todayoutfit.admin;
+package com.ara.todayoutfit.config.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,6 +17,7 @@ import java.io.PrintWriter;
  * AOP 구현하여 관리자페이지 접근을 막는 역할을 담당
  */
 
+@Slf4j
 @Aspect
 @Controller
 public class AdminAOP {
@@ -32,9 +34,12 @@ public class AdminAOP {
         HttpSession session = (HttpSession) args[2];
 
         if (session.getAttribute("name") == null
-            || !session.getAttribute("name").equals("adminara")) {
+            || !session.getAttribute("name").equals("admin")) {
 
             try {
+
+                log.info("[{}] Access Denied",
+                        Thread.currentThread().getStackTrace()[1].getMethodName());
 
                 response.setCharacterEncoding("UTF-8");
 
@@ -46,7 +51,7 @@ public class AdminAOP {
 
             } catch (Exception e) {
 
-                System.out.println(e);
+                e.printStackTrace();
 
             }
 

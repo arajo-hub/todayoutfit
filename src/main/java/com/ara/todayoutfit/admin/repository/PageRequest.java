@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.admin;
+package com.ara.todayoutfit.admin.repository;
 
 import org.springframework.data.domain.AbstractPageRequest;
 import org.springframework.data.domain.Pageable;

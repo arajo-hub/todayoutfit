@@ -15,64 +15,43 @@
 
     <section>
 
-        <button onclick="location.href='/admin/logout.action'" class="form form-control" id="logoutbtn">로그아웃</button>
+        <button onclick="location.href='/admin/logout'" class="form form-control" id="logoutbtn">로그아웃</button>
+
+        <input type="hidden" id="page" name="page" th:value="${page}">
+        <input type="hidden" id="size" name="size" th:value="${size}">
 
         <table id="posttable" class="table">
-
-            <tr>
-                <th class="col-md-1">번호</th>
-                <th class="col-md-5">내용</th>
-                <th class="col-md-1">지역</th>
-                <th class="col-md-1">추천수</th>
-                <th class="col-md-2">작성일</th>
-                <th class="col-md-1">조정</th>
-            </tr>
-
-            <div th:if="${totalPosts.totalPages == 0}">
+            <thead>
                 <tr>
-                    <td colspan="6">게시물이 없습니다</td>
+                    <th class="col-md-1">번호</th>
+                    <th class="col-md-5">내용</th>
+                    <th class="col-md-1">지역</th>
+                    <th class="col-md-1">추천수</th>
+                    <th class="col-md-2">작성일</th>
+                    <th class="col-md-1">조정</th>
                 </tr>
-            </div>
-
-            <div th:unless="${totalPosts.totalPages == 0}">
-                <tr th:each="post : ${totalPosts.content}">
-                    <td th:text="${post.id}"></td>
-                    <td th:text="${post.content}"></td>
-                    <td th:text="${post.location}"></td>
-                    <td th:text="${post.recommendcnt}"></td>
-                    <td th:text="${post.writedate}"></td>
-                    <td>
-                        <div id="btns">
-                            <button type="button" id="delbtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" th:data-seq="${post.id}">삭제</button>
-                            <div th:if="${post.declared.toString().equals('DECLARED')}">
-                                <button type="button" id="cancelbtn" class="form form-control btn-general" th:data-seq="${post.id}">신고취소</button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </div>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="6">게시물이 없습니다</td>
+                <!-- dynamic data -->
+            </tr>
+            </tbody>
 
         </table>
 
-        <th:if test="${totalPosts != null}">
             <nav aria-label="Page navigation example" id="pagination">
                 <ul class="pagination">
 
                     <!-- 이전버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number-1}">&laquo;</a></li> -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number-1}">&laquo;</a></li> -->
 
                     <!-- 페이지그룹 -->
-                    <th:block th:with="start=${startPage}, end=${endPage}">
-                        <li class="page-item" th:with="start = ${startPage}, end = ${endPage}" th:each="pageButton : ${#numbers.sequence(start, end)}">
-                            <a class="page-link" th:href="@{/admin/board/list.action?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
-                        </li>
-                    </th:block>
 
                     <!-- 다음버튼 -->
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list.action?page=${totalPosts.number+2}">&raquo;</a></li> -->
+                    <!-- <li class="page-item"><a class="page-link" href="/admin/board/list?page=${totalPosts.number+2}">&raquo;</a></li> -->
                 </ul>
             </nav>
-        </th:if>
     </section>
 
     <footer>
@@ -90,13 +69,13 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">삭제 확인</h5>
             </div>
-            <form action="del.action" method="GET">
+            <form action="del" method="post">
                 <div class="modal-body">
                     <div>정말 삭제하시겠습니까?</div>
                     <input type="hidden" id="id" name="id">
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" class="btn btn-general" value="삭제">
+                    <input type="button" class="btn btn-general" id="delModalBtn" value="삭제">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 </div>
             </form>
@@ -106,28 +85,145 @@
 
     <script>
 
-        // 삭제 확인 모달로 글번호 보내는 기능
-        $("#btns > #delbtn").on('click', function(){
-            $('#id').val($(this).data("seq"));
-        });
+        $(() => adminListView.init());
 
-        // 게시물 신고 취소하는 ajax
-        $("#btns > #cancelbtn").on('click', function(){
-            var me = this;
-            console.log($(this).data("seq"));
+        var adminListView = {};
+
+        adminListView.init = function() {
+            this.listInit();
+            this.cancelDeclare();
+            this.openModal();
+            this.pageBtnClick();
+            this.delelePost();
+        };
+
+        adminListView.listInit = function() {
+            var requestParam = {
+                page: $("#page").val(),
+                size: $("#size").val()
+            };
+
+            console.log(requestParam);
+
             $.ajax({
-                url:"/admin/board/canceldeclare.action",
-                data:{id: $(this).data("seq")},
-                success: function(data) {
-                    if (data == 'NOT_DECLARED') {
-                        $(me).hide();
-                        console.log("cancel succeeded");
-                    } else {
-                        console.log("cancel failed");
+                url 		: "/admin/board/listAjax",
+                type 		: "POST",
+                data 		: requestParam,
+                dataType 	: "JSON",
+            })
+            .done(function(result) {
+                var row = '';
+
+                if (result.list.size == 0) {
+                    row = '<tr><td colspan="6">게시물이 없습니다</td></tr>';
+                } else {
+                    result.list.content.forEach((element, index, array) => {
+                        row += '<tr><td>' + (index + 1) + '</td>'
+                            + '<td>' + element.content + '</td>'
+                            + '<td>' + element.location + '</td>'
+                            + '<td>' + element.recommendCnt + '</td>'
+                            + '<td>' + element.writeDate + '</td>'
+                            + '<td><div id="btns">'
+                            + '<button type="button" id="delBtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" data-seq="' + element.postSeq + '">삭제</button>';
+
+                        if (element.declared_yn == 1) {
+                            row += '<button type="button" id="cancelBtn" class="form form-control btn-general" data-seq="' + element.postSeq + '">신고취소</button>';
+                        }
+
+                        row += '</div></td></tr>';
+                    });
+
+                    var page = '';
+                    for (var i = 0; i < result.list.totalPages; i++) {
+                        page += '<li class="page-item">'
+                            + '<a href="#" class="page-link">' + (i + 1) + '</a>'
+                            + '</li>';
                     }
                 }
+
+                $("tbody").html(row);
+                $("ul.pagination").html(page);
+            })
+            .fail(function() {
+                $("tbody").html('<tr><td colspan="6">게시물이 없습니다</td></tr>');
+            })
+        };
+
+        // 신고 취소
+        adminListView.cancelDeclare = function () {
+            var that = this;
+            $(document).on('click', '#cancelBtn', function() {
+
+                var requestParam = {
+                    id: $(this).data('seq')
+                }
+
+                $.ajax({
+                    url 		: "/admin/board/cancelDeclareAjax",
+                    type 		: "POST",
+                    data 		: requestParam,
+                    dataType 	: "JSON",
+                })
+                .done(function(result) {
+                    console.log(result);
+                    if (result.responseCode == "SUCCESS") {
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("신고 취소할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                })
             });
-        });
+        };
+
+        adminListView.openModal = function() {
+            // 삭제 확인 모달로 글번호 보내는 기능
+            $(document).on('click', '#delBtn', function(e) {
+                $('#id').val(e.currentTarget.dataset.seq);
+            });
+        };
+
+        adminListView.delelePost = function() {
+            var that = this;
+            $("#delModalBtn").on('click', function() {
+                var requestParam = {
+                    id: $('#id').val()
+                }
+                console.log(requestParam);
+                $.ajax({
+                    url 		: "/admin/board/deletePostAjax",
+                    type 		: "POST",
+                    data 		: requestParam,
+                    dataType 	: "JSON",
+                })
+                .done(function(result) {
+                    console.log(result);
+                    if (result.responseCode == "SUCCESS") {
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("삭제할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                })
+            });
+        };
+
+        adminListView.pageBtnClick = function() {
+            var that = this;
+
+            $("ul.pagination").on('click', 'a', function() {
+                $("#page").val($(this).text());
+                that.listInit();
+            });
+        };
 
     </script>
 
