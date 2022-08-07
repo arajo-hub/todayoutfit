@@ -69,10 +69,11 @@
 
 </body>
 
-    <script type="text/javascript" src="js/apikey.js"></script>
-    <script>
+    <script th:inline="javascript">
 
-       if (navigator.geolocation) { // GPS를 지원하면
+        let apiKey = [[${apiKey}]];
+
+        if (navigator.geolocation) { // GPS를 지원하면
             navigator.geolocation.getCurrentPosition(function(position) {
 
             // 좌표
@@ -83,7 +84,7 @@
             $.ajax({
                 url:"https://dapi.kakao.com/v2/local/geo/coord2address.json?x="+point_x+"&y="+point_y+"&input_coord=WGS84",
                 type:'GET',
-                headers: {'Authorization' : config.apikey},
+                headers: {'Authorization' : apiKey},
                 success: function(data) {
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
                     $('#searchByMyLocation').click(function(){
