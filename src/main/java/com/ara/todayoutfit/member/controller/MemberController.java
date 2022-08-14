@@ -39,6 +39,7 @@ public class MemberController {
 
     @RequestMapping(value = "/board/list", method = {RequestMethod.GET})
     public String list(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model, String location) {
+        model.addAttribute("apiKey", apiKey);
         model.addAttribute("page", 1);
         model.addAttribute("size", 10);
         model.addAttribute("location", location);
