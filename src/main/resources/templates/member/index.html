@@ -1,72 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="inc/asset.html::asset" />
-<link rel="stylesheet" th:href="@{/css/member/main.css}">
 
-<body>
-
-    <div class="container">
-
-        <header>
-
-            <h1>오늘 뭐 입지?</h1>
-
-            <div id="now">
-                <span class="glyphicon glyphicon-map-marker"></span>
-                <span id="currentLocation">위치찾는 중</span>
-                <button type="button" class="btn btn-secondary" id="searchByMyLocation">내 위치로 검색</button>
-            </div>
-
-        </header>
-
-        <section>
-
-            <div id="outfit" class="mainbox">
-                <div> 위치를 찾으면 옷차림을 추천합니다.</div>
-            </div>
-
-            <div id="weather" class="mainbox">
-
-                <small>현재</small><h3 id="nowTemp">-도</h3>
-
-                <div>
-                    <div>최고기온 <span id="maxTemp">-</span>도 / 최저기온 <span id="minTemp">-</span>도</div>
-                </div>
-
-            </div>
-
-            <div id="search" class="mainbox">
-
-                <h4>다른 사람들은 뭘 입었을까 궁금하다면?</h4>
-
-                <form method="GET" name="searchform" action="/board/list">
+<body class="uk-background-muted">
+    <section>
+        <div class="uk-margin-auto uk-text-center uk-position-center uk-card uk-card-default uk-card-body">
+            <div class="uk-section">
+                <h1 class="uk-heading-line todayoutfit"><span>오늘 뭐 입지?</span></h1>
+                <div class="uk-card uk-card-primary uk-card-large uk-card-body uk-width-2xlarge">
+                    <h3>19도</h3>
+                    <p id="recommend">위치를 찾으면 옷차림을 추천합니다.</p>
+                    <div uk-icon="location"><span id="currentLocation">위치 찾는 중</span></div>
                     <div>
-                        <div class="input-group">
-                        <input type="text" class="form-control" id="lcation" name="location" placeholder="위치를 입력해주세요.">
-                        <span class="input-group-btn">
-                            <input type="submit" class="btn btn-default" id="searchBtn" value="검색">
-                        </span>
-                        </div>
+                        <button class="uk-button uk-button-default uk-button-small" id="searchByMyLocation">내 위치로 옷차림 검색</button>
                     </div>
-                </form>
-
+                    <hr class="uk-divider-small">
+                    <p>최고기온 <span id="maxTemp">-</span>도 / 최저기온 <span id="minTemp">-</span>도</p>
+                </div>
+                <div class="uk-margin">
+                    <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/board/list">
+                        <a onclick="document.getElementById('searchForm').submit();" class="uk-search-icon-flip" uk-search-icon></a>
+                        <input class="uk-search-input" type="search" id="location" name="location" placeholder="원하는 지역명으로 검색">
+                    </form>
+                </div>
             </div>
-
-        </section>
-
-        <footer>
 
             <div>
                 <span class="glyphicon glyphicon-envelope"></span>
-                <a th:href="@{mailto:joara9566@naver.com}">관리자에게 메일쓰기</a>
+                <a class="uk-icon-button uk-button-secondary" uk-icon="mail" href="mailto:joara9566@naver.com"></a>
             </div>
-
-            <copyright>Copyright 2021.조아라. All rights reserved.</copyright>
-
-        </footer>
-
-    </div>
-
+        </div>
+    </section>
 </body>
 
     <script th:inline="javascript">
@@ -90,23 +54,21 @@
                     $('#searchByMyLocation').click(function(){
                         location.href="/board/list?location="+data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"];
                     });
-
                 }
-
             });
 
             getWeather(point_x, point_y);
 
 
             }, function(error) {
-                console.error(error);
+                UIkit.modal.dialog('<p class="uk-modal-body">위치 정보를 확인할 수 없어 서비스를 제대로 이용할 수 없습니다. 내 위치 확인을 허용해주세요.</p>');
             }, {
                 enableHighAccuracy: false,
                 maximumAge: 0,
                 timeout: Infinity
             });
         } else {
-            alert('GPS를 지원하지 않습니다');
+            UIkit.modal.dialog('<p class="uk-modal-body">GPS를 지원하지 않아 서비스를 제대로 이용할 수 없습니다. GPS 가능한 브라우저로 접속해주세요.</p>');
         }
 
         function getWeather(point_x, point_y) {
@@ -128,7 +90,7 @@
                     dataType: "json",
                     success: function(data) {
                         console.log(data);
-                        $("#outfit > div").html(data.temp);
+                        $("#recommend").html(data.temp);
                     }
 
                 });
