@@ -23,7 +23,7 @@
 
     <section>
         <article class="uk-width-2xlarge uk-margin-auto uk-margin-medium-bottom">
-            <p class="uk-margin-auto" th:text="|${location}의 옷차림|"></p>
+            <p class="uk-margin-auto" id="searchLocation" th:text="|${location}의 옷차림|"></p>
             <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/board/list">
                 <a onclick="document.getElementById('searchForm').submit();" class="uk-search-icon-flip" uk-search-icon></a>
                 <input class="uk-search-input" type="search" id="location" name="location" placeholder="원하는 지역명으로 검색">
@@ -51,7 +51,7 @@
                     <legend class="uk-legend">오늘 당신의 옷차림을 알려주세요.</legend>
 
                     <div class="uk-margin">
-                        <textarea id="content" name="content" class="uk-textarea" rows="5" placeholder="30자까지 입력 가능합니다."></textarea>
+                        <textarea id="content" name="content" class="uk-textarea" placeholder="30자까지 입력 가능합니다." maxlength="30"></textarea>
                         <input type="hidden" name="nowLocation" id="nowLocation" value=""/>
                     </div>
 
@@ -116,7 +116,7 @@
             var requestParam = {
                 page: $("#page").val(),
                 size: $("#size").val(),
-                location: $("#location").text().replace("의 옷차림", ""),
+                location: $("#searchLocation").text().replace("의 옷차림", ""),
             };
 
             console.log(requestParam);
@@ -252,8 +252,10 @@
                     dataType 	: "JSON",
                 })
                 .done(function (result) {
+                    console.log(requestParam.location);
                     if (result.responseCode == "SUCCESS") {
                         $("#page").val(1);
+                        $("#searchLocation")[0].innerHTML = requestParam.location + "의 옷차림";
                         that.listInit();
                         $("#writeForm")[0].reset();
                         that.closeModal();
