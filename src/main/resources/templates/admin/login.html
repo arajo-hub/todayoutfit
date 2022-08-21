@@ -1,67 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="inc/asset.html::asset" />
-<link rel="stylesheet" th:href="@{/css/admin/login.css}">
 
-<body>
+<body class="uk-background-muted">
+<section>
+    <div class="uk-margin-auto uk-text-center uk-position-center uk-width-2xlarge uk-card uk-card-default uk-card-body">
+        <div class="uk-section">
+            <h1 class="uk-heading-line todayoutfit"><span>로그인</span></h1>
+            <div class="uk-card uk-card-primary uk-card-large uk-card-body uk-width-2xlarge">
+                <form th:action="login" id="loginform" method="post" th:autocomplete="false">
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: user"></span>
+                            <input class="uk-input" type="text" id="id" name="id" placeholder="아이디를 입력해주세요." maxlength="10">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                            <input class="uk-input" type="password" id="pw" name="pw" placeholder="비밀번호를 입력해주세요." maxlength="30">
+                        </div>
+                    </div>
+                    <input type="button" class="uk-button uk-button-default" id="loginBtn" value="로그인">
+                </form>
+            </div>
+        </div>
+</section>
 
-<div class="container">
+<script>
 
-    <header>
+    $(() => adminLoginView.init());
 
-        <h1>오늘 뭐 입지?</h1>
+    var adminLoginView = {
 
-    </header>
+    };
 
-    <section>
+    adminLoginView.init = function () {
+        this.loginBtnClick();
+    };
 
-        <form th:action="login" id="loginform" method="post">
-            <label>아이디<input type="text" id="name" name="name" class="form form-control"></label>
-            <label>비밀번호<input type="password" id="pw" name="pw" class="form form-control"></label>
-            <input type="button" class="form form-control btn-general" id="loginBtn" value="로그인">
-        </form>
+    adminLoginView.loginBtnClick = function() {
 
-    </section>
+        var that = this;
 
-    <footer>
+        $("#loginBtn").click(function() {
 
-        <copyright>Copyright 2021.조아라. All rights reserved.</copyright>
+            var requestParam = {
+                id: $("#id").val(),
+                pw: $("#pw").val()
+            };
 
-    </footer>
-
-</div>
-
-    <script>
-
-        $(() => adminLoginView.init());
-
-        var adminLoginView = {
-
-        };
-
-        adminLoginView.init = function () {
-            this.loginBtnClick();
-        };
-
-        adminLoginView.loginBtnClick = function() {
-
-            var that = this;
-
-            $("#loginBtn").click(function() {
-
-                var requestParam = {
-                    id: $("#name").val(),
-                    pw: $("#pw").val()
-                };
-
-                $.ajax({
-                    url 		: "/admin/loginAjax",
-                    type 		: "POST",
-                    data 		: requestParam,
-                    dataType 	: "JSON",
-                })
+            $.ajax({
+                url 		: "/admin/loginAjax",
+                type 		: "POST",
+                data 		: requestParam,
+                dataType 	: "JSON",
+            })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         window.location = "/admin/board/list";
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
@@ -75,10 +70,10 @@
                 .fail(function() {
                     alert("알 수 없는 오류가 발생했습니다.");
                 })
-            });
-        };
+        });
+    };
 
-    </script>
+</script>
 
 </body>
 </html>
