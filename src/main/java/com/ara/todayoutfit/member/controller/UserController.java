@@ -57,6 +57,7 @@ public class UserController {
     @RequestMapping(value = "/board/addAjax", method={RequestMethod.POST})
     public BaseResult addPostAjax(HttpServletRequest request, Post post) {
         log.info(post.toString());
+        post.setRecommendCnt(0L);
         post.setWriteDate(LocalDateTime.now());
         post.setDeclaredYn(false);
         return postService.save(post);
