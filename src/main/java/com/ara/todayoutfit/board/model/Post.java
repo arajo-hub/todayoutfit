@@ -20,7 +20,7 @@ public class Post {
     private Long postSeq;
 
     @Column
-    @Size(max = 30)
+    @Size(max = 50)
     private String content;
 
     @Column
