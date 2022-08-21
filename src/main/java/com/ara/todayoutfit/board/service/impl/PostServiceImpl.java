@@ -1,9 +1,8 @@
 package com.ara.todayoutfit.board.service.impl;
 
-import com.ara.todayoutfit.board.model.Declare;
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostShow;
 import com.ara.todayoutfit.board.repository.PostRepository;
-import com.ara.todayoutfit.board.repository.PostSpecifications;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
@@ -12,12 +11,9 @@ import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,36 +23,40 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
-    public PageResult list(SearchParam searchParam) {
+    public PageResult findAll(SearchParam searchParam) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
-        Pageable pageable = PageRequest.of(searchParam.getPage() - 1, searchParam.getSize(), Sort.by("writeDate").descending());
-        Page<Post> all = postRepository.findAll(pageable);
+        Page<PostShow> all = postRepository.findAll(searchParam);
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
     };
 
-    public PageResult listByLocation(SearchParam searchParam) {
+    public List<Post> findAll() {
+        return postRepository.findAll();
+    }
+
+    public Optional<Post> findBySeq(Long id) {
+        return postRepository.findBySeq(id);
+    }
+
+    public PageResult findByLocation(SearchParam searchParam) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
-        Pageable pageable = PageRequest.of(searchParam.getPage() - 1, searchParam.getSize(), Sort.by("writeDate").descending());
-        Page<Post> all = postRepository.findAll(PostSpecifications.equalToSpecificLocation(searchParam.getLocation())
-                                                .and(PostSpecifications.findNotDeclared())
-                                                .and(PostSpecifications.findAllTodayPosts(LocalDateTime.now())), pageable);
+        Page<PostShow> all = postRepository.findByLocation(searchParam);
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
     }
 
-    public BaseResult cancelDeclare(int id) {
+    public BaseResult cancelDeclare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findById(id);
+        Optional<Post> postById = postRepository.findBySeq(seq);
         if (postById.isPresent()) {
             Post post = postById.get();
-            post.setDeclared_yn(Declare.NOT_DECLARED.getCode());
-            postRepository.saveAndFlush(post);
+            post.setDeclaredYn(false);
+            postRepository.save(post);
         } else {
             result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
             log.info("[{}] {}",
@@ -66,20 +66,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public BaseResult add(Post post) {
-        postRepository.save(post);
-        return new BaseResult(ResponseCode.SUCCESS);
+    public BaseResult save(Post post) {
+        Post save = postRepository.save(post);
+        return post.equals(save) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
     }
 
     @Override
-    public BaseResult recommend(int id) {
+    public BaseResult saveAll(List<Post> posts) {
+        List<Post> saveAll = postRepository.saveAll(posts);
+        return posts.equals(saveAll) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
+    }
+
+    @Override
+    public BaseResult recommend(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findById(id);
+        Optional<Post> postById = postRepository.findBySeq(seq);
         if (postById.isPresent()) {
             Post post = postById.get();
             post.setRecommendCnt(post.getRecommendCnt() + 1);
-            postRepository.saveAndFlush(post);
         } else {
             result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
         }
@@ -87,22 +92,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public BaseResult declare(int id) {
+    public BaseResult declare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findById(id);
+        Optional<Post> postById = postRepository.findBySeq(seq);
         if (postById.isPresent()) {
             Post post = postById.get();
-            post.setDeclared_yn(Declare.DECLARED.getCode());
-            postRepository.saveAndFlush(post);
+            post.setDeclaredYn(true);
         } else {
             result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
         }
         return result;
     }
 
-    public BaseResult deletePost(int id) {
-        postRepository.deleteById(id);
+    @Override
+    public BaseResult delete(Long seq) {
+        postRepository.deleteBySeq(seq);
         return new BaseResult(ResponseCode.SUCCESS);
     }
+
+    @Override
+    public BaseResult deleteAll() {
+        postRepository.deleteAll();
+        return new BaseResult(ResponseCode.SUCCESS);
+    }
+
 }

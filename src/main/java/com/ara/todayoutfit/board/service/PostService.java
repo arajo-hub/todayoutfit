@@ -1,23 +1,32 @@
 package com.ara.todayoutfit.board.service;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.SearchParam;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface PostService {
-    PageResult list(SearchParam searchParam);
 
-    PageResult listByLocation(SearchParam searchParam);
+    PageResult findAll(SearchParam searchParam);
 
-    BaseResult deletePost(int parseInt);
+    PageResult findByLocation(SearchParam searchParam);
 
-    BaseResult cancelDeclare(int parseInt);
+    BaseResult delete(Long seq);
 
-    BaseResult add(Post post);
+    BaseResult deleteAll();
 
-    BaseResult recommend(int id);
+    BaseResult cancelDeclare(Long seq);
 
-    BaseResult declare(int id);
+    BaseResult save(Post post);
+
+    BaseResult saveAll(List<Post> posts);
+
+    BaseResult recommend(Long seq);
+
+    BaseResult declare(Long seq);
 
 }

@@ -25,7 +25,7 @@ public class RecommendController {
     @RequestMapping(value = "/recommend", method={RequestMethod.GET})
     public void recommend(HttpServletRequest req, HttpServletResponse response, String temp) {
 
-        double nowTemp = Double.parseDouble(temp);
+        Integer nowTemp = Integer.parseInt(temp);
 
         Gson gson = new Gson();
 

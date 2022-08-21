@@ -1,11 +1,11 @@
 package com.ara.todayoutfit.admin.controller;
 
-import com.ara.todayoutfit.admin.model.Admin;
 import com.ara.todayoutfit.admin.service.AdminService;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.SearchParam;
+import com.ara.todayoutfit.user.model.MemberSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,10 +37,10 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(value = "/loginAjax", method = {RequestMethod.POST})
-    public BaseResult loginAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, Admin admin) {
+    public BaseResult loginAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, MemberSearch memberSearch) {
         // 유효성 체크
-        log.info(admin.toString());
-        return adminService.login(session, admin);
+        log.info(memberSearch.toString());
+        return adminService.login(session, memberSearch);
     }
 
     @RequestMapping(value = "/board/list", method = {RequestMethod.GET})
@@ -54,20 +54,20 @@ public class AdminController {
     @RequestMapping(value = "/board/listAjax", method = {RequestMethod.POST})
     public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, SearchParam searchParam) {
         searchParam.setPage((searchParam.getPage() <= 0) ? 1 : searchParam.getPage());
-        PageResult result = postService.list(searchParam);
+        PageResult result = postService.findByLocation(searchParam);
         return result;
     }
 
     @ResponseBody
     @RequestMapping(value = "/board/deletePostAjax", method = {RequestMethod.POST})
     public BaseResult deletePostAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, String id) {
-        return postService.deletePost(Integer.parseInt(id));
+        return postService.delete(Long.parseLong(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/board/cancelDeclareAjax", method = {RequestMethod.POST})
     public BaseResult cancelDeclareAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, String id) {
-        return postService.cancelDeclare(Integer.parseInt(id));
+        return postService.cancelDeclare(Long.parseLong(id));
     }
 
     @RequestMapping(value = "/logout", method = {RequestMethod.GET})

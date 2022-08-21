@@ -16,7 +16,7 @@
     <section>
 
         <form th:action="login" id="loginform" method="post">
-            <label>아이디<input type="text" id="name" name="name" class="form form-control"></label>
+            <label>아이디<input type="text" id="id" name="id" class="form form-control"></label>
             <label>비밀번호<input type="password" id="pw" name="pw" class="form form-control"></label>
             <input type="button" class="form form-control btn-general" id="loginBtn" value="로그인">
         </form>
@@ -50,7 +50,7 @@
             $("#loginBtn").click(function() {
 
                 var requestParam = {
-                    id: $("#name").val(),
+                    id: $("#id").val(),
                     pw: $("#pw").val()
                 };
 

@@ -128,3 +128,5 @@ fabric.properties
 build/
 out/
 src/main/generated/
+application-test.properties
+generated_tests

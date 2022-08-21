@@ -76,7 +76,7 @@
             fetch("https://api.openweathermap.org/data/2.5/weather?lat="+point_y+"&lon="+point_x+"&appid=e7b4c588445f7aa66ba2455335a97e25&units=metric")
             .then(res => res.json())
             .then(data => {
-                const temp = data.main.temp;
+                const temp = parseInt(data.main.temp, 10);
                 const maxTemp = data.main.temp_max;
                 const minTemp = data.main.temp_min;
                 $("#nowTemp").html(temp+"도");
@@ -89,7 +89,6 @@
                     data: {temp: temp},
                     dataType: "json",
                     success: function(data) {
-                        console.log(data);
                         $("#recommend").html(data.temp);
                     }
 
