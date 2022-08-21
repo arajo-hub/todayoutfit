@@ -19,16 +19,16 @@ public class RecommendServiceImpl implements RecommendInfoService {
     private RecommendInfoRepository recommendInfoRepository;
 
     public List<RecommendInfo> getAllRecommendInfo() {
-        return recommendInfoRepository.findAll();
+//        return recommendInfoRepository.findAll();
+        return null;
     }
 
     @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")
     @Override
-    public RecommendInfo getRecommendInfoByTemp(double temp) {
+    public RecommendInfo getRecommendInfoByTemp(Integer temp) {
         long start = System.currentTimeMillis();
         List<RecommendInfo> properRecommendInfo = recommendInfoRepository.findRecommendInfoByTemp(temp);
         long end = System.currentTimeMillis();
-        log.info("수행시간" + Long.toString(end - start));
         return ObjectUtils.isEmpty(properRecommendInfo) ? null : properRecommendInfo.get(0);
     }
 
