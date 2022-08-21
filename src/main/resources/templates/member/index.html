@@ -77,8 +77,8 @@
             .then(res => res.json())
             .then(data => {
                 const temp = parseInt(data.main.temp, 10);
-                const maxTemp = data.main.temp_max;
-                const minTemp = data.main.temp_min;
+                const maxTemp = parseInt(data.main.temp_max);
+                const minTemp = parseInt(data.main.temp_min);
                 $("#nowTemp").html(temp+"도");
                 $("#maxTemp").html(maxTemp);
                 $("#minTemp").html(minTemp);
