@@ -107,22 +107,22 @@ public class PostRepository {
         return posts;
     }
 
-//    public void deleteBySeq(Long seq) {
-//        queryFactory.delete(post)
-//                .where(equalsSeq(seq)).execute();
-//    }
-//
-//    public void delete(Post post) {
-//        em.remove(post);
-//    }
-//
-//    private BooleanExpression equalsSeq(Long seq) {
-//        return post.postSeq.eq(seq);
-//    }
-//
-//    public void deleteAll() {
-//        queryFactory.delete(post)
-//                .execute();
-//    }
+    public void deleteBySeq(Long seq) {
+        queryFactory.delete(post)
+                .where(equalsSeq(seq)).execute();
+    }
+
+    public void delete(Post post) {
+        em.remove(post);
+    }
+
+    private BooleanExpression equalsSeq(Long seq) {
+        return post.postSeq.eq(seq);
+    }
+
+    public void deleteAll() {
+        queryFactory.delete(post)
+                .execute();
+    }
 
 }

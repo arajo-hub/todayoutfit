@@ -85,6 +85,7 @@ public class PostServiceImpl implements PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.setRecommendCnt(post.getRecommendCnt() + 1);
+            postRepository.save(post);
         } else {
             result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
         }
