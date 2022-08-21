@@ -30,7 +30,7 @@ public class Post {
     @Column(name="recommend_cnt")
     private Long recommendCnt;
 
-    @Column(name="declare_yn")
+    @Column(name="declared_yn")
     private boolean declaredYn;
 
     @Column(name="write_date")

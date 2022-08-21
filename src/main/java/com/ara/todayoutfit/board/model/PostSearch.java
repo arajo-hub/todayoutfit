@@ -11,21 +11,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostSearch {
 
-    private int postSeq;
-    private String content;
+    private int page;
+    private int size;
     private String location;
-    private long recommendCnt;
-    private boolean declaredYn;
-    private LocalDateTime writeDate;
 
     @Builder
-    public PostSearch(int postSeq, String content, String location, long recommendCnt, boolean declaredYn, LocalDateTime writeDate) {
-        this.postSeq = postSeq;
-        this.content = content;
+    public PostSearch(int page, int size, String location) {
+        this.page = page;
+        this.size = size;
         this.location = location;
-        this.recommendCnt = recommendCnt;
-        this.declaredYn = declaredYn;
-        this.writeDate = writeDate;
     }
 
 }

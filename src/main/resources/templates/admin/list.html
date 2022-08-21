@@ -103,8 +103,6 @@
                 size: $("#size").val()
             };
 
-            console.log(requestParam);
-
             $.ajax({
                 url 		: "/admin/board/listAjax",
                 type 		: "POST",
@@ -165,7 +163,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         that.listInit();
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
@@ -193,7 +190,6 @@
                 var requestParam = {
                     id: $('#id').val()
                 }
-                console.log(requestParam);
                 $.ajax({
                     url 		: "/admin/board/deletePostAjax",
                     type 		: "POST",
@@ -201,7 +197,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         that.listInit();
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {

@@ -1,7 +1,7 @@
-package com.ara.todayoutfit.user.service;
+package com.ara.todayoutfit.member.service;
 
-import com.ara.todayoutfit.user.model.Member;
-import com.ara.todayoutfit.user.repository.MemberRepository;
+import com.ara.todayoutfit.member.model.Member;
+import com.ara.todayoutfit.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

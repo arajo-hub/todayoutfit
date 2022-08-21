@@ -1,8 +1,7 @@
-package com.ara.todayoutfit.user.service;
-
-import com.ara.todayoutfit.user.model.Member;
+package com.ara.todayoutfit.member.service;
 
 import java.util.Optional;
+import com.ara.todayoutfit.member.model.Member;
 
 public interface MemberService {
 

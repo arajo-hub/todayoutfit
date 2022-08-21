@@ -2,7 +2,7 @@ package com.ara.todayoutfit.user;
 
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.repository.PostRepository;
-import com.ara.todayoutfit.user.controller.UserController;
+import com.ara.todayoutfit.member.controller.UserController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

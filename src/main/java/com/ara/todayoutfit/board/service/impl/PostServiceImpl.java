@@ -1,13 +1,13 @@
 package com.ara.todayoutfit.board.service.impl;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.model.PostShow;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.ResponseCode;
-import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,10 +23,10 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
-    public PageResult findAll(SearchParam searchParam) {
+    public PageResult findAll(PostSearch postSearch) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
-        Page<PostShow> all = postRepository.findAll(searchParam);
+        Page<PostShow> all = postRepository.findAll(postSearch);
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
@@ -40,10 +40,10 @@ public class PostServiceImpl implements PostService {
         return postRepository.findBySeq(id);
     }
 
-    public PageResult findByLocation(SearchParam searchParam) {
+    public PageResult findByLocation(PostSearch postSearch) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
-        Page<PostShow> all = postRepository.findByLocation(searchParam);
+        Page<PostShow> all = postRepository.findByLocation(postSearch);
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
@@ -107,13 +107,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public BaseResult delete(Long seq) {
-        postRepository.deleteBySeq(seq);
+//        postRepository.deleteBySeq(seq);
         return new BaseResult(ResponseCode.SUCCESS);
     }
 
     @Override
     public BaseResult deleteAll() {
-        postRepository.deleteAll();
+//        postRepository.deleteAll();
         return new BaseResult(ResponseCode.SUCCESS);
     }
 

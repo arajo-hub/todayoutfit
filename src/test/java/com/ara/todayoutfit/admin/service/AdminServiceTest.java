@@ -2,9 +2,9 @@ package com.ara.todayoutfit.admin.service;
 
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
-import com.ara.todayoutfit.user.model.Member;
-import com.ara.todayoutfit.user.model.MemberSearch;
-import com.ara.todayoutfit.user.service.MemberService;
+import com.ara.todayoutfit.member.model.Member;
+import com.ara.todayoutfit.member.model.MemberSearch;
+import com.ara.todayoutfit.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

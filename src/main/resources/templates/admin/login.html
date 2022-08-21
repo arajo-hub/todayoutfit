@@ -61,7 +61,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         window.location = "/admin/board/list";
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {

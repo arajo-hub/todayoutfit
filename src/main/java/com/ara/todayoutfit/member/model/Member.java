@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.user.model;
+package com.ara.todayoutfit.member.model;
 
 import lombok.*;
 

@@ -1,10 +1,10 @@
-package com.ara.todayoutfit.user.controller;
+package com.ara.todayoutfit.member.controller;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
-import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,9 +47,9 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/board/listAjax", method={RequestMethod.POST})
-    public PageResult listAjax(HttpServletRequest request, Model model, SearchParam searchParam) {
-        searchParam.setPage((searchParam.getPage() <= 0) ? 1 : searchParam.getPage());
-        PageResult result = postService.findByLocation(searchParam);
+    public PageResult listAjax(HttpServletRequest request, Model model, PostSearch postSearch) {
+        postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
+        PageResult result = postService.findByLocation(postSearch);
         return result;
     }
 

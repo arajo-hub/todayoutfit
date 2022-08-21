@@ -1,8 +1,8 @@
-package com.ara.todayoutfit.user.service.impl;
+package com.ara.todayoutfit.member.service.impl;
 
-import com.ara.todayoutfit.user.model.Member;
-import com.ara.todayoutfit.user.repository.MemberRepository;
-import com.ara.todayoutfit.user.service.MemberService;
+import com.ara.todayoutfit.member.model.Member;
+import com.ara.todayoutfit.member.repository.MemberRepository;
+import com.ara.todayoutfit.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

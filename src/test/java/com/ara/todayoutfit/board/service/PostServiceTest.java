@@ -1,9 +1,9 @@
 package com.ara.todayoutfit.board.service;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.common.PageResult;
-import com.ara.todayoutfit.common.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class PostServiceTest {
                         .build());
         postService.saveAll(posts);
 
-        SearchParam searchParam = SearchParam.builder()
+        PostSearch searchParam = PostSearch.builder()
                 .page(1)
                 .size(10)
                 .location("%")
@@ -80,7 +80,7 @@ class PostServiceTest {
                         .build());
         postService.saveAll(posts);
 
-        SearchParam searchParam = SearchParam.builder()
+        PostSearch searchParam = PostSearch.builder()
                         .page(1)
                         .size(10)
                         .location(null)
@@ -111,7 +111,7 @@ class PostServiceTest {
         postService.saveAll(posts);
 
         String location = "광진구";
-        SearchParam searchParam = SearchParam.builder()
+        PostSearch searchParam = PostSearch.builder()
                 .page(1)
                 .size(10)
                 .location(location)

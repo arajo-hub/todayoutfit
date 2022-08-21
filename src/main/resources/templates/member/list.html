@@ -119,8 +119,6 @@
                 location: $("#searchLocation").text().replace("의 옷차림", ""),
             };
 
-            console.log(requestParam);
-
             $.ajax({
                 url 		: "/board/listAjax",
                 type 		: "POST",
@@ -198,7 +196,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function (result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         that.listInit();
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
@@ -252,7 +249,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function (result) {
-                    console.log(requestParam.location);
                     if (result.responseCode == "SUCCESS") {
                         $("#page").val(1);
                         $("#searchLocation")[0].innerHTML = requestParam.location + "의 옷차림";

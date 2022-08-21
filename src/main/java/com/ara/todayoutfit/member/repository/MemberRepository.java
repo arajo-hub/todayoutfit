@@ -1,10 +1,9 @@
-package com.ara.todayoutfit.user.repository;
+package com.ara.todayoutfit.member.repository;
 
-import com.ara.todayoutfit.user.model.Member;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.ara.todayoutfit.member.model.Member;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 

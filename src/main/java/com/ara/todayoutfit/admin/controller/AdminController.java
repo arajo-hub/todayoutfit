@@ -1,11 +1,11 @@
 package com.ara.todayoutfit.admin.controller;
 
 import com.ara.todayoutfit.admin.service.AdminService;
+import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
-import com.ara.todayoutfit.common.SearchParam;
-import com.ara.todayoutfit.user.model.MemberSearch;
+import com.ara.todayoutfit.member.model.MemberSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,9 +52,9 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(value = "/board/listAjax", method = {RequestMethod.POST})
-    public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, SearchParam searchParam) {
-        searchParam.setPage((searchParam.getPage() <= 0) ? 1 : searchParam.getPage());
-        PageResult result = postService.findByLocation(searchParam);
+    public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, PostSearch postSearch) {
+        postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
+        PageResult result = postService.findByLocation(postSearch);
         return result;
     }
 
