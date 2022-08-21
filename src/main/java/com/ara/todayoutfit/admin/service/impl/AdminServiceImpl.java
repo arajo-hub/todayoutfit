@@ -1,10 +1,11 @@
 package com.ara.todayoutfit.admin.service.impl;
 
-import com.ara.todayoutfit.admin.model.Admin;
-import com.ara.todayoutfit.admin.repository.AdminRepository;
 import com.ara.todayoutfit.admin.service.AdminService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
+import com.ara.todayoutfit.member.model.Member;
+import com.ara.todayoutfit.member.model.MemberSearch;
+import com.ara.todayoutfit.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,20 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private MemberService userService;
 
-    public BaseResult login(HttpSession session, Admin admin) {
+    @Override
+    public BaseResult login(HttpSession session, MemberSearch admin) {
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Admin> attemptedToLogin = adminRepository.findById(String.valueOf(admin.getId()));
+        Optional<Member> userFindById = userService.findById(admin.getId());
 
-        if (attemptedToLogin.isPresent()) {
-            Admin loggedInAdmin = attemptedToLogin.get();
-            if (admin.getPw().equals(loggedInAdmin.getPw())) {
-                session.setAttribute("id", loggedInAdmin.getId());
+        if (userFindById.isPresent()) {
+            Member loggedIn = userFindById.get();
+            if (admin.getPw().equals(loggedIn.getPw())) {
+                session.setAttribute("id", loggedIn.getId());
                 log.info("[{}] Logged in = {}",
                         Thread.currentThread().getStackTrace()[1].getMethodName(),
-                        loggedInAdmin.getId(), loggedInAdmin.getName(), loggedInAdmin.getPw());
+                        loggedIn.getId(), loggedIn.getPw());
             } else {
                 result.setResponseCode(ResponseCode.WRONG_PASSWORD);
                 log.info("[{}] {}",

@@ -103,8 +103,6 @@
                 size: $("#size").val()
             };
 
-            console.log(requestParam);
-
             $.ajax({
                 url 		: "/admin/board/listAjax",
                 type 		: "POST",
@@ -122,7 +120,7 @@
                             + '<td>' + element.content + '</td>'
                             + '<td>' + element.location + '</td>'
                             + '<td>' + element.recommendCnt + '</td>'
-                            + '<td>' + element.writeDate + '</td>'
+                            + '<td>' + element.writeDateStr + '</td>'
                             + '<td><div id="btns">'
                             + '<button type="button" id="delBtn" class="form form-control btn-general" data-toggle="modal" data-target="#delModal" data-seq="' + element.postSeq + '">삭제</button>';
 
@@ -165,7 +163,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         that.listInit();
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
@@ -193,7 +190,6 @@
                 var requestParam = {
                     id: $('#id').val()
                 }
-                console.log(requestParam);
                 $.ajax({
                     url 		: "/admin/board/deletePostAjax",
                     type 		: "POST",
@@ -201,7 +197,6 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    console.log(result);
                     if (result.responseCode == "SUCCESS") {
                         that.listInit();
                     } else if (result.responseCode == "DB_NOT_FOUND_DATA") {

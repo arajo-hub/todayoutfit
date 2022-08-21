@@ -15,6 +15,6 @@ public interface RecommendInfoService {
     /**
      * 기온에 따른 정보 조회
      */
-    RecommendInfo getRecommendInfoByTemp(double temp);
+    RecommendInfo getRecommendInfoByTemp(Integer temp);
 
 }
