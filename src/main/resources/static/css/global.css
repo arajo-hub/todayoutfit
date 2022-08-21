@@ -20,14 +20,6 @@ html, body {
     height: 100%;
 }
 
-header {
-    min-height:25%;
-}
-
-footer {
-    font-size:0.7em;
-}
-
 textarea {
     resize: none;
 }
