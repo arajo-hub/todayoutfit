@@ -3,11 +3,11 @@ package com.ara.todayoutfit.recommend.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name="recommendinfo")
 public class RecommendInfo implements Serializable {
@@ -18,12 +18,19 @@ public class RecommendInfo implements Serializable {
     private Integer recommendInfoSeq;
 
     @Column(name="max_temp")
-    private Double maxTemp;
+    private Integer maxTemp;
 
     @Column(name="min_temp")
-    private Double minTemp;
+    private Integer minTemp;
 
     @Column
+    @Size(max = 30)
     private String message;
 
+    @Builder
+    public RecommendInfo(Integer maxTemp, Integer minTemp, String message) {
+        this.maxTemp = maxTemp;
+        this.minTemp = minTemp;
+        this.message = message;
+    }
 }

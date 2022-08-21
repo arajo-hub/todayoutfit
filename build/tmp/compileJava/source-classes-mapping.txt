@@ -1,4 +1,0 @@
-com/ara/todayoutfit/WebController.java
- com.ara.todayoutfit.WebController
-com/ara/todayoutfit/BootTestApplication.java
- com.ara.todayoutfit.BootTestApplication
