@@ -27,7 +27,7 @@ public class PostShow {
         this.recommendCnt = recommendCnt;
         this.declaredYn = declaredYn;
         this.writeDate = writeDate;
-        this.writeDateStr = this.writeDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
+        this.writeDateStr = this.writeDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
     }
 
 }

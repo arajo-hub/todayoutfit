@@ -100,6 +100,7 @@ public class PostServiceImpl implements PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.setDeclaredYn(true);
+            postRepository.save(post);
         } else {
             result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
         }
@@ -108,13 +109,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public BaseResult delete(Long seq) {
-//        postRepository.deleteBySeq(seq);
+        postRepository.deleteBySeq(seq);
         return new BaseResult(ResponseCode.SUCCESS);
     }
 
     @Override
     public BaseResult deleteAll() {
-//        postRepository.deleteAll();
+        postRepository.deleteAll();
         return new BaseResult(ResponseCode.SUCCESS);
     }
 
