@@ -112,16 +112,33 @@ public class PostRepository {
                 .where(equalsSeq(seq)).execute();
     }
 
-    public void delete(Post post) {
-        em.remove(post);
-    }
-
     private BooleanExpression equalsSeq(Long seq) {
         return post.postSeq.eq(seq);
     }
 
     public void deleteAll() {
         queryFactory.delete(post)
+                .execute();
+    }
+
+    public void cancelDeclare(Long seq) {
+        queryFactory.update(post)
+                .set(post.declaredYn, false)
+                .where(equalsSeq(seq))
+                .execute();
+    }
+
+    public void declare(Long seq) {
+        queryFactory.update(post)
+                .set(post.declaredYn, true)
+                .where(equalsSeq(seq))
+                .execute();
+    }
+
+    public void recommend(Long seq) {
+        queryFactory.update(post)
+                .set(post.recommendCnt, post.recommendCnt.add(1))
+                .where(equalsSeq(seq))
                 .execute();
     }
 

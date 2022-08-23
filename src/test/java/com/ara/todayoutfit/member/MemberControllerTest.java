@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.user;
+package com.ara.todayoutfit.member;
 
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.repository.PostRepository;
@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Slf4j
-@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 public class MemberControllerTest {
@@ -40,6 +39,11 @@ public class MemberControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+    }
+
+    @BeforeEach
+    void clean() {
+        postRepository.deleteAll();
     }
 
     @Test
@@ -58,7 +62,7 @@ public class MemberControllerTest {
                         .flashAttr("post", post));
 
         List<Post> all = postRepository.findAll();
-        assertTrue(all.contains(post));
+        assertEquals(1, all.size());
     }
 
     @Test
@@ -103,7 +107,7 @@ public class MemberControllerTest {
         Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
-//        assertEquals(true, saved.getDeclaredYn());
+        assertEquals(true, saved.isDeclaredYn());
     }
 
 }

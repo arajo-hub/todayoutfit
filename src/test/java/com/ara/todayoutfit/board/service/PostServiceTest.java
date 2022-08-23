@@ -5,6 +5,7 @@ import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.common.PageResult;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 class PostServiceTest {
@@ -30,6 +30,11 @@ class PostServiceTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @BeforeEach
+    void clean() {
+        postRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("% 검색")
@@ -135,7 +140,7 @@ class PostServiceTest {
                 .writeDate(LocalDateTime.now())
                 .build();
         postService.save(post);
-        postRepository.delete(post);
+        postRepository.deleteBySeq(post.getPostSeq());
         List<Post> all = postRepository.findAll();
 
         assertEquals(0, all.size());
@@ -155,7 +160,13 @@ class PostServiceTest {
 
         postService.cancelDeclare(post.getPostSeq());
 
-        assertEquals(false, post.isDeclaredYn());
+        Optional<Post> postFindBySeq = postRepository.findBySeq(post.getPostSeq());
+        Post result = new Post();
+        if (postFindBySeq.isPresent()) {
+            result = postFindBySeq.get();
+        }
+
+        assertEquals(false, result.isDeclaredYn());
     }
 
     @Test
@@ -191,7 +202,13 @@ class PostServiceTest {
 
         postService.recommend(post.getPostSeq());
 
-        assertEquals(init + 1, post.getRecommendCnt().longValue());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Post result = new Post();
+        if (postBySeq.isPresent()) {
+            result = postBySeq.get();
+        }
+
+        assertEquals(init + 1, result.getRecommendCnt().longValue());
     }
 
     @Test
@@ -208,7 +225,12 @@ class PostServiceTest {
 
         postService.declare(post.getPostSeq());
 
-        assertEquals(true, post.isDeclaredYn());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Post result = new Post();
+        if (postBySeq.isPresent()) {
+            result = postBySeq.get();
+        }
+        assertEquals(true, result.isDeclaredYn());
 
     }
 }

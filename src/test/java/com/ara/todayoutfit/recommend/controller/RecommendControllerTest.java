@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 class RecommendControllerTest {
@@ -40,6 +39,11 @@ class RecommendControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(recommendController).build();
+    }
+
+    @BeforeEach
+    void clean() {
+        recommendInfoRepository.deleteAll();
     }
 
     @Test
