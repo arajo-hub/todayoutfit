@@ -52,16 +52,8 @@ public class PostServiceImpl implements PostService {
     public BaseResult cancelDeclare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findBySeq(seq);
-        if (postById.isPresent()) {
-            Post post = postById.get();
-            post.setDeclaredYn(false);
-            postRepository.save(post);
-        } else {
-            result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
-            log.info("[{}] {}",
-                    Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
-        }
+        postRepository.cancelDeclare(seq);
+        log.info("[{}] {}", Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
         return result;
     }
 
@@ -81,14 +73,8 @@ public class PostServiceImpl implements PostService {
     public BaseResult recommend(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findBySeq(seq);
-        if (postById.isPresent()) {
-            Post post = postById.get();
-            post.setRecommendCnt(post.getRecommendCnt() + 1);
-            postRepository.save(post);
-        } else {
-            result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
-        }
+        postRepository.recommend(seq);
+        log.info("[{}] {}", Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
         return result;
     }
 
@@ -96,14 +82,8 @@ public class PostServiceImpl implements PostService {
     public BaseResult declare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Post> postById = postRepository.findBySeq(seq);
-        if (postById.isPresent()) {
-            Post post = postById.get();
-            post.setDeclaredYn(true);
-            postRepository.save(post);
-        } else {
-            result.setResponseCode(ResponseCode.DB_NOT_FOUND_DATA);
-        }
+        postRepository.declare(seq);
+        log.info("[{}] {}", Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
         return result;
     }
 

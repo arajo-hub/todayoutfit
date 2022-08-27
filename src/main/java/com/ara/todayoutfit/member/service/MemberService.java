@@ -7,7 +7,7 @@ public interface MemberService {
 
     Member save(Member user);
 
-    void delete(Member user);
+    void deleteById(String id);
 
     Optional<Member> findById(String id);
 

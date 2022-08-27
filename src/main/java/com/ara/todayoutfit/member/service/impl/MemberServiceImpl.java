@@ -20,8 +20,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void delete(Member user) {
-        userRepository.delete(user);
+    public void deleteById(String id) {
+        userRepository.deleteById(id);
     }
 
     @Override

@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Slf4j
-@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 public class AdminControllerTest {
@@ -46,6 +45,12 @@ public class AdminControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+    }
+
+    @BeforeEach
+    void clean() {
+        memberRepository.deleteAll();
+        postRepository.deleteAll();
     }
 
     @Test
