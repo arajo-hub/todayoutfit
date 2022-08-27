@@ -54,7 +54,7 @@ public class AdminController {
     @RequestMapping(value = "/board/listAjax", method = {RequestMethod.POST})
     public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, PostSearch postSearch) {
         postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
-        PageResult result = postService.findByLocation(postSearch);
+        PageResult result = postService.findAll(postSearch);
         return result;
     }
 
