@@ -12,7 +12,7 @@ public class BaseResult {
     private ResponseCode responseCode;
 
     public boolean isSuccess() {
-        return this.responseCode.getCode().equals(ResponseCode.SUCCESS.getCode()) ? true : false;
+        return this.responseCode.getCode().equals(ResponseCode.SUCCESS.getCode());
     }
 
     public boolean isNotSuccess() {
