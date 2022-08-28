@@ -1,8 +1,8 @@
-package com.ara.todayoutfit.member;
+package com.ara.todayoutfit.member.controller;
 
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.repository.PostRepository;
-import com.ara.todayoutfit.member.controller.UserController;
+import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,17 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
 @ActiveProfiles("test")
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class MemberControllerTest {
 
     @Autowired
-    private UserController memberController;
+    WebApplicationContext wac;
 
     @Autowired
     private PostRepository postRepository;
@@ -38,7 +39,7 @@ public class MemberControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @BeforeEach
@@ -63,6 +64,80 @@ public class MemberControllerTest {
 
         List<Post> all = postRepository.findAll();
         assertEquals(1, all.size());
+    }
+
+    @Test
+    @DisplayName("50자 이상 게시물 추가")
+    void addLongLengthPostTest() throws Exception {
+        Post post = Post.builder()
+                .content("게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가게시물추가")
+                .location("광진구")
+                .declaredYn(false)
+                .recommendCnt(0)
+                .writeDate(LocalDateTime.now())
+                .build();
+
+        // 게시물 추가
+        mockMvc.perform(post("/board/addAjax")
+                .flashAttr("post", post))
+                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+
+    }
+
+    @Test
+    @DisplayName("내용없는 게시물 추가")
+    void addNoLengthPostTest() throws Exception {
+        Post post = Post.builder()
+                .content("")
+                .location("광진구")
+                .declaredYn(false)
+                .recommendCnt(0)
+                .writeDate(LocalDateTime.now())
+                .build();
+
+        // 게시물 추가
+        mockMvc.perform(post("/board/addAjax")
+                .flashAttr("post", post))
+                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+
+    }
+
+    @Test
+    @DisplayName("15자 이상 지역으로 게시글 추가")
+    void addLongLocationTest() throws Exception {
+        Post post = Post.builder()
+                .content("저장테스트")
+                .location("광진구광진구광진구광진구광진구광진구")
+                .declaredYn(false)
+                .recommendCnt(0)
+                .writeDate(LocalDateTime.now())
+                .build();
+
+        // 게시물 추가
+        mockMvc.perform(post("/board/addAjax")
+                .flashAttr("post", post))
+                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+
+    }
+
+    @Test
+    @DisplayName("빈 지역명으로 게시글 추가")
+    void addNoLengthLocationTest() throws Exception {
+        Post post = Post.builder()
+                .content("저장테스트")
+                .location("")
+                .declaredYn(false)
+                .recommendCnt(0)
+                .writeDate(LocalDateTime.now())
+                .build();
+
+        // 게시물 추가
+        mockMvc.perform(post("/board/addAjax")
+                .flashAttr("post", post))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()))
+                .andDo(MockMvcResultHandlers.print());
+
     }
 
     @Test

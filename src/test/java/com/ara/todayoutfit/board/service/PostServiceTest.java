@@ -3,7 +3,9 @@ package com.ara.todayoutfit.board.service;
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -173,7 +176,7 @@ class PostServiceTest {
     @DisplayName("글 저장")
     void save() {
         Post post = Post.builder()
-                .content("삭제테스트")
+                .content("저장테스트")
                 .location("광진구")
                 .recommendCnt(1L)
                 .declaredYn(false)
@@ -184,6 +187,66 @@ class PostServiceTest {
         Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
 
         assertEquals(1, postBySeq.stream().count());
+    }
+
+    @Test
+    @DisplayName("50자 이상 글 저장")
+    void saveLongContent() {
+        assertThrows(ConstraintViolationException.class, () -> {
+            Post post = Post.builder()
+                    .content("50자이상50자이상50자이상50자이상50자이상50자이상50자이상50자이상50자이상50자이상50자이상")
+                    .location("광진구")
+                    .recommendCnt(1L)
+                    .declaredYn(false)
+                    .writeDate(LocalDateTime.now())
+                    .build();
+            postService.save(post);
+        });
+    }
+
+    @Test
+    @DisplayName("내용없는 글 저장")
+    void saveNoLengthContent() {
+        assertThrows(ConstraintViolationException.class, () -> {
+            Post post = Post.builder()
+                    .content("")
+                    .location("광진구")
+                    .recommendCnt(1L)
+                    .declaredYn(false)
+                    .writeDate(LocalDateTime.now())
+                    .build();
+            postService.save(post);
+        });
+    }
+
+    @Test
+    @DisplayName("15자 이상 지역으로 글 저장")
+    void saveLongLocation() {
+        assertThrows(ConstraintViolationException.class, () -> {
+            Post post = Post.builder()
+                    .content("저장테스트")
+                    .location("광진구광진구광진구광진구광진구광진구")
+                    .recommendCnt(1L)
+                    .declaredYn(false)
+                    .writeDate(LocalDateTime.now())
+                    .build();
+            postService.save(post);
+        });
+    }
+
+    @Test
+    @DisplayName("지역 입력없이 글 저장")
+    void saveNoLengthLocation() {
+        assertThrows(ConstraintViolationException.class, () -> {
+            Post post = Post.builder()
+                    .content("저장테스트")
+                    .location("")
+                    .recommendCnt(1L)
+                    .declaredYn(false)
+                    .writeDate(LocalDateTime.now())
+                    .build();
+            postService.save(post);
+        });
     }
 
     @Test

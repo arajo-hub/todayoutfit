@@ -12,11 +12,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AdminControllerTest {
 
     @Autowired
-    private AdminController adminController;
+    private WebApplicationContext wac;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -44,7 +46,7 @@ public class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @BeforeEach
@@ -124,8 +126,12 @@ public class AdminControllerTest {
                 .build();
         Post savedPost = postRepository.save(post);
 
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("id", "admin");
+
         // 삭제 시도
         mockMvc.perform(post("/admin/board/deletePostAjax")
+                .session(session)
                 .param("id", Long.toString(savedPost.getPostSeq())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResponseCode.SUCCESS.toString()))
@@ -145,7 +151,11 @@ public class AdminControllerTest {
                 .build();
         Post savedPost = postRepository.save(post);
 
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("id", "admin");
+
         mockMvc.perform(post("/admin/board/cancelDeclareAjax")
+                .session(session)
                 .param("id", Long.toString(savedPost.getPostSeq())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResponseCode.SUCCESS.toString()))

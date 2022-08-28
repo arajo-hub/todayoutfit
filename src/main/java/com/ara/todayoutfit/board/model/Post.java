@@ -20,11 +20,11 @@ public class Post {
     private Long postSeq;
 
     @Column
-    @Size(max = 50)
+    @Size(min = 1, max = 50)
     private String content;
 
     @Column
-    @Size(max = 15)
+    @Size(min = 1, max = 15)
     private String location;
 
     @Column(name="recommend_cnt")

@@ -1,11 +1,10 @@
 package com.ara.todayoutfit.recommend.controller;
 
-import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
-import com.ara.todayoutfit.recommend.service.RecommendInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +12,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RecommendControllerTest {
 
     @Autowired
-    private RecommendController recommendController;
+    private WebApplicationContext wac;
 
     @Autowired
     private RecommendInfoRepository recommendInfoRepository;
@@ -38,7 +35,7 @@ class RecommendControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(recommendController).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @BeforeEach
@@ -47,6 +44,7 @@ class RecommendControllerTest {
     }
 
     @Test
+    @DisplayName("기온에 따른 추천정보 가져오기")
     void recommend() throws Exception {
         RecommendInfo recommendInfo = RecommendInfo.builder()
                 .maxTemp(40)
