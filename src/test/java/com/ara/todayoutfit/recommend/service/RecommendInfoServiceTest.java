@@ -1,21 +1,24 @@
 package com.ara.todayoutfit.recommend.service;
 
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
+import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
 import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Slf4j
-@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 public class RecommendInfoServiceTest {
@@ -25,6 +28,11 @@ public class RecommendInfoServiceTest {
 
     @Autowired
     private RecommendInfoRepository recommendInfoRepository;
+
+    @BeforeEach
+    void clean() {
+        recommendInfoRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("추천정보 전체 조회")
@@ -56,6 +64,69 @@ public class RecommendInfoServiceTest {
         int temp = 37;
         RecommendInfo recommendInfoByTemp = recommendInfoService.getRecommendInfoByTemp(temp);
         assertEquals(recommendInfo, recommendInfoByTemp);
+    }
+
+    @Test
+    @DisplayName("추천정보 추가")
+    void save() {
+        RecommendInfo recommendInfo = RecommendInfo.builder()
+                .maxTemp(40)
+                .minTemp(20)
+                .message("추가 테스트입니다.")
+                .build();
+
+        recommendInfoService.save(recommendInfo);
+
+        Optional<RecommendInfo> recommendInfoBySeq = recommendInfoRepository.findBySeq(recommendInfo.getRecommendInfoSeq());
+
+        assertEquals(1, recommendInfoBySeq.stream().count());
+    }
+
+    @Test
+    @DisplayName("추천정보 삭제")
+    void delete() {
+        RecommendInfo recommendInfo = RecommendInfo.builder()
+                .maxTemp(40)
+                .minTemp(20)
+                .message("추가 테스트입니다.")
+                .build();
+
+        recommendInfoService.save(recommendInfo);
+
+        recommendInfoService.delete(recommendInfo.getRecommendInfoSeq());
+
+        int size = recommendInfoRepository.findAll().size();
+
+        assertEquals(0, size);
+    }
+
+    @Test
+    @DisplayName("추천정보 수정")
+    void update() {
+        RecommendInfo recommendInfo = RecommendInfo.builder()
+                .maxTemp(40)
+                .minTemp(20)
+                .message("추가 테스트입니다.")
+                .build();
+
+        recommendInfoService.save(recommendInfo);
+
+        RecommendInfoUpdate recommendInfoUpdate = RecommendInfoUpdate.builder()
+                .maxTemp(50)
+                .minTemp(10)
+                .message("수정 메시지입니다.")
+                .build();
+
+        recommendInfoService.update(recommendInfo.getRecommendInfoSeq(), recommendInfoUpdate);
+
+        Optional<RecommendInfo> updatedBySeq = recommendInfoRepository.findBySeq(recommendInfo.getRecommendInfoSeq());
+
+        RecommendInfo updated = new RecommendInfo();
+        if (updatedBySeq.isPresent()) {
+            updated = updatedBySeq.get();
+        }
+        log.info(recommendInfo.toString());
+        assertNotEquals(recommendInfo, updated);
     }
 
 }

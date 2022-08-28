@@ -15,7 +15,7 @@ public class RecommendInfo implements Serializable {
     @Id
     @Column(name="recommendinfo_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recommendInfoSeq;
+    private Long recommendInfoSeq;
 
     @Column(name="max_temp")
     private Integer maxTemp;
