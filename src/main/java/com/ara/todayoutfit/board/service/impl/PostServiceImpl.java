@@ -30,7 +30,7 @@ public class PostServiceImpl implements PostService {
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
-    };
+    }
 
     public List<Post> findAll() {
         return postRepository.findAll();

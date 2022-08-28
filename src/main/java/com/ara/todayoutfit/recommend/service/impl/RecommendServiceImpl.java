@@ -28,9 +28,7 @@ public class RecommendServiceImpl implements RecommendInfoService {
     @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")
     @Override
     public RecommendInfo getRecommendInfoByTemp(Integer temp) {
-        long start = System.currentTimeMillis();
         List<RecommendInfo> properRecommendInfo = recommendInfoRepository.findRecommendInfoByTemp(temp);
-        long end = System.currentTimeMillis();
         return ObjectUtils.isEmpty(properRecommendInfo) ? null : properRecommendInfo.get(0);
     }
 
