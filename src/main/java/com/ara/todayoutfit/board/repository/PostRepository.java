@@ -64,9 +64,9 @@ public class PostRepository {
     }
 
     private BooleanExpression writeToday() {
-        LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0));
-        LocalDateTime tomorrow = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
-        return post.writeDate.between(yesterday, tomorrow);
+        LocalDateTime todayStart = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
+        LocalDateTime todayEnd = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59));
+        return post.writeDate.between(todayStart, todayEnd);
     }
 
     private BooleanExpression notDeclared() {
