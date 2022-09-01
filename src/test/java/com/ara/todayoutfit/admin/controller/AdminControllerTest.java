@@ -2,6 +2,7 @@ package com.ara.todayoutfit.admin.controller;
 
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.member.model.Member;
 import com.ara.todayoutfit.member.model.MemberSearch;
@@ -58,15 +59,16 @@ public class AdminControllerTest {
     @Test
     @DisplayName("관리자 로그인 성공")
     void adminLoginSuccessTest() throws Exception {
+        String pwd = "1234";
         Member successAdmin = Member.builder()
                 .id("admin")
-                .pw("1234")
+                .pw(PwdEncryption.encrypt(pwd))
                 .isAdmin(true)
                 .build();
         memberRepository.save(successAdmin);
         MemberSearch memberSearch = MemberSearch.builder()
                         .id(successAdmin.getId())
-                        .pw(successAdmin.getPw())
+                        .pw(pwd)
                         .build();
         //로그인 시도
         mockMvc.perform(post("/admin/loginAjax")
@@ -96,7 +98,7 @@ public class AdminControllerTest {
     void adminLoginWrongPwTest() throws Exception {
         Member admin = Member.builder()
                 .id("admin")
-                .pw("1234")
+                .pw(PwdEncryption.encrypt("1234"))
                 .isAdmin(true)
                 .build();
         memberRepository.save(admin);

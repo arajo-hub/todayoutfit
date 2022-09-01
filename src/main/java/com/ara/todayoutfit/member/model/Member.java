@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class Member {
     private String id;
 
     @Column
-    @Size(max = 30)
+    @Size(max = 150)
     private String pw;
 
     @Column(name="is_admin")
