@@ -5,6 +5,7 @@ import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.member.model.MemberSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class AdminController {
     @RequestMapping(value = "/loginAjax", method = {RequestMethod.POST})
     public BaseResult loginAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, MemberSearch memberSearch) {
         // 유효성 체크
-        log.info(memberSearch.toString());
+        memberSearch.setPw(PwdEncryption.encrypt(memberSearch.getPw()));
         return adminService.login(session, memberSearch);
     }
 
@@ -54,8 +55,7 @@ public class AdminController {
     @RequestMapping(value = "/board/listAjax", method = {RequestMethod.POST})
     public PageResult listAjax(HttpServletRequest request, HttpServletResponse response, HttpSession session, PostSearch postSearch) {
         postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
-        PageResult result = postService.findAll(postSearch);
-        return result;
+        return postService.findAll(postSearch);
     }
 
     @ResponseBody

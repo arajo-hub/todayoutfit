@@ -48,8 +48,7 @@ public class MemberController {
     @RequestMapping(value = "/board/listAjax", method={RequestMethod.POST})
     public PageResult listAjax(HttpServletRequest request, Model model, PostSearch postSearch) {
         postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
-        PageResult result = postService.findByLocation(postSearch);
-        return result;
+        return postService.findByLocation(postSearch);
     }
 
     @ResponseBody
@@ -64,14 +63,14 @@ public class MemberController {
 
     @ResponseBody
     @RequestMapping(value = "/board/recommendAjax", method = RequestMethod.POST)
-    public BaseResult recommendAjax(HttpServletResponse resp, String id) throws IOException {
+    public BaseResult recommendAjax(HttpServletResponse resp, String id) {
         return postService.recommend(Long.parseLong(id));
 
     }
 
     @ResponseBody
     @RequestMapping(value = "/board/declareAjax", method = RequestMethod.POST)
-    public BaseResult declareAjax(HttpServletResponse resp, String id) throws IOException {
+    public BaseResult declareAjax(HttpServletResponse resp, String id) {
         return postService.declare(Long.parseLong(id));
     }
 

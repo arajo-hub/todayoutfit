@@ -1,6 +1,7 @@
 package com.ara.todayoutfit.admin.service;
 
 import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.member.model.Member;
 import com.ara.todayoutfit.member.model.MemberSearch;
@@ -42,7 +43,7 @@ public class AdminServiceTest {
     void login() {
         Member admin = Member.builder()
                 .id("admin")
-                .pw("1234")
+                .pw(PwdEncryption.encrypt("1234"))
                 .build();
         memberService.save(admin);
 
@@ -61,7 +62,7 @@ public class AdminServiceTest {
     void loginNotExistId() {
         MemberSearch userSearch = MemberSearch.builder()
                 .id("admin")
-                .pw("1234")
+                .pw(PwdEncryption.encrypt("1234"))
                 .build();
 
         BaseResult result = adminService.login(new MockHttpSession(null, userSearch.getId()), userSearch);
@@ -74,13 +75,13 @@ public class AdminServiceTest {
     void loginWrongPw() {
         Member admin = Member.builder()
                 .id("admin")
-                .pw("1234")
+                .pw(PwdEncryption.encrypt("1234"))
                 .build();
         memberService.save(admin);
 
         MemberSearch userSearch = MemberSearch.builder()
                 .id(admin.getId())
-                .pw("564654")
+                .pw(PwdEncryption.encrypt("564654"))
                 .build();
 
         BaseResult result = adminService.login(new MockHttpSession(null, admin.getId()), userSearch);

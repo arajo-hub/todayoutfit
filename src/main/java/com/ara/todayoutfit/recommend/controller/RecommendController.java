@@ -45,7 +45,7 @@ public class RecommendController {
             response.getWriter().print(gson.toJson(recommend));
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("{}", e);
         }
 
     }
