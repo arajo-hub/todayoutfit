@@ -1,6 +1,8 @@
 package com.ara.todayoutfit.member.controller;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostLike;
+import com.ara.todayoutfit.board.repository.PostLikeRepository;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +37,9 @@ public class MemberControllerTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PostLikeRepository postLikeRepository;
 
     private MockMvc mockMvc;
 
@@ -141,14 +147,12 @@ public class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("게시물 추천수 올리기")
+    @DisplayName("좋아요 버튼 클릭")
     void recommendUpTest() throws Exception {
-        int init = 0;
         Post post = Post.builder()
                 .content("게시물 추천 테스트입니다.")
                 .location("광진구")
                 .declaredYn(false)
-                .recommendCnt(init)
                 .writeDate(LocalDateTime.now())
                 .build();
         postRepository.save(post);
@@ -157,10 +161,9 @@ public class MemberControllerTest {
         mockMvc.perform(post("/board/recommendAjax")
                 .param("id", Long.toString(post.getPostSeq())));
 
-        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
-        Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
+        Optional<PostLike> postLikeFindBySeq = postLikeRepository.findBySeq(post.getPostSeq());
 
-        assertEquals(init + 1, saved.getRecommendCnt().longValue());
+        assertTrue(postLikeFindBySeq.isPresent());
     }
 
     @Test

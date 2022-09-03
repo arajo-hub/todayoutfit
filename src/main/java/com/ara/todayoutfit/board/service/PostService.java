@@ -23,7 +23,7 @@ public interface PostService {
 
     BaseResult saveAll(List<Post> posts);
 
-    BaseResult recommend(Long seq);
+    BaseResult recommend(Long seq, String ip);
 
     BaseResult declare(Long seq);
 

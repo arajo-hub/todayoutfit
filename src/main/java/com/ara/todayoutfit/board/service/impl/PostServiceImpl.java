@@ -1,8 +1,10 @@
 package com.ara.todayoutfit.board.service.impl;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostLike;
 import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.model.PostShow;
+import com.ara.todayoutfit.board.repository.PostLikeRepository;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
@@ -22,6 +24,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PostLikeRepository postLikeRepository;
 
     public PageResult findAll(PostSearch postSearch) {
         //결과
@@ -70,10 +75,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public BaseResult recommend(Long seq) {
+    public BaseResult recommend(Long seq, String ip) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        postRepository.recommend(seq);
+        boolean isAlreadyRecommended = postLikeRepository.isAlreadyLiked(seq, ip);
+        if (isAlreadyRecommended) {
+            result = new BaseResult(ResponseCode.ALREADY_LIKED);
+        } else {
+            PostLike postLike = PostLike.builder()
+                            .postSeq(seq)
+                            .ip(ip)
+                            .build();
+            postLikeRepository.save(postLike);
+        }
         log.info("[{}] {}", Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
         return result;
     }

@@ -1,7 +1,9 @@
 package com.ara.todayoutfit.board.service;
 
 import com.ara.todayoutfit.board.model.Post;
+import com.ara.todayoutfit.board.model.PostLike;
 import com.ara.todayoutfit.board.model.PostSearch;
+import com.ara.todayoutfit.board.repository.PostLikeRepository;
 import com.ara.todayoutfit.board.repository.PostRepository;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
@@ -32,7 +34,13 @@ class PostServiceTest {
     private PostService postService;
 
     @Autowired
+    private PostLikeService postLikeService;
+
+    @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PostLikeRepository postLikeRepository;
 
     @BeforeEach
     void clean() {
@@ -250,28 +258,47 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 추천")
+    @DisplayName("좋아요 버튼 클릭")
     void recommend() {
-        long init = 0;
-
         Post post = Post.builder()
                 .content("삭제테스트")
                 .location("광진구")
-                .recommendCnt(init)
                 .declaredYn(false)
                 .writeDate(LocalDateTime.now())
                 .build();
         postService.save(post);
 
-        postService.recommend(post.getPostSeq());
+        String ip = "192.168.1.100";
 
-        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
-        Post result = new Post();
-        if (postBySeq.isPresent()) {
-            result = postBySeq.get();
-        }
+        postService.recommend(post.getPostSeq(), ip);
 
-        assertEquals(init + 1, result.getRecommendCnt().longValue());
+        Optional<PostLike> postLikeFindBySeq = postLikeRepository.findBySeq(post.getPostSeq());
+
+        assertTrue(postLikeFindBySeq.isPresent());
+    }
+
+    @Test
+    @DisplayName("이미 좋아요 버튼 클릭한 게시물 클릭")
+    void recommendAlreadyRecommendedPost() {
+        Post post = Post.builder()
+                .content("삭제테스트")
+                .location("광진구")
+                .declaredYn(false)
+                .writeDate(LocalDateTime.now())
+                .build();
+        postService.save(post);
+
+        String ip = "192.168.1.100";
+
+        PostLike postLike = PostLike.builder()
+                .postSeq(post.getPostSeq())
+                .ip(ip)
+                .build();
+        postLikeRepository.save(postLike);
+
+        BaseResult result = postService.recommend(post.getPostSeq(), ip);
+
+        assertEquals(ResponseCode.ALREADY_LIKED, result.getResponseCode());
     }
 
     @Test

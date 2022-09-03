@@ -63,9 +63,8 @@ public class MemberController {
 
     @ResponseBody
     @RequestMapping(value = "/board/recommendAjax", method = RequestMethod.POST)
-    public BaseResult recommendAjax(HttpServletResponse resp, String id) {
-        return postService.recommend(Long.parseLong(id));
-
+    public BaseResult recommendAjax(HttpServletRequest req, HttpServletResponse resp, String id) {
+        return postService.recommend(Long.parseLong(id), req.getRemoteAddr());
     }
 
     @ResponseBody
