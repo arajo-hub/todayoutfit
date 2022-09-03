@@ -11,7 +11,7 @@ public interface PostService {
 
     PageResult findAll(PostSearch postSearch);
 
-    PageResult findByLocation(PostSearch postSearch);
+    PageResult findByLocation(PostSearch postSearch, String ip);
 
     BaseResult delete(Long seq);
 
@@ -23,7 +23,9 @@ public interface PostService {
 
     BaseResult saveAll(List<Post> posts);
 
-    BaseResult recommend(Long seq);
+    BaseResult recommend(Long seq, String ip);
+
+    BaseResult cancelRecommend(Long seq, String ip);
 
     BaseResult declare(Long seq);
 
