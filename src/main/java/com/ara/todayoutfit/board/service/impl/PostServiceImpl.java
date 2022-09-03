@@ -4,8 +4,8 @@ import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.model.PostLike;
 import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.model.PostShow;
-import com.ara.todayoutfit.board.repository.PostLikeRepository;
 import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.board.service.PostLikeService;
 import com.ara.todayoutfit.board.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
@@ -26,7 +26,7 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Autowired
-    private PostLikeRepository postLikeRepository;
+    private PostLikeService postLikeService;
 
     public PageResult findAll(PostSearch postSearch) {
         //결과
@@ -45,10 +45,13 @@ public class PostServiceImpl implements PostService {
         return postRepository.findBySeq(id);
     }
 
-    public PageResult findByLocation(PostSearch postSearch) {
+    public PageResult findByLocation(PostSearch postSearch, String ip) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
         Page<PostShow> all = postRepository.findByLocation(postSearch);
+        all.getContent().stream().forEach(postShow -> {
+            postShow.setRecommended(postLikeService.isAlreadyLiked(postShow.getPostSeq(), ip));
+        });
         result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
@@ -78,18 +81,26 @@ public class PostServiceImpl implements PostService {
     public BaseResult recommend(Long seq, String ip) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        boolean isAlreadyRecommended = postLikeRepository.isAlreadyLiked(seq, ip);
+        boolean isAlreadyRecommended = postLikeService.isAlreadyLiked(seq, ip);
         if (isAlreadyRecommended) {
-            result = new BaseResult(ResponseCode.ALREADY_LIKED);
+            result = this.cancelRecommend(seq, ip);
         } else {
             PostLike postLike = PostLike.builder()
                             .postSeq(seq)
                             .ip(ip)
                             .build();
-            postLikeRepository.save(postLike);
+            postLikeService.save(postLike);
+            postRepository.recommend(seq);
         }
         log.info("[{}] {}", Thread.currentThread().getStackTrace()[1].getMethodName(), result.getResponseCode().getMessage());
         return result;
+    }
+
+    @Override
+    public BaseResult cancelRecommend(Long seq, String ip) {
+        postLikeService.deleteSamePostSeqAdnIp(seq, ip);
+        postRepository.cancelRecommend(seq);
+        return new BaseResult(ResponseCode.SUCCESS);
     }
 
     @Override

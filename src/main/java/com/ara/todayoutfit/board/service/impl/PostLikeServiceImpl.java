@@ -16,4 +16,14 @@ public class PostLikeServiceImpl implements PostLikeService {
         postLikeRepository.save(postLike);
     }
 
+    @Override
+    public boolean isAlreadyLiked(Long postSeq, String ip) {
+        return postLikeRepository.isAlreadyLiked(postSeq, ip);
+    }
+
+    @Override
+    public void deleteSamePostSeqAdnIp(Long seq, String ip) {
+        postLikeRepository.deleteSamePostSeqAdnIp(seq, ip);
+    }
+
 }

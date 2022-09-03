@@ -142,4 +142,11 @@ public class PostRepository {
                 .execute();
     }
 
+    public void cancelRecommend(Long seq) {
+        queryFactory.update(post)
+                .set(post.recommendCnt, post.recommendCnt.add(-1))
+                .where(equalsSeq(seq))
+                .execute();
+    }
+
 }

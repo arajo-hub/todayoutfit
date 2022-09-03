@@ -34,9 +34,6 @@ class PostServiceTest {
     private PostService postService;
 
     @Autowired
-    private PostLikeService postLikeService;
-
-    @Autowired
     private PostRepository postRepository;
 
     @Autowired
@@ -45,6 +42,7 @@ class PostServiceTest {
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
+        postLikeRepository.deleteAll();
     }
 
     @Test
@@ -72,7 +70,9 @@ class PostServiceTest {
                 .location("%")
                 .build();
 
-        PageResult pageResult = postService.findByLocation(searchParam);
+        String ip = "192.168.1.100";
+
+        PageResult pageResult = postService.findByLocation(searchParam, ip);
 
         assertNotEquals(posts.size(), pageResult.getList().getNumberOfElements());
     }
@@ -133,7 +133,9 @@ class PostServiceTest {
                 .location(location)
                 .build();
 
-        PageResult pageResult = postService.findByLocation(searchParam);
+        String ip = "192.168.1.100";
+
+        PageResult pageResult = postService.findByLocation(searchParam, ip);
 
         List<Post> filtered = posts.stream().filter(p -> p.getLocation().equals(location)).collect(Collectors.toList());
 
@@ -260,9 +262,11 @@ class PostServiceTest {
     @Test
     @DisplayName("좋아요 버튼 클릭")
     void recommend() {
+        long init = 0;
         Post post = Post.builder()
                 .content("삭제테스트")
                 .location("광진구")
+                .recommendCnt(init)
                 .declaredYn(false)
                 .writeDate(LocalDateTime.now())
                 .build();
@@ -272,18 +276,23 @@ class PostServiceTest {
 
         postService.recommend(post.getPostSeq(), ip);
 
-        Optional<PostLike> postLikeFindBySeq = postLikeRepository.findBySeq(post.getPostSeq());
+        Optional<PostLike> postLike = postLikeRepository.findByPostSeqAndIp(post.getPostSeq(), ip);
+        Optional<Post> findBySeq = postRepository.findBySeq(post.getPostSeq());
+        Post saved = findBySeq.isPresent() ? findBySeq.get() : null;
 
-        assertTrue(postLikeFindBySeq.isPresent());
+        assertTrue(postLike.isPresent());
+        assertEquals(init + 1, saved.getRecommendCnt().longValue());
     }
 
     @Test
-    @DisplayName("이미 좋아요 버튼 클릭한 게시물 클릭")
+    @DisplayName("좋아요 취소")
     void recommendAlreadyRecommendedPost() {
+        long init = 1;
         Post post = Post.builder()
                 .content("삭제테스트")
                 .location("광진구")
                 .declaredYn(false)
+                .recommendCnt(init)
                 .writeDate(LocalDateTime.now())
                 .build();
         postService.save(post);
@@ -298,7 +307,13 @@ class PostServiceTest {
 
         BaseResult result = postService.recommend(post.getPostSeq(), ip);
 
-        assertEquals(ResponseCode.ALREADY_LIKED, result.getResponseCode());
+        Optional<PostLike> postLikeFindBySeq = postLikeRepository.findBySeq(postLike.getPostLikeSeq());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
+
+        assertEquals(ResponseCode.SUCCESS, result.getResponseCode());
+        assertTrue(postLikeFindBySeq.isEmpty());
+        assertEquals(init - 1, saved.getRecommendCnt().longValue());
     }
 
     @Test

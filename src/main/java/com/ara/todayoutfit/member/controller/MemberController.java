@@ -48,7 +48,7 @@ public class MemberController {
     @RequestMapping(value = "/board/listAjax", method={RequestMethod.POST})
     public PageResult listAjax(HttpServletRequest request, Model model, PostSearch postSearch) {
         postSearch.setPage((postSearch.getPage() <= 0) ? 1 : postSearch.getPage());
-        return postService.findByLocation(postSearch);
+        return postService.findByLocation(postSearch, request.getRemoteAddr());
     }
 
     @ResponseBody
