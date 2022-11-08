@@ -1,21 +1,22 @@
 package com.ara.todayoutfit.recommend.repository;
 
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
+import com.ara.todayoutfit.recommend.model.RecommendInfoShow;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommend.model.RecommendInfoSearch;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,23 @@ public class RecommendInfoRepository {
 
     public List<RecommendInfo> findAll() {
         return queryFactory.selectFrom(recommendInfo).fetch();
+    }
+
+    public Page<RecommendInfoShow> findAll(RecommendInfoSearch recommendSearch) {
+        Pageable pageable = PageRequest.of(recommendSearch.getPage() - 1, recommendSearch.getSize());
+        List<RecommendInfo> recommendInfos = queryFactory.selectFrom(recommendInfo)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(recommendInfo.recommendInfoSeq.desc())
+                .fetch();
+        Long count = queryFactory.select(recommendInfo.count())
+                .from(recommendInfo)
+                .fetchOne();
+        List<RecommendInfoShow> recommendShows = new ArrayList<RecommendInfoShow>();
+        for (RecommendInfo recommendInfo : recommendInfos) {
+            recommendShows.add(recommendInfo.toRecommendInfoShow().build());
+        }
+        return new PageImpl<>(recommendShows, pageable, count);
     }
 
     public List<RecommendInfo> findRecommendInfoByTemp(Integer temp) {

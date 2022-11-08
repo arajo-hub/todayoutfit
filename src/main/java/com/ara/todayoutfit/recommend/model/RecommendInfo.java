@@ -33,4 +33,12 @@ public class RecommendInfo implements Serializable {
         this.minTemp = minTemp;
         this.message = message;
     }
+
+    public RecommendInfoShow.RecommendInfoShowBuilder toRecommendInfoShow() {
+        return RecommendInfoShow.builder()
+                .message(message)
+                .maxTemp(maxTemp)
+                .minTemp(minTemp);
+    }
+
 }

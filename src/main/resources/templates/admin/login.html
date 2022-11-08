@@ -25,37 +25,38 @@
                 </form>
             </div>
         </div>
+    </div>
 </section>
 
-    <script>
+<script>
 
-        $(() => adminLoginView.init());
+    $(() => adminLoginView.init());
 
-        var adminLoginView = {
+    var adminLoginView = {
 
-        };
+    };
 
-        adminLoginView.init = function () {
-            this.loginBtnClick();
-        };
+    adminLoginView.init = function () {
+        this.loginBtnClick();
+    };
 
-        adminLoginView.loginBtnClick = function() {
+    adminLoginView.loginBtnClick = function() {
 
-            var that = this;
+        var that = this;
 
-            $("#loginBtn").click(function() {
+        $("#loginBtn").click(function() {
 
-                var requestParam = {
-                    id: $("#id").val(),
-                    pw: $("#pw").val()
-                };
+            var requestParam = {
+                id: $("#id").val(),
+                pw: $("#pw").val()
+            };
 
-                $.ajax({
-                    url 		: "/admin/loginAjax",
-                    type 		: "POST",
-                    data 		: requestParam,
-                    dataType 	: "JSON",
-                })
+            $.ajax({
+                url 		: "/admin/loginAjax",
+                type 		: "POST",
+                data 		: requestParam,
+                dataType 	: "JSON",
+            })
                 .done(function(result) {
                     if (result.responseCode == "SUCCESS") {
                         window.location = "/admin/board/list";
@@ -70,10 +71,10 @@
                 .fail(function() {
                     alert("알 수 없는 오류가 발생했습니다.");
                 })
-            });
-        };
+        });
+    };
 
-    </script>
+</script>
 
 </body>
 </html>

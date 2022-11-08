@@ -1,14 +1,18 @@
 package com.ara.todayoutfit.recommend.service.impl;
 
 import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
+import com.ara.todayoutfit.recommend.model.RecommendInfoShow;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommend.model.RecommendInfoSearch;
 import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
 import com.ara.todayoutfit.recommend.service.RecommendInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,6 +27,15 @@ public class RecommendServiceImpl implements RecommendInfoService {
 
     public List<RecommendInfo> getAllRecommendInfo() {
         return recommendInfoRepository.findAll();
+    }
+
+    public PageResult getAllRecommends(RecommendInfoSearch recommendSearch) {
+        //결과
+        PageResult result = new PageResult(ResponseCode.SUCCESS);
+        Page<RecommendInfoShow> all = recommendInfoRepository.findAll(recommendSearch);
+        result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
+        result.setList(all);
+        return result;
     }
 
     @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="inc/asset.html::asset" />
+
+<body class="uk-background-muted">
+<section>
+    <article class="uk-width-2xlarge uk-margin-auto">
+        <h1 class="uk-heading-line todayoutfit"><span>오늘 뭐 입지?</span></h1>
+        <a href="#offcanvas-slide" class="uk-button uk-button-default" uk-toggle>메뉴</a>
+
+        <div id="offcanvas-slide" uk-offcanvas>
+            <div class="uk-offcanvas-bar">
+                <ul class="uk-nav uk-nav-default">
+                    <li class="uk-active">관리자 님</li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: happy"></span>추천정보 관리</a></li>
+                    <li><a href="/"><span class="uk-margin-small-right" uk-icon="icon: home"></span>메인으로</a></li>
+                    <li class="uk-nav-divider"></li>
+                    <li><a href="/admin/logout"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span>로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <input type="hidden" id="page" name="page" th:value="${page}">
+        <input type="hidden" id="size" name="size" th:value="${size}">
+
+        <table class="uk-table uk-table-middle uk-table-divider uk-table-hover uk-table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%;">번호</th>
+                <th class="uk-table-expand" style="width: 30%;">추천정보</th>
+                <th style="width: 15%;">최고온도</th>
+                <th style="width: 10%;">최저온도</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="4" class="uk-text-center">게시글이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </article>
+</section>
+<ul class="uk-pagination uk-flex-center" id="pagination" uk-margin>
+</ul>
+
+<!-- 글 삭제하는 모달 -->
+<!-- This is the modal -->
+<div id="delModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <p>정말 삭제하시겠습니까?</p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">닫기</button>
+            <button class="uk-button uk-button-primary" type="button" id="delModalBtn">삭제</button>
+        </p>
+    </div>
+</div>
+
+<script>
+
+    $(() => recommendListView.init());
+
+    var recommendListView = {};
+
+    recommendListView.init = function() {
+        this.listInit();
+        this.openModal();
+        this.changePage();
+        this.delelePost();
+    };
+
+    recommendListView.listInit = function() {
+        var requestParam = {
+            page: $("#page").val(),
+            size: $("#size").val()
+        };
+        console.log(requestParam);
+        $.ajax({
+            url 		: "/recommend/listAjax",
+            type 		: "POST",
+            data 		: requestParam,
+            dataType 	: "JSON",
+        })
+            .done(function(result) {
+                var row = '';
+                if (result.list.content.length == 0) {
+                    row = '<tr><td colspan="4" class="uk-text-center">게시글이 없습니다.</td></tr>';
+                } else {
+                    result.list.content.forEach((element, index, array) => {
+                        row += '<tr><td>' + (index + 1) + '</td>'
+                            + '<td>' + element.message + '</td>'
+                            + '<td>' + element.maxTemp + '</td>'
+                            + '<td>' + element.minTemp + '</td>'
+                            + '<td><div id="btns">'
+                            + '<button class="uk-button uk-button-default uk-button-small uk-width-1-1" type="button" id="delBtn" data-toggle="modal" data-target="#delModal" data-seq="' + element.postSeq + '">삭제</button>'
+                            + '</div></td></tr>';
+                    });
+
+                    var page = '';
+                    for (var i = 0; i < result.list.totalPages; i++) {
+                        if (requestParam.page == (i + 1)) {
+                            page += '<li class="uk-active">'
+                                + '<a href="#">' + (i + 1) + '</a>'
+                                + '</li>';
+                        } else {
+                            page += '<li>'
+                                + '<a href="#">' + (i + 1) + '</a>'
+                                + '</li>';
+                        }
+                    }
+                }
+                $("tbody").html(row);
+                $("ul.pagination").html(page);
+            })
+            .fail(function() {
+                $("tbody").html('<tr><td colspan="4" class="uk-text-center">게시글이 없습니다.</td></tr>');
+            })
+    };
+
+    recommendListView.openModal = function() {
+        // 삭제 확인 모달로 글번호 보내는 기능
+        $(document).on('click', '#delBtn', function(e) {
+            $('#id').val(e.currentTarget.dataset.seq);
+        });
+    };
+
+    recommendListView.delelePost = function() {
+        var that = this;
+        $("#delModalBtn").on('click', function() {
+            var requestParam = {
+                id: $('#id').val()
+            }
+            $.ajax({
+                url 		: "/admin/board/deletePostAjax",
+                type 		: "POST",
+                data 		: requestParam,
+                dataType 	: "JSON",
+            })
+                .done(function(result) {
+                    if (result.responseCode == "SUCCESS") {
+                        that.listInit();
+                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                        alert("삭제할 게시물이 없습니다.");
+                    } else {
+                        alert("알 수 없는 오류가 발생했습니다.");
+                    }
+                })
+                .fail(function() {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                })
+        });
+    };
+
+    recommendListView.changePage = function() {
+        var that = this;
+        $(document).on('click', '#pagination > li > a', function(e) {
+            $("#page").val(e.currentTarget.innerHTML);
+            that.listInit();
+        });
+    };
+
+</script>
+
+</body>
+</html>
