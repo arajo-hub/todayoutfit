@@ -59,6 +59,9 @@ dependencies {
     annotationProcessor('org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final')
     annotationProcessor('com.querydsl:querydsl-apt:4.2.2:jpa')
 
+    //mariaDB(for aws)
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
+
     //h2(for test)
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
@@ -77,6 +80,9 @@ dependencies {
 
     // 암호화
     implementation 'commons-codec:commons-codec:1.11'
+
+    // AWS parameter store
+    implementation 'com.coveo:spring-boot-parameter-store-integration:1.1.2'
 
 }
 
