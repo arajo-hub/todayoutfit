@@ -29,10 +29,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --exclude-task test
       
-    # 현재 위치 확인
-    - name: Now
-      run: pwd
-      
     # 디렉토리 생성
     - name: Make Directory
       run: mkdir -p deploy
@@ -42,8 +38,8 @@ jobs:
       run: cp ./build/libs/*.jar ./deploy
       
     # appspec.yml 파일 복사
-    - name: Copy appspec.yml
-      run: cp appspec.yml ./deploy
+    - name: Copy appspec.yaml
+      run: cp appspec.yaml ./deploy
 
 
     # script files 복사
