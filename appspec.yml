@@ -6,7 +6,7 @@ files:
     overwrite: yes
 
 permissions:
-  - object: /
+  - object: /home/ec2-user/app/todayoutfit/
     pattern: "**"
     owner: root
     group: root
