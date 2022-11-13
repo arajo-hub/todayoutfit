@@ -4,6 +4,8 @@ REPOSITORY=/home/ec2-user/app/todayoutfit
 
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
 
+echo "> 현재 구동 중인 애플리케이션 pid 확인"
+
 CURRENT_PID=$(pgrep -fla java | grep hayan | awk '{print $1}')
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
