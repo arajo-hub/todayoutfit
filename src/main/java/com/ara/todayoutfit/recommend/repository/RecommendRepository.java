@@ -33,11 +33,11 @@ public class RecommendRepository {
         return queryFactory.selectFrom(recommendInfo).fetch();
     }
 
-    public List<RecommendInfo> findRecommendInfoByTemp(Integer temp) {
+    public RecommendInfo findRecommendInfoByTemp(Integer temp) {
         return queryFactory.selectFrom(recommendInfo)
                 .where(betweenMaxTempAndMinTemp(temp))
                 .orderBy(recommendInfo.minTemp.asc())
-                .fetch();
+                .fetchFirst();
     }
 
     private BooleanExpression betweenMaxTempAndMinTemp(Integer temp) {

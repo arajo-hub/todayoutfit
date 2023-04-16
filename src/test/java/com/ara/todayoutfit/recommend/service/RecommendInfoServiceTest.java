@@ -1,5 +1,7 @@
 package com.ara.todayoutfit.recommend.service;
 
+import com.ara.todayoutfit.common.response.ListResult;
+import com.ara.todayoutfit.common.response.SingleResult;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
 import com.ara.todayoutfit.recommend.repository.RecommendRepository;
@@ -61,8 +63,8 @@ public class RecommendInfoServiceTest {
                         .minTemp(5)
                         .message("추천정보2입니다.").build()));
         int temp = 37;
-        RecommendInfo recommendInfoByTemp = recommendInfoService.getRecommendInfoByTemp(temp);
-        assertEquals(recommendInfo, recommendInfoByTemp);
+        SingleResult recommendResult = recommendInfoService.getRecommendInfoByTemp(temp);
+        assertEquals(recommendInfo, recommendResult);
     }
 
     @Test

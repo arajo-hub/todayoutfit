@@ -3,6 +3,7 @@ package com.ara.todayoutfit.recommend.service.impl;
 import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.common.response.ListResult;
+import com.ara.todayoutfit.common.response.SingleResult;
 import com.ara.todayoutfit.recommend.exception.RecommendNotFoundException;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
@@ -28,13 +29,13 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")
     @Override
-    public ListResult getRecommendInfoByTemp(int temp) {
-        List<RecommendInfo> recommendInfoList = recommendInfoRepository.findRecommendInfoByTemp(temp);
-        if (recommendInfoList.isEmpty()) {
+    public SingleResult getRecommendInfoByTemp(int temp) {
+        RecommendInfo recommendInfo = recommendInfoRepository.findRecommendInfoByTemp(temp);
+        if (recommendInfo == null) {
             throw new RecommendNotFoundException();
         }
-        ListResult result = new ListResult(ResponseCode.SUCCESS);
-        result.setList(recommendInfoList);
+        SingleResult result = new SingleResult(ResponseCode.SUCCESS);
+        result.setData(recommendInfo);
         return result;
     }
 

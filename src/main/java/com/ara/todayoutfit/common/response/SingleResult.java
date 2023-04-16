@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class SingleResult extends BaseResult {
 
-    private Object object;
+    private Object data;
 
     public SingleResult(ResponseCode responseCode) {
         super(responseCode);

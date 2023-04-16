@@ -2,6 +2,7 @@ package com.ara.todayoutfit.recommend.service;
 
 import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.response.ListResult;
+import com.ara.todayoutfit.common.response.SingleResult;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
 
@@ -18,7 +19,7 @@ public interface RecommendService {
     /**
      * 기온에 따른 정보 조회
      */
-    ListResult getRecommendInfoByTemp(int temp);
+    SingleResult getRecommendInfoByTemp(int temp);
 
     BaseResult save(RecommendInfo recommendInfo);
 
