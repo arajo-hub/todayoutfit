@@ -1,6 +1,6 @@
 package com.ara.todayoutfit.config.advice;
 
-import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

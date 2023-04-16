@@ -5,8 +5,8 @@ import com.ara.todayoutfit.board.model.PostLike;
 import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.repository.PostLikeRepository;
 import com.ara.todayoutfit.board.repository.PostRepository;
-import com.ara.todayoutfit.common.BaseResult;
-import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.response.BaseResult;
+import com.ara.todayoutfit.common.response.PageResult;
 import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;

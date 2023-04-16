@@ -1,6 +1,6 @@
 package com.ara.todayoutfit.admin.service;
 
-import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.member.model.Member;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 

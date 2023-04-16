@@ -1,6 +1,6 @@
 package com.ara.todayoutfit.admin.service;
 
-import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.member.model.MemberSearch;
 
 import javax.servlet.http.HttpSession;

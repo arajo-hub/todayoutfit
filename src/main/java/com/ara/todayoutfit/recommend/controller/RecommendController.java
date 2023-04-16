@@ -1,53 +1,22 @@
 package com.ara.todayoutfit.recommend.controller;
 
-import com.ara.todayoutfit.recommend.service.RecommendInfoService;
-import com.google.gson.Gson;
+import com.ara.todayoutfit.recommend.service.RecommendService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.thymeleaf.util.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import com.ara.todayoutfit.common.response.ListResult;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class RecommendController {
 
-    @Autowired
-    private RecommendInfoService recommendInfoService;
+    private final RecommendService recommendInfoService;
 
-    @RequestMapping(value = "/recommend", method={RequestMethod.GET})
-    public void recommend(HttpServletRequest req, HttpServletResponse response, String temp) {
-
-        Integer nowTemp = Integer.parseInt(temp);
-
-        Gson gson = new Gson();
-
-        Map<String, String> recommend = new HashMap<String, String>();
-
-        String comment = recommendInfoService.getRecommendInfoByTemp(nowTemp).getMessage();
-
-        if (StringUtils.isEmpty(comment)) {
-            comment = "서버에 문제가 생겼습니다.";
-        }
-        
-        recommend.put("temp", comment);
-
-        try {
-
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(gson.toJson(recommend));
-
-        } catch (IOException e) {
-            log.error("{}", e);
-        }
-
+    @GetMapping(value = "/recommend")
+    public ListResult recommend(int temp) {
+        return recommendInfoService.getRecommendInfoByTemp(temp);
     }
 
 }

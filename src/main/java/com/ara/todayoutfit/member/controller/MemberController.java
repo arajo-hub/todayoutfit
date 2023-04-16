@@ -3,8 +3,8 @@ package com.ara.todayoutfit.member.controller;
 import com.ara.todayoutfit.board.model.Post;
 import com.ara.todayoutfit.board.model.PostSearch;
 import com.ara.todayoutfit.board.service.PostService;
-import com.ara.todayoutfit.common.BaseResult;
-import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.response.BaseResult;
+import com.ara.todayoutfit.common.response.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Slf4j

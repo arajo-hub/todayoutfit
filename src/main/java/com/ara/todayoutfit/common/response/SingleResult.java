@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.common;
+package com.ara.todayoutfit.common.response;
 
-import lombok.AllArgsConstructor;
+import com.ara.todayoutfit.common.ResponseCode;
 import lombok.Getter;
 import lombok.Setter;
 

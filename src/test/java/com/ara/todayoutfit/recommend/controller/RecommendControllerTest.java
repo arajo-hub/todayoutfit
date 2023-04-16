@@ -1,7 +1,7 @@
 package com.ara.todayoutfit.recommend.controller;
 
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
-import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.recommend.repository.RecommendRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class RecommendControllerTest {
     private WebApplicationContext wac;
 
     @Autowired
-    private RecommendInfoRepository recommendInfoRepository;
+    private RecommendRepository recommendInfoRepository;
 
     private MockMvc mockMvc;
 

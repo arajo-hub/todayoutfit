@@ -4,14 +4,8 @@ import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +18,13 @@ import static com.ara.todayoutfit.recommend.model.QRecommendInfo.recommendInfo;
 @Slf4j
 @Repository
 @Transactional
-public class RecommendInfoRepository {
+public class RecommendRepository {
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
     @Autowired
-    public RecommendInfoRepository(EntityManager em) {
+    public RecommendRepository(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }

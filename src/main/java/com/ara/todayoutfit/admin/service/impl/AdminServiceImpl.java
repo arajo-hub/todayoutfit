@@ -1,7 +1,7 @@
 package com.ara.todayoutfit.admin.service.impl;
 
 import com.ara.todayoutfit.admin.service.AdminService;
-import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.member.model.Member;
 import com.ara.todayoutfit.member.model.MemberSearch;

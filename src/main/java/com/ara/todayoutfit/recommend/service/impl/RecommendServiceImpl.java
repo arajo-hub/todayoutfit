@@ -1,25 +1,26 @@
 package com.ara.todayoutfit.recommend.service.impl;
 
-import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.response.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
+import com.ara.todayoutfit.common.response.ListResult;
+import com.ara.todayoutfit.recommend.exception.RecommendNotFoundException;
 import com.ara.todayoutfit.recommend.model.RecommendInfo;
 import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
-import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
-import com.ara.todayoutfit.recommend.service.RecommendInfoService;
+import com.ara.todayoutfit.recommend.repository.RecommendRepository;
+import com.ara.todayoutfit.recommend.service.RecommendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
 @Slf4j
 @Service
-public class RecommendServiceImpl implements RecommendInfoService {
+public class RecommendServiceImpl implements RecommendService {
 
     @Autowired
-    private RecommendInfoRepository recommendInfoRepository;
+    private RecommendRepository recommendInfoRepository;
 
     public List<RecommendInfo> getAllRecommendInfo() {
         return recommendInfoRepository.findAll();
@@ -27,9 +28,14 @@ public class RecommendServiceImpl implements RecommendInfoService {
 
     @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")
     @Override
-    public RecommendInfo getRecommendInfoByTemp(Integer temp) {
-        List<RecommendInfo> properRecommendInfo = recommendInfoRepository.findRecommendInfoByTemp(temp);
-        return ObjectUtils.isEmpty(properRecommendInfo) ? null : properRecommendInfo.get(0);
+    public ListResult getRecommendInfoByTemp(int temp) {
+        List<RecommendInfo> recommendInfoList = recommendInfoRepository.findRecommendInfoByTemp(temp);
+        if (recommendInfoList.isEmpty()) {
+            throw new RecommendNotFoundException();
+        }
+        ListResult result = new ListResult(ResponseCode.SUCCESS);
+        result.setList(recommendInfoList);
+        return result;
     }
 
     @Override

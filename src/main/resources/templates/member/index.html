@@ -89,6 +89,7 @@
                     data: {temp: temp},
                     dataType: "json",
                     success: function(data) {
+                        console.log(data);
                         $("#recommend").html(data.temp);
                     }
 
