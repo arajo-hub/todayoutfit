@@ -8,7 +8,7 @@ import com.ara.todayoutfit.common.response.SingleResult;
 
 @Controller
 @RequiredArgsConstructor
-public class RecommendController {
+public class RecommendApiController {
 
     private final RecommendService recommendInfoService;
 
