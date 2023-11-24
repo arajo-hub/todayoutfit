@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.recommend.model;
+package com.ara.todayoutfit.recommendInfo.model;
 
 import lombok.Builder;
 import lombok.Getter;
