@@ -1,5 +1,6 @@
 package com.ara.todayoutfit.post.service;
 
+import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.repository.PostLikeRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -297,26 +300,25 @@ class PostServiceTest {
 //        assertEquals(init - 1, saved.getRecommendCnt().longValue());
 //    }
 //
-//    @Test
-//    @DisplayName("글 신고")
-//    void declare() {
-//        Post post = Post.builder()
-//                .content("삭제테스트")
-//                .location("광진구")
-//                .recommendCnt(0)
-//                .declaredYn(false)
-//                .writeDate(LocalDateTime.now())
-//                .build();
-//        postService.save(post);
-//
-//        postService.declare(post.getPostSeq());
-//
-//        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
-//        Post result = new Post();
-//        if (postBySeq.isPresent()) {
-//            result = postBySeq.get();
-//        }
-//        assertEquals(true, result.isDeclaredYn());
-//
-//    }
+    @Test
+    @DisplayName("글 신고")
+    void declare() {
+        PostCreateRequest request = PostCreateRequest.builder()
+                .content("삭제테스트")
+                .location("광진구")
+                .build();
+        postService.savePost(request);
+
+        postService.declare(1L);
+
+        Optional<Post> bySeq = postRepository.findBySeq(1L);
+        if (bySeq.isPresent()) {
+            Post post = bySeq.get();
+            assertTrue(post.isDeclaredYn());
+        }
+
+        assertTrue(bySeq.isPresent());
+        assertTrue(bySeq.get().isDeclaredYn());
+
+    }
 }
