@@ -1,7 +1,7 @@
-package com.ara.todayoutfit.recommend.controller;
+package com.ara.todayoutfit.recommendInfo.controller;
 
-import com.ara.todayoutfit.recommend.model.RecommendInfo;
-import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendInfo.repository.RecommendInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @ActiveProfiles("test")
 @SpringBootTest
-class RecommendControllerTest {
+class RecommendInfoControllerTest {
 
     @Autowired
     private WebApplicationContext wac;

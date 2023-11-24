@@ -1,10 +1,10 @@
-package com.ara.todayoutfit.recommend.service;
+package com.ara.todayoutfit.recommendInfo.service;
 
-import com.ara.todayoutfit.recommend.model.RecommendInfo;
-import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
-import com.ara.todayoutfit.recommend.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.common.SingleResult;
+import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommendInfo.repository.RecommendInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @ActiveProfiles("test")
@@ -49,22 +48,18 @@ public class RecommendInfoServiceTest {
 //        assertEquals(2, all.size());
 //    }
 //
-//    @Test
-//    @DisplayName("기온에 따라 추천정보 조회")
-//    void getRecommendInfoByTemp() {
-//        RecommendInfo recommendInfo = RecommendInfo.builder()
-//                .maxTemp(40)
-//                .minTemp(21)
-//                .message("추천정보1입니다.").build();
-//        recommendInfoRepository.saveAll(List.of(recommendInfo,
-//                RecommendInfo.builder()
-//                        .maxTemp(20)
-//                        .minTemp(5)
-//                        .message("추천정보2입니다.").build()));
-//        int temp = 37;
-//        RecommendInfo recommendInfoByTemp = recommendInfoService.getRecommendInfoByTemp(temp);
-//        assertEquals(recommendInfo, recommendInfoByTemp);
-//    }
+    @Test
+    @DisplayName("기온에 따라 추천정보 조회")
+    void getRecommendInfoByTemperature() {
+        RecommendInfo recommendInfo = RecommendInfo.builder()
+                .maxTemp(40)
+                .minTemp(21)
+                .message("추천정보1입니다.").build();
+        recommendInfoRepository.save(recommendInfo);
+        int temp = 37;
+        SingleResult recommendInfoByTemp = recommendInfoService.findRecommendInfoByTemperature(temp);
+        assertNotNull(recommendInfoByTemp.getObject());
+    }
 //
 //    @Test
 //    @DisplayName("추천정보 추가")
