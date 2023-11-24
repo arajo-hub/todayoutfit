@@ -5,7 +5,7 @@
 
     <cache alias="getRecommendInfoCache">
         <key-type>java.lang.Double</key-type>
-        <value-type>com.ara.todayoutfit.recommend.model.RecommendInfo</value-type>
+        <value-type>com.ara.todayoutfit.recommendInfo.model.RecommendInfo</value-type>
         <expiry>
             <!-- 캐시 만료 시간 = timeToLiveSeconds -->
             <ttl unit="seconds">30</ttl>

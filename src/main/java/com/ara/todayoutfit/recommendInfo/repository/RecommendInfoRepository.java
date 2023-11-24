@@ -1,17 +1,11 @@
-package com.ara.todayoutfit.recommend.repository;
+package com.ara.todayoutfit.recommendInfo.repository;
 
-import com.ara.todayoutfit.recommend.model.RecommendInfo;
-import com.ara.todayoutfit.recommend.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.recommend.model.QRecommendInfo.recommendInfo;
+import static com.ara.todayoutfit.recommendInfo.model.QRecommendInfo.recommendInfo;
 
 @Slf4j
 @Repository
@@ -39,11 +33,11 @@ public class RecommendInfoRepository {
         return queryFactory.selectFrom(recommendInfo).fetch();
     }
 
-    public List<RecommendInfo> findRecommendInfoByTemp(Integer temp) {
+    public RecommendInfo findRecommendInfoByTemperature(Integer temp) {
         return queryFactory.selectFrom(recommendInfo)
                 .where(betweenMaxTempAndMinTemp(temp))
                 .orderBy(recommendInfo.minTemp.asc())
-                .fetch();
+                .fetchOne();
     }
 
     private BooleanExpression betweenMaxTempAndMinTemp(Integer temp) {

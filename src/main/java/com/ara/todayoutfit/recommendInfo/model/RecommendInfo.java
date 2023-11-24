@@ -1,5 +1,6 @@
-package com.ara.todayoutfit.recommend.model;
+package com.ara.todayoutfit.recommendInfo.model;
 
+import com.ara.todayoutfit.recommendInfo.response.RecommendInfoShow;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,4 +34,11 @@ public class RecommendInfo implements Serializable {
         this.minTemp = minTemp;
         this.message = message;
     }
+
+    public RecommendInfoShow toRecommendInfoShow() {
+        return RecommendInfoShow.builder()
+                .message(message)
+                .build();
+    }
+
 }
