@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.member.model;
+package com.ara.todayoutfit.user.service.request;
 
 import lombok.*;
 
@@ -6,13 +6,13 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
-public class MemberSearch {
+public class UserSearch {
 
     private String id;
     private String pw;
 
     @Builder
-    public MemberSearch(String id, String pw) {
+    public UserSearch(String id, String pw) {
         this.id = id;
         this.pw = pw;
     }

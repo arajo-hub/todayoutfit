@@ -1,11 +1,7 @@
-package com.ara.todayoutfit.admin.service.impl;
+package com.ara.todayoutfit.user.service;
 
-import com.ara.todayoutfit.admin.service.AdminService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ResponseCode;
-import com.ara.todayoutfit.member.model.Member;
-import com.ara.todayoutfit.member.model.MemberSearch;
-import com.ara.todayoutfit.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +11,17 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class AdminServiceImpl implements AdminService {
+public class LoginService {
 
     @Autowired
-    private MemberService userService;
+    private UserService userService;
 
-    @Override
-    public BaseResult login(HttpSession session, MemberSearch admin) {
+    public BaseResult login(HttpSession session, com.ara.todayoutfit.user.service.request.UserSearch admin) {
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
-        Optional<Member> userFindById = userService.findById(admin.getId());
+        Optional<com.ara.todayoutfit.user.service.domain.User> userFindById = userService.findById(admin.getId());
 
         if (userFindById.isPresent()) {
-            Member loggedIn = userFindById.get();
+            com.ara.todayoutfit.user.service.domain.User loggedIn = userFindById.get();
             if (admin.getPw().equals(loggedIn.getPw())) {
                 session.setAttribute("id", loggedIn.getId());
                 log.info("[{}] Logged in = {}",

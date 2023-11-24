@@ -1,12 +1,10 @@
-package com.ara.todayoutfit.admin.service;
+package com.ara.todayoutfit.user.service;
 
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
-import com.ara.todayoutfit.member.model.Member;
-import com.ara.todayoutfit.member.model.MemberSearch;
-import com.ara.todayoutfit.member.repository.MemberRepository;
-import com.ara.todayoutfit.member.service.MemberService;
+import com.ara.todayoutfit.user.domain.User;
+import com.ara.todayoutfit.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AdminServiceTest {
 
     @Autowired
-    private AdminService adminService;
+    private LoginService loginService;
 
     @Autowired
-    private MemberService memberService;
+    private UserService userService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private UserRepository memberRepository;
 
     @BeforeEach
     void clean() {
@@ -41,18 +38,18 @@ public class AdminServiceTest {
     @Test
     @DisplayName("로그인 성공")
     void login() {
-        Member admin = Member.builder()
+        User admin = User.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt("1234"))
                 .build();
-        memberService.save(admin);
+        userService.save(admin);
 
-        MemberSearch userSearch = MemberSearch.builder()
+        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                 .id(admin.getId())
                 .pw(admin.getPw())
                 .build();
 
-        BaseResult result = adminService.login(new MockHttpSession(null, admin.getId()), userSearch);
+        BaseResult result = loginService.login(new MockHttpSession(null, admin.getId()), userSearch);
 
         assertEquals(ResponseCode.SUCCESS, result.getResponseCode());
     }
@@ -60,12 +57,12 @@ public class AdminServiceTest {
     @Test
     @DisplayName("존재하지 않는 아이디로 로그인 시도")
     void loginNotExistId() {
-        MemberSearch userSearch = MemberSearch.builder()
+        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt("1234"))
                 .build();
 
-        BaseResult result = adminService.login(new MockHttpSession(null, userSearch.getId()), userSearch);
+        BaseResult result = loginService.login(new MockHttpSession(null, userSearch.getId()), userSearch);
 
         assertEquals(ResponseCode.DB_NOT_FOUND_DATA, result.getResponseCode());
     }
@@ -73,18 +70,18 @@ public class AdminServiceTest {
     @Test
     @DisplayName("일치하지 않는 비밀번호로 로그인 시도")
     void loginWrongPw() {
-        Member admin = Member.builder()
+        User admin = User.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt("1234"))
                 .build();
-        memberService.save(admin);
+        userService.save(admin);
 
-        MemberSearch userSearch = MemberSearch.builder()
+        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                 .id(admin.getId())
                 .pw(PwdEncryption.encrypt("564654"))
                 .build();
 
-        BaseResult result = adminService.login(new MockHttpSession(null, admin.getId()), userSearch);
+        BaseResult result = loginService.login(new MockHttpSession(null, admin.getId()), userSearch);
 
         assertEquals(ResponseCode.WRONG_PASSWORD, result.getResponseCode());
     }

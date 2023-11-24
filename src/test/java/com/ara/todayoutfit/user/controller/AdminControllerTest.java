@@ -1,12 +1,11 @@
-package com.ara.todayoutfit.admin.controller;
+package com.ara.todayoutfit.user.controller;
 
 import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
-import com.ara.todayoutfit.member.model.Member;
-import com.ara.todayoutfit.member.model.MemberSearch;
-import com.ara.todayoutfit.member.repository.MemberRepository;
+import com.ara.todayoutfit.user.domain.User;
+import com.ara.todayoutfit.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +36,7 @@ public class AdminControllerTest {
     private WebApplicationContext wac;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -51,7 +50,7 @@ public class AdminControllerTest {
 
     @BeforeEach
     void clean() {
-        memberRepository.deleteAll();
+        userRepository.deleteAll();
         postRepository.deleteAll();
     }
 
@@ -59,13 +58,13 @@ public class AdminControllerTest {
     @DisplayName("관리자 로그인 성공")
     void adminLoginSuccessTest() throws Exception {
         String pwd = "1234";
-        Member successAdmin = Member.builder()
+        User successAdmin = User.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt(pwd))
                 .isAdmin(true)
                 .build();
-        memberRepository.save(successAdmin);
-        MemberSearch memberSearch = MemberSearch.builder()
+        userRepository.save(successAdmin);
+        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                         .id(successAdmin.getId())
                         .pw(pwd)
                         .build();
@@ -80,7 +79,7 @@ public class AdminControllerTest {
     @Test
     @DisplayName("DB에 존재하지 않는 관리자로 로그인")
     void adminLoginTest() throws Exception {
-        MemberSearch memberSearch = MemberSearch.builder()
+        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                 .id("admin")
                 .pw("1234")
                 .build();
@@ -95,14 +94,14 @@ public class AdminControllerTest {
     @Test
     @DisplayName("관리자 비밀번호 잘못 입력")
     void adminLoginWrongPwTest() throws Exception {
-        Member admin = Member.builder()
+        User admin = User.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt("1234"))
                 .isAdmin(true)
                 .build();
-        memberRepository.save(admin);
+        userRepository.save(admin);
 
-        MemberSearch memberSearch = MemberSearch.builder()
+        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
                         .id(admin.getId())
                         .pw(String.format("1{}", admin.getPw()))
                         .build();

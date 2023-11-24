@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.member.model;
+package com.ara.todayoutfit.user.domain;
 
 import lombok.*;
 
@@ -12,9 +12,9 @@ import javax.validation.constraints.Size;
 @Setter
 @ToString
 @Entity
-@Table(name="member")
+@Table(name="users")
 @NoArgsConstructor
-public class Member {
+public class User {
 
     @Id
     @Size(max = 10)
@@ -28,7 +28,7 @@ public class Member {
     private boolean isAdmin;
 
     @Builder
-    public Member(String id, String pw, boolean isAdmin) {
+    public User(String id, String pw, boolean isAdmin) {
         this.id = id;
         this.pw = pw;
         this.isAdmin = isAdmin;
