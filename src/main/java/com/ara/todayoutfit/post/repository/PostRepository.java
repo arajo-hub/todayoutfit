@@ -1,6 +1,9 @@
-package com.ara.todayoutfit.board.repository;
+package com.ara.todayoutfit.post.repository;
 
-import com.ara.todayoutfit.board.model.*;
+import com.ara.todayoutfit.post.domain.Post;
+import com.ara.todayoutfit.post.response.*;
+import com.ara.todayoutfit.post.request.PostSearch;
+import com.ara.todayoutfit.post.response.PostShow;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.*;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.board.model.QPost.post;
+import static com.ara.todayoutfit.post.domain.QPost.post;
 
 @Repository
 @Transactional
@@ -36,8 +39,8 @@ public class PostRepository {
         return Optional.ofNullable(post);
     }
 
-    public Page<PostShow> findByLocation(PostSearch postSearch) {
-        Pageable pageable = PageRequest.of(postSearch.getPage() - 1, postSearch.getSize());
+    public Page<PostShow> findPostByLocation(PostSearch postSearch) {
+        Pageable pageable = PageRequest.of(postSearch.getPage(), postSearch.getSize());
         List<Post> posts = queryFactory.selectFrom(post)
                 .where(likeLocation(postSearch.getLocation()), writeToday(), notDeclared())
                 .offset(pageable.getOffset())
@@ -46,9 +49,7 @@ public class PostRepository {
                 .fetch();
         Long count = getCount(postSearch.getLocation());
         List<PostShow> postShows = new ArrayList<PostShow>();
-        for (Post post : posts) {
-            postShows.add(post.toPostShow().build());
-        }
+        posts.forEach(p -> postShows.add(p.toPostShow()));
         return new PageImpl<>(postShows, pageable, count);
     }
 
@@ -85,7 +86,7 @@ public class PostRepository {
                 .fetchOne();
         List<PostShow> postShows = new ArrayList<PostShow>();
         for (Post post : posts) {
-            postShows.add(post.toPostShow().build());
+            postShows.add(post.toPostShow());
         }
         return new PageImpl<>(postShows, pageable, count);
     }
@@ -113,7 +114,7 @@ public class PostRepository {
     }
 
     private BooleanExpression equalsSeq(Long seq) {
-        return post.postSeq.eq(seq);
+        return post.postId.eq(seq);
     }
 
     public void deleteAll() {

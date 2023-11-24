@@ -1,6 +1,8 @@
-package com.ara.todayoutfit.board.model;
+package com.ara.todayoutfit.post.domain;
 
+import com.ara.todayoutfit.post.response.PostShow;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -17,7 +19,7 @@ public class Post {
     @Id
     @Column(name="post_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postSeq;
+    private Long postId;
 
     @Column
     @Size(min = 1, max = 50)
@@ -34,6 +36,7 @@ public class Post {
     private boolean declaredYn;
 
     @Column(name="write_date")
+    @CreatedDate
     private LocalDateTime writeDate;
 
     @Builder
@@ -45,14 +48,15 @@ public class Post {
         this.writeDate = writeDate;
     }
 
-    public PostShow.PostShowBuilder toPostShow() {
+    public PostShow toPostShow() {
         return PostShow.builder()
-                .postSeq(postSeq)
+                .postId(postId)
                 .content(content)
                 .location(location)
                 .recommendCnt(recommendCnt)
                 .declaredYn(declaredYn)
-                .writeDate(writeDate);
+                .writeDate(writeDate)
+                .build();
     }
 
 }

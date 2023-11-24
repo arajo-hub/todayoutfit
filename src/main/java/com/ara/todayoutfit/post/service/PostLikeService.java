@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.board.service;
+package com.ara.todayoutfit.post.service;
 
-import com.ara.todayoutfit.board.model.PostLike;
+import com.ara.todayoutfit.post.domain.PostLike;
 
 public interface PostLikeService {
 

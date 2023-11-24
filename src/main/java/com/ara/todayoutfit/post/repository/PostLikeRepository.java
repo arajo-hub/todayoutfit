@@ -1,7 +1,6 @@
-package com.ara.todayoutfit.board.repository;
+package com.ara.todayoutfit.post.repository;
 
-import com.ara.todayoutfit.board.model.PostLike;
-import com.ara.todayoutfit.board.model.QPostLike;
+import com.ara.todayoutfit.post.domain.PostLike;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -12,7 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.board.model.QPostLike.postLike;
+import static com.ara.todayoutfit.post.domain.QPostLike.postLike;
 
 @Repository
 @Transactional

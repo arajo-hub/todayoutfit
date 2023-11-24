@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.board.model;
+package com.ara.todayoutfit.post.domain;
 
 import lombok.*;
 
