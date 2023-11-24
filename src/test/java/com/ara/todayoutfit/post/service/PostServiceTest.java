@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -141,29 +142,6 @@ class PostServiceTest {
 //        List<Post> all = postRepository.findAll();
 //
 //        assertEquals(0, all.size());
-//    }
-//
-//    @Test
-//    @DisplayName("글 신고 취소")
-//    void cancelDeclare() {
-//        Post post = Post.builder()
-//                .content("삭제테스트")
-//                .location("광진구")
-//                .recommendCnt(1L)
-//                .declaredYn(true)
-//                .writeDate(LocalDateTime.now())
-//                .build();
-//        postService.save(post);
-//
-//        postService.cancelDeclare(post.getPostSeq());
-//
-//        Optional<Post> postFindBySeq = postRepository.findBySeq(post.getPostSeq());
-//        Post result = new Post();
-//        if (postFindBySeq.isPresent()) {
-//            result = postFindBySeq.get();
-//        }
-//
-//        assertEquals(false, result.isDeclaredYn());
 //    }
 //
 //    @Test
@@ -320,5 +298,24 @@ class PostServiceTest {
         assertTrue(bySeq.isPresent());
         assertTrue(bySeq.get().isDeclaredYn());
 
+    }
+
+    @Test
+    @DisplayName("글 신고 취소")
+    void cancelDeclare() {
+        PostCreateRequest request = PostCreateRequest.builder()
+                .content("삭제테스트")
+                .location("광진구")
+                .build();
+        postService.savePost(request);
+
+        postService.declare(1L);
+
+        postService.cancelDeclare(1L);
+
+        Optional<Post> postFindBySeq = postRepository.findBySeq(1L);
+
+        assertTrue(postFindBySeq.isPresent());
+        assertFalse(postFindBySeq.get().isDeclaredYn());
     }
 }
