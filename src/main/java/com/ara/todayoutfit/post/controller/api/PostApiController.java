@@ -45,4 +45,12 @@ public class PostApiController {
         return postService.delete(postId);
     }
 
+    /**
+     * 게시글 신고
+     */
+    @PostMapping("/posts/{postId}/declare")
+    public BaseResult declarePost(@PathVariable Long postId) {
+        return postService.declare(postId);
+    }
+
 }
