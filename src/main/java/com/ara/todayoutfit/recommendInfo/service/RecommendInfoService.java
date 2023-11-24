@@ -6,6 +6,7 @@ import com.ara.todayoutfit.common.SingleResult;
 import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
 import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
 import com.ara.todayoutfit.recommendInfo.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.recommendInfo.request.RecommendInfoCreateRequest;
 import com.ara.todayoutfit.recommendInfo.response.RecommendInfoShow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,10 @@ public class RecommendInfoService {
         return SingleResult.builder().object(recommendInfoShow).build();
     }
 
-    public BaseResult save(RecommendInfo recommendInfo) {
-        RecommendInfo save = recommendInfoRepository.save(recommendInfo);
-        return (recommendInfo.equals(save)) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
+    public BaseResult saveRecommendInfo(RecommendInfoCreateRequest request) {
+        RecommendInfo recommendInfo = request.toRecommendInfo();
+        RecommendInfo savedInfo = recommendInfoRepository.saveRecommendInfo(recommendInfo);
+        return new SingleResult(savedInfo);
     }
 
     public BaseResult delete(Long seq) {

@@ -51,7 +51,7 @@ public class RecommendInfoRepository {
         return infos;
     }
 
-    public RecommendInfo save(RecommendInfo recommendInfo) {
+    public RecommendInfo saveRecommendInfo(RecommendInfo recommendInfo) {
         em.persist(recommendInfo);
         return recommendInfo;
     }
