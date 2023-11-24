@@ -53,4 +53,12 @@ public class PostApiController {
         return postService.declare(postId);
     }
 
+    /**
+     * 게시글 신고 취소
+     */
+    @PostMapping("/posts/{postId}/declare/cancel")
+    public BaseResult cancelDeclarePost(@PathVariable Long postId) {
+        return postService.cancelDeclare(postId);
+    }
+
 }
