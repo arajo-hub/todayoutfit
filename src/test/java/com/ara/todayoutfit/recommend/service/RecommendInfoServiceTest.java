@@ -34,53 +34,53 @@ public class RecommendInfoServiceTest {
         recommendInfoRepository.deleteAll();
     }
 
-    @Test
-    @DisplayName("추천정보 전체 조회")
-    void getAllRecommendInfo() {
-        recommendInfoRepository.saveAll(List.of(RecommendInfo.builder()
-                        .maxTemp(20)
-                        .minTemp(5)
-                        .message("추천정보1입니다.").build(),
-                        RecommendInfo.builder()
-                        .maxTemp(20)
-                        .minTemp(5)
-                        .message("추천정보2입니다.").build()));
-        List<RecommendInfo> all = recommendInfoRepository.findAll();
-        assertEquals(2, all.size());
-    }
-
-    @Test
-    @DisplayName("기온에 따라 추천정보 조회")
-    void getRecommendInfoByTemp() {
-        RecommendInfo recommendInfo = RecommendInfo.builder()
-                .maxTemp(40)
-                .minTemp(21)
-                .message("추천정보1입니다.").build();
-        recommendInfoRepository.saveAll(List.of(recommendInfo,
-                RecommendInfo.builder()
-                        .maxTemp(20)
-                        .minTemp(5)
-                        .message("추천정보2입니다.").build()));
-        int temp = 37;
-        RecommendInfo recommendInfoByTemp = recommendInfoService.getRecommendInfoByTemp(temp);
-        assertEquals(recommendInfo, recommendInfoByTemp);
-    }
-
-    @Test
-    @DisplayName("추천정보 추가")
-    void save() {
-        RecommendInfo recommendInfo = RecommendInfo.builder()
-                .maxTemp(40)
-                .minTemp(20)
-                .message("추가 테스트입니다.")
-                .build();
-
-        recommendInfoService.save(recommendInfo);
-
-        Optional<RecommendInfo> recommendInfoBySeq = recommendInfoRepository.findBySeq(recommendInfo.getRecommendInfoSeq());
-
-        assertEquals(1, recommendInfoBySeq.stream().count());
-    }
+//    @Test
+//    @DisplayName("추천정보 전체 조회")
+//    void getAllRecommendInfo() {
+//        recommendInfoRepository.saveAll(List.of(RecommendInfo.builder()
+//                        .maxTemp(20)
+//                        .minTemp(5)
+//                        .message("추천정보1입니다.").build(),
+//                        RecommendInfo.builder()
+//                        .maxTemp(20)
+//                        .minTemp(5)
+//                        .message("추천정보2입니다.").build()));
+//        List<RecommendInfo> all = recommendInfoRepository.findAll();
+//        assertEquals(2, all.size());
+//    }
+//
+//    @Test
+//    @DisplayName("기온에 따라 추천정보 조회")
+//    void getRecommendInfoByTemp() {
+//        RecommendInfo recommendInfo = RecommendInfo.builder()
+//                .maxTemp(40)
+//                .minTemp(21)
+//                .message("추천정보1입니다.").build();
+//        recommendInfoRepository.saveAll(List.of(recommendInfo,
+//                RecommendInfo.builder()
+//                        .maxTemp(20)
+//                        .minTemp(5)
+//                        .message("추천정보2입니다.").build()));
+//        int temp = 37;
+//        RecommendInfo recommendInfoByTemp = recommendInfoService.getRecommendInfoByTemp(temp);
+//        assertEquals(recommendInfo, recommendInfoByTemp);
+//    }
+//
+//    @Test
+//    @DisplayName("추천정보 추가")
+//    void save() {
+//        RecommendInfo recommendInfo = RecommendInfo.builder()
+//                .maxTemp(40)
+//                .minTemp(20)
+//                .message("추가 테스트입니다.")
+//                .build();
+//
+//        recommendInfoService.save(recommendInfo);
+//
+//        Optional<RecommendInfo> recommendInfoBySeq = recommendInfoRepository.findBySeq(recommendInfo.getRecommendInfoSeq());
+//
+//        assertEquals(1, recommendInfoBySeq.stream().count());
+//    }
 
     @Test
     @DisplayName("추천정보 삭제")

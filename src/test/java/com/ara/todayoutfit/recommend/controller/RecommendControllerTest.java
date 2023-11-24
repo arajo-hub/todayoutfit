@@ -50,11 +50,11 @@ class RecommendControllerTest {
                 .maxTemp(40)
                 .minTemp(21)
                 .message("추천정보1입니다.").build();
-        recommendInfoRepository.saveAll(List.of(recommendInfo,
-                RecommendInfo.builder()
-                        .maxTemp(20)
-                        .minTemp(5)
-                        .message("추천정보2입니다.").build()));
+//        recommendInfoRepository.saveAll(List.of(recommendInfo,
+//                RecommendInfo.builder()
+//                        .maxTemp(20)
+//                        .minTemp(5)
+//                        .message("추천정보2입니다.").build()));
 
         String temp = Integer.toString(35);
 

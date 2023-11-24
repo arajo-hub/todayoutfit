@@ -1,9 +1,9 @@
 package com.ara.todayoutfit.member.controller;
 
-import com.ara.todayoutfit.board.model.Post;
-import com.ara.todayoutfit.board.model.PostLike;
-import com.ara.todayoutfit.board.repository.PostLikeRepository;
-import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.post.domain.Post;
+import com.ara.todayoutfit.post.domain.PostLike;
+import com.ara.todayoutfit.post.repository.PostLikeRepository;
+import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -161,10 +161,10 @@ public class MemberControllerTest {
 
         // 추천수 올리기
         mockMvc.perform(post("/board/recommendAjax")
-                .param("id", Long.toString(post.getPostSeq())));
+                .param("id", Long.toString(post.getPostId())));
 
         List<PostLike> posts = postLikeRepository.findAll();
-        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostId());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
         assertFalse(posts.isEmpty());
@@ -186,14 +186,14 @@ public class MemberControllerTest {
 
         // 추천수 올리기
         mockMvc.perform(post("/board/recommendAjax")
-                .param("id", Long.toString(post.getPostSeq())));
+                .param("id", Long.toString(post.getPostId())));
 
         // 추천수 올리기
         mockMvc.perform(post("/board/recommendAjax")
-                .param("id", Long.toString(post.getPostSeq())));
+                .param("id", Long.toString(post.getPostId())));
 
         List<PostLike> postLikes = postLikeRepository.findAll();
-        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostId());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
         assertTrue(postLikes.isEmpty());
@@ -214,9 +214,9 @@ public class MemberControllerTest {
 
         // 신고
         mockMvc.perform(post("/board/declareAjax")
-                .param("id", Long.toString(post.getPostSeq())));
+                .param("id", Long.toString(post.getPostId())));
 
-        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostSeq());
+        Optional<Post> postBySeq = postRepository.findBySeq(post.getPostId());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
         assertEquals(true, saved.isDeclaredYn());
