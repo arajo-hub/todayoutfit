@@ -1,8 +1,8 @@
 package com.ara.todayoutfit.admin.controller;
 
 import com.ara.todayoutfit.admin.service.AdminService;
-import com.ara.todayoutfit.board.model.PostSearch;
-import com.ara.todayoutfit.board.service.PostService;
+import com.ara.todayoutfit.post.request.PostSearch;
+import com.ara.todayoutfit.post.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.PwdEncryption;

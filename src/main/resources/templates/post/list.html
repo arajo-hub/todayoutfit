@@ -120,8 +120,8 @@
             };
 
             $.ajax({
-                url 		: "/board/listAjax",
-                type 		: "POST",
+                url 		: "/posts/",
+                type 		: "GET",
                 data 		: requestParam,
                 dataType 	: "JSON",
             })
@@ -251,7 +251,7 @@
                     location: $("#nowLocation").val()
                 };
                 $.ajax({
-                    url         : "/board/addAjax",
+                    url         : "/posts",
                     type 		: "POST",
                     data        : requestParam,
                     dataType 	: "JSON",

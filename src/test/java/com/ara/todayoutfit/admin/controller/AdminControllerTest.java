@@ -1,7 +1,7 @@
 package com.ara.todayoutfit.admin.controller;
 
-import com.ara.todayoutfit.board.model.Post;
-import com.ara.todayoutfit.board.repository.PostRepository;
+import com.ara.todayoutfit.post.domain.Post;
+import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResponseCode;
 import com.ara.todayoutfit.member.model.Member;
@@ -18,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
@@ -134,7 +133,7 @@ public class AdminControllerTest {
         // 삭제 시도
         mockMvc.perform(post("/admin/board/deletePostAjax")
                 .session(session)
-                .param("id", Long.toString(savedPost.getPostSeq())))
+                .param("id", Long.toString(savedPost.getPostId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResponseCode.SUCCESS.toString()))
                 .andDo(MockMvcResultHandlers.print());
@@ -158,7 +157,7 @@ public class AdminControllerTest {
 
         mockMvc.perform(post("/admin/board/cancelDeclareAjax")
                 .session(session)
-                .param("id", Long.toString(savedPost.getPostSeq())))
+                .param("id", Long.toString(savedPost.getPostId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResponseCode.SUCCESS.toString()))
                 .andDo(MockMvcResultHandlers.print());

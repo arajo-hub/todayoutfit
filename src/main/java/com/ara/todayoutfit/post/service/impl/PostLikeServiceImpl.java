@@ -1,8 +1,8 @@
-package com.ara.todayoutfit.board.service.impl;
+package com.ara.todayoutfit.post.service.impl;
 
-import com.ara.todayoutfit.board.model.PostLike;
-import com.ara.todayoutfit.board.repository.PostLikeRepository;
-import com.ara.todayoutfit.board.service.PostLikeService;
+import com.ara.todayoutfit.post.domain.PostLike;
+import com.ara.todayoutfit.post.repository.PostLikeRepository;
+import com.ara.todayoutfit.post.service.PostLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

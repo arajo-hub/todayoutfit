@@ -1,17 +1,16 @@
-package com.ara.todayoutfit.board.service.impl;
+package com.ara.todayoutfit.post.service;
 
-import com.ara.todayoutfit.board.model.Post;
-import com.ara.todayoutfit.board.model.PostLike;
-import com.ara.todayoutfit.board.model.PostSearch;
-import com.ara.todayoutfit.board.model.PostShow;
-import com.ara.todayoutfit.board.repository.PostRepository;
-import com.ara.todayoutfit.board.service.PostLikeService;
-import com.ara.todayoutfit.board.service.PostService;
+import com.ara.todayoutfit.post.domain.Post;
+import com.ara.todayoutfit.post.domain.PostLike;
+import com.ara.todayoutfit.post.request.PostSearch;
+import com.ara.todayoutfit.post.response.PostShow;
+import com.ara.todayoutfit.post.repository.PostRepository;
+import com.ara.todayoutfit.post.request.PostCreateRequest;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResult;
 import com.ara.todayoutfit.common.ResponseCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class PostServiceImpl implements PostService {
+@RequiredArgsConstructor
+public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private PostLikeService postLikeService;
+    private final PostLikeService postLikeService;
 
     public PageResult findAll(PostSearch postSearch) {
         //결과
@@ -45,16 +43,32 @@ public class PostServiceImpl implements PostService {
         return postRepository.findBySeq(id);
     }
 
-    public PageResult findByLocation(PostSearch postSearch, String ip) {
+    /**
+     * 위치 기반으로 게시판 글 조회
+     * @param postSearch
+     * @param ip
+     * @return
+     */
+    public PageResult findPostByLocation(PostSearch postSearch, String ip) {
         //결과
         PageResult result = new PageResult(ResponseCode.SUCCESS);
-        Page<PostShow> all = postRepository.findByLocation(postSearch);
+        Page<PostShow> all = postRepository.findPostByLocation(postSearch);
         all.getContent().stream().forEach(postShow -> {
-            postShow.setRecommended(postLikeService.isAlreadyLiked(postShow.getPostSeq(), ip));
+//            postShow.setRecommended(postLikeService.isAlreadyLiked(postShow.getPostId(), ip));
         });
-        result.setResponseCode(all.isEmpty() ? ResponseCode.DB_NOT_FOUND_DATA : result.getResponseCode());
         result.setList(all);
         return result;
+    }
+
+    /**
+     * 게시글 등록
+     * @param request
+     * @return
+     */
+    public BaseResult savePost(PostCreateRequest request) {
+        Post post = request.toPost();
+        Post save = postRepository.save(post);
+        return post.equals(save) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
     }
 
     public BaseResult cancelDeclare(Long seq) {
@@ -65,19 +79,11 @@ public class PostServiceImpl implements PostService {
         return result;
     }
 
-    @Override
-    public BaseResult save(Post post) {
-        Post save = postRepository.save(post);
-        return post.equals(save) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
-    }
-
-    @Override
     public BaseResult saveAll(List<Post> posts) {
         List<Post> saveAll = postRepository.saveAll(posts);
         return posts.equals(saveAll) ? new BaseResult(ResponseCode.SUCCESS) : new BaseResult(ResponseCode.FAIL);
     }
 
-    @Override
     public BaseResult recommend(Long seq, String ip) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
@@ -96,14 +102,12 @@ public class PostServiceImpl implements PostService {
         return result;
     }
 
-    @Override
     public BaseResult cancelRecommend(Long seq, String ip) {
         postLikeService.deleteSamePostSeqAdnIp(seq, ip);
         postRepository.cancelRecommend(seq);
         return new BaseResult(ResponseCode.SUCCESS);
     }
 
-    @Override
     public BaseResult declare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResponseCode.SUCCESS);
@@ -112,16 +116,13 @@ public class PostServiceImpl implements PostService {
         return result;
     }
 
-    @Override
     public BaseResult delete(Long seq) {
         postRepository.deleteBySeq(seq);
         return new BaseResult(ResponseCode.SUCCESS);
     }
 
-    @Override
     public BaseResult deleteAll() {
         postRepository.deleteAll();
         return new BaseResult(ResponseCode.SUCCESS);
     }
-
 }

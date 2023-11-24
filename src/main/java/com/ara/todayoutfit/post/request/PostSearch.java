@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.board.model;
+package com.ara.todayoutfit.post.request;
 
 import lombok.*;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostSearch {
 
-    private int page;
-    private int size;
+    private int page = 1;
+    private int size = 20;
     private String location;
 
     @Builder
