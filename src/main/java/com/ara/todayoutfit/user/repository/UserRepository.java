@@ -1,56 +1,57 @@
-package com.ara.todayoutfit.member.repository;
+package com.ara.todayoutfit.user.repository;
 
-import com.ara.todayoutfit.member.model.QMember;
+import com.ara.todayoutfit.user.domain.QUser;
+import com.ara.todayoutfit.user.domain.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.ara.todayoutfit.member.model.Member;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.member.model.QMember.member;
+import static com.ara.todayoutfit.user.domain.QUser.user;
 
 @Repository
 @Transactional
-public class MemberRepository {
+public class UserRepository {
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public MemberRepository(EntityManager em) {
+    public UserRepository(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Member save(Member user) {
+    public User save(User user) {
         em.persist(user);
         return user;
     }
 
     public void deleteById(String id) {
-        queryFactory.delete(member)
+        queryFactory.delete(user)
                 .where(equalsId(id))
                 .execute();
     }
 
     private BooleanExpression equalsId(String id) {
-        return member.id.eq(id);
+        return user.id.eq(id);
     }
 
     public void deleteAll() {
-        queryFactory.delete(member)
+        queryFactory.delete(user)
                 .execute();
     }
 
-    public Optional<Member> findById(String id) {
-        Member user = em.find(Member.class, id);
+    public Optional<User> findById(String id) {
+        User user = em.find(User.class, id);
         return Optional.ofNullable(user);
     }
 
-    public List<Member> findAll() {
-        return queryFactory.selectFrom(member)
+    public List<User> findAll() {
+        return queryFactory.selectFrom(user)
                 .fetch();
     }
 
