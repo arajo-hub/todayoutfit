@@ -71,10 +71,9 @@ public class PostService {
      * @param request
      * @return
      */
-    public BaseResult savePost(PostCreateRequest request) {
-        Post post = request.toPost();
-        Post save = postRepository.save(post);
-        return post.equals(save) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.FAIL);
+    public ObjectResponse<PostShow> savePost(PostCreateRequest request) {
+        Post save = postRepository.save(request.toPost());
+        return new ObjectResponse<PostShow>(save.toPostShow());
     }
 
     public BaseResult cancelDeclare(Long seq) {
