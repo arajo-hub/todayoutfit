@@ -8,7 +8,6 @@ import com.ara.todayoutfit.post.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,7 @@ public class PostApiController {
      */
     @GetMapping("/posts")
     public PageResponse<PostShow> boards(HttpServletRequest request, PostSearch search) {
-        return postService.findPostByLocation(search, request.getRemoteAddr());
+        return postService.findPostByLocationWithPaging(search, request.getRemoteAddr());
     }
 
     /**

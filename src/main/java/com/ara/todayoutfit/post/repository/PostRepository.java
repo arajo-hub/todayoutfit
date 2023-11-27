@@ -69,21 +69,12 @@ public class PostRepository {
         return post.declaredYn.eq(false);
     }
 
-    public Page<PostShow> findAll(PostSearch postSearch) {
-        Pageable pageable = PageRequest.of(postSearch.getPage() - 1, postSearch.getSize());
-        List<Post> posts = queryFactory.selectFrom(post)
+    public List<Post> findAll(PostSearch postSearch, Pageable pageable) {
+        return queryFactory.selectFrom(post)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(post.writeDate.desc())
                 .fetch();
-        Long count = queryFactory.select(post.count())
-                .from(post)
-                .fetchOne();
-        List<PostShow> postShows = new ArrayList<PostShow>();
-        for (Post post : posts) {
-            postShows.add(post.toPostShow());
-        }
-        return new PageImpl<>(postShows, pageable, count);
     }
 
     public List<Post> findAll() {

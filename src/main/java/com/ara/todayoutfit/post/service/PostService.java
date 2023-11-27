@@ -20,9 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static com.ara.todayoutfit.post.domain.QPost.post;
 
 @Slf4j
 @Service
@@ -33,19 +30,28 @@ public class PostService {
 
     private final PostLikeService postLikeService;
 
-    public PageResponse<PostShow> findAll(PostSearch postSearch) {
-        Page<PostShow> all = postRepository.findAll(postSearch);
-        return PageResponse.<PostShow>builder()
-                .list(all)
-                .build();
+    /**
+     * 게시글 전체 조회 with paging
+     * @param postSearch
+     * @return
+     */
+    public PageResponse<PostShow> findPostWithPaging(PostSearch postSearch) {
+        Pageable pageable = PageRequest.of(postSearch.getPage() - 1, postSearch.getSize());
+        List<Post> allPosts = postRepository.findAll(postSearch, pageable);
+        Long count = postRepository.getCount(postSearch.getLocation());
+
+        List<PostShow> postShows = new ArrayList<PostShow>();
+        allPosts.forEach(p -> postShows.add(p.toPostShow()));
+        Page<PostShow> postShowPages = new PageImpl<>(postShows, pageable, count);
+        return new PageResponse<PostShow>(postShowPages);
     }
 
+    /**
+     * 게시글 전체 조회
+     * @return
+     */
     public List<Post> findAll() {
         return postRepository.findAll();
-    }
-
-    public Optional<Post> findBySeq(Long id) {
-        return postRepository.findBySeq(id);
     }
 
     /**
@@ -54,7 +60,7 @@ public class PostService {
      * @param ip
      * @return
      */
-    public PageResponse<PostShow> findPostByLocation(PostSearch postSearch, String ip) {
+    public PageResponse<PostShow> findPostByLocationWithPaging(PostSearch postSearch, String ip) {
         Pageable pageable = PageRequest.of(postSearch.getPage(), postSearch.getSize());
         List<Post> allPosts = postRepository.findPostByLocation(postSearch, pageable);
         Long count = postRepository.getCount(postSearch.getLocation());
