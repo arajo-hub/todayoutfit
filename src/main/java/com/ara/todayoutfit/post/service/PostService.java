@@ -1,8 +1,12 @@
 package com.ara.todayoutfit.post.service;
 
-import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.domain.PostLike;
+import com.ara.todayoutfit.post.repository.PostLikeRedisRepository;
+import com.ara.todayoutfit.post.repository.PostLikeRepository;
+import com.ara.todayoutfit.post.repository.PostRedisRepository;
+import com.ara.todayoutfit.post.request.PostLikeMultiSearch;
+import com.ara.todayoutfit.post.request.PostLikeSearch;
 import com.ara.todayoutfit.post.request.PostSearch;
 import com.ara.todayoutfit.post.response.PostShow;
 import com.ara.todayoutfit.post.repository.PostRepository;
@@ -17,21 +21,25 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.post.domain.QPost.post;
-
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
 
-    private final PostLikeService postLikeService;
+    private final PostLikeRepository postLikeRepository;
+
+    private final PostRedisRepository postRedisRepository;
+
+    private final PostLikeRedisRepository postLikeRedisRepository;
 
     public PageResponse<PostShow> findAll(PostSearch postSearch) {
         Page<PostShow> all = postRepository.findAll(postSearch);
@@ -59,8 +67,17 @@ public class PostService {
         List<Post> allPostsByLocation = postRepository.findPostByLocation(postSearch, pageable);
         Long count = postRepository.getCount(postSearch.getLocation());
 
+        List<Long> postSeqs = new ArrayList<>();
+        allPostsByLocation.forEach(p -> postSeqs.add(p.getPostId()));
+        PostLikeMultiSearch search = PostLikeMultiSearch.builder().postIds(postSeqs).ip(ip).build();
+        List<Long> likedIds = postLikeRepository.getPostLikes(search);
+
         List<PostShow> postShows = new ArrayList<PostShow>();
-        allPostsByLocation.forEach(p -> postShows.add(p.toPostShow()));
+        allPostsByLocation.forEach(p -> {
+            PostShow postShow = p.toPostShow();
+            postShow.setLikedYn(likedIds.contains(p.getPostId()));
+            postShows.add(postShow);
+        });
 
         Page<PostShow> postShowPages = new PageImpl<>(postShows, pageable, count);
         return new PageResponse<PostShow>(postShowPages);
@@ -89,26 +106,44 @@ public class PostService {
         return posts.equals(saveAll) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.FAIL);
     }
 
-    public BaseResult recommend(Long seq, String ip) {
+    /**
+     * 게시글 좋아요 기능
+     * @param seq
+     * @param ip
+     * @return
+     */
+    public BaseResult likePost(Long seq, String ip) {
         //결과
         BaseResult result = new BaseResult(ResultCode.SUCCESS);
-        boolean isAlreadyRecommended = postLikeService.isAlreadyLiked(seq, ip);
-        if (isAlreadyRecommended) {
-            result = this.cancelRecommend(seq, ip);
-        } else {
-            PostLike postLike = PostLike.builder()
-                            .postSeq(seq)
-                            .ip(ip)
-                            .build();
-            postLikeService.save(postLike);
-            postRepository.recommend(seq);
+        Optional<Post> postBySeq = postRepository.findBySeq(seq);
+        if (!postBySeq.isPresent()) {
+            return new BaseResult(ResultCode.DB_NOT_FOUND_DATA);
+        }
+        Post targetPost = postBySeq.get();
+        boolean isExecuted = postLikeRedisRepository.likePost(seq, ip);
+        synchronized (this) {
+            if (isExecuted) {
+                PostLike like = PostLike.builder().postSeq(seq).ip(ip).build();
+                postLikeRepository.insertPostLike(like);
+                targetPost.increaseLikeCount();
+            } else {
+                if (targetPost.getLikeCount() > 0) {
+                    isExecuted = postLikeRedisRepository.deleteLikePost(seq, ip);
+                    PostLikeSearch search = PostLikeSearch.builder().postId(seq).ip(ip).build();
+                    postLikeRepository.deletePostLike(search);
+                    targetPost.decreaseLikeCount();
+                }
+            }
+        }
+        if (!isExecuted) {
+            result = new BaseResult(ResultCode.FAIL);
         }
         return result;
     }
 
     public BaseResult cancelRecommend(Long seq, String ip) {
-        postLikeService.deleteSamePostSeqAdnIp(seq, ip);
-        postRepository.cancelRecommend(seq);
+//        postRepository.deleteSamePostSeqAdnIp(seq, ip);
+//        postRepository.cancelRecommend(seq);
         return new BaseResult(ResultCode.SUCCESS);
     }
 

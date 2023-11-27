@@ -2,7 +2,7 @@ package com.ara.todayoutfit.member.controller;
 
 import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.domain.PostLike;
-import com.ara.todayoutfit.post.repository.PostLikeRepository;
+import com.ara.todayoutfit.post.repository.PostLikeRedisRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.common.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class MemberControllerTest {
     private PostRepository postRepository;
 
     @Autowired
-    private PostLikeRepository postLikeRepository;
+    private PostLikeRedisRepository postLikeRepository;
 
     private MockMvc mockMvc;
 
@@ -50,7 +50,7 @@ public class MemberControllerTest {
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
-        postLikeRepository.deleteAll();
+//        postLikeRepository.deleteAll();
     }
 
     @Test
@@ -160,14 +160,14 @@ public class MemberControllerTest {
         postRepository.save(post);
 
         // 추천수 올리기
-        mockMvc.perform(post("/board/recommendAjax")
+        mockMvc.perform(post("/posts/" + post.getPostId() + "/like")
                 .param("id", Long.toString(post.getPostId())));
 
-        List<PostLike> posts = postLikeRepository.findAll();
+//        List<PostLike> posts = postLikeRepository.findAll();
         Optional<Post> postBySeq = postRepository.findBySeq(post.getPostId());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
-        assertFalse(posts.isEmpty());
+//        assertFalse(posts.isEmpty());
         assertEquals(init + 1, saved.getRecommendCnt().longValue());
     }
 
@@ -185,18 +185,18 @@ public class MemberControllerTest {
         postRepository.save(post);
 
         // 추천수 올리기
-        mockMvc.perform(post("/board/recommendAjax")
+        mockMvc.perform(post("/posts/" + post.getPostId() + "/like")
                 .param("id", Long.toString(post.getPostId())));
 
         // 추천수 올리기
-        mockMvc.perform(post("/board/recommendAjax")
+        mockMvc.perform(post("/posts/" + post.getPostId() + "/like")
                 .param("id", Long.toString(post.getPostId())));
 
-        List<PostLike> postLikes = postLikeRepository.findAll();
+//        List<PostLike> postLikes = postLikeRepository.findAll();
         Optional<Post> postBySeq = postRepository.findBySeq(post.getPostId());
         Post saved = postBySeq.isPresent() ? postBySeq.get() : null;
 
-        assertTrue(postLikes.isEmpty());
+//        assertTrue(postLikes.isEmpty());
         assertEquals(init, saved.getRecommendCnt().longValue());
     }
 

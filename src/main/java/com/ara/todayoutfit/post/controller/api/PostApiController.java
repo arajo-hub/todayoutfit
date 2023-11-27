@@ -74,4 +74,12 @@ public class PostApiController {
         return postService.cancelDeclare(postId);
     }
 
+    /**
+     * 게시글 좋아요 기능
+     */
+    @PostMapping("/posts/{postId}/like")
+    public BaseResult likePost(@PathVariable Long postId, HttpServletRequest request) {
+        return postService.likePost(postId, request.getRemoteAddr());
+    }
+
 }

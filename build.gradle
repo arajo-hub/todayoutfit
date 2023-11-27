@@ -84,6 +84,9 @@ dependencies {
     // AWS parameter store
 //    implementation 'com.coveo:spring-boot-parameter-store-integration:1.1.2'
 
+    //Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 test {

@@ -1,11 +1,10 @@
 package com.ara.todayoutfit.post.service;
 
 import com.ara.todayoutfit.post.domain.Post;
-import com.ara.todayoutfit.post.repository.PostLikeRepository;
+import com.ara.todayoutfit.post.repository.PostLikeRedisRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
 import com.ara.todayoutfit.post.request.PostSearch;
-import com.ara.todayoutfit.common.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +31,7 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @Autowired
-    private PostLikeRepository postLikeRepository;
+    private PostLikeRedisRepository postLikeRepository;
 
     @BeforeEach
     void clean() {
