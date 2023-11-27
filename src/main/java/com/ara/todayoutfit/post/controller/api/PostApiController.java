@@ -1,11 +1,14 @@
 package com.ara.todayoutfit.post.controller.api;
 
+import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.post.request.PostSearch;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
+import com.ara.todayoutfit.post.response.PostShow;
 import com.ara.todayoutfit.post.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
-import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +26,7 @@ public class PostApiController {
      * @return
      */
     @GetMapping("/posts")
-    public PageResult boards(HttpServletRequest request, PostSearch search) {
+    public ObjectResponse<Page<PostShow>> boards(HttpServletRequest request, PostSearch search) {
         return postService.findPostByLocation(search, request.getRemoteAddr());
     }
 

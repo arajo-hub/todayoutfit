@@ -5,7 +5,7 @@ import com.ara.todayoutfit.post.repository.PostLikeRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
 import com.ara.todayoutfit.post.request.PostSearch;
-import com.ara.todayoutfit.common.PageResult;
+import com.ara.todayoutfit.common.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +57,7 @@ class PostServiceTest {
 
         String ip = "192.168.1.100";
 
-        PageResult pageResult = postService.findPostByLocation(searchParam, ip);
+        PageResponse pageResult = postService.findPostByLocation(searchParam, ip);
 
         assertTrue(pageResult.getList().getSize() > 0);
     }

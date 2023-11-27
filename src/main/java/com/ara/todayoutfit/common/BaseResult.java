@@ -9,10 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BaseResult {
 
-    private ResponseCode responseCode;
+    private ResultCode resultCode;
 
     public boolean isSuccess() {
-        return this.responseCode.getCode().equals(ResponseCode.SUCCESS.getCode());
+        return this.resultCode.equals(ResultCode.SUCCESS);
     }
 
     public boolean isNotSuccess() {

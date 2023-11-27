@@ -4,7 +4,7 @@ import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.domain.PostLike;
 import com.ara.todayoutfit.post.repository.PostLikeRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
-import com.ara.todayoutfit.common.ResponseCode;
+import com.ara.todayoutfit.common.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -86,7 +86,7 @@ public class MemberControllerTest {
         // 게시물 추가
         mockMvc.perform(post("/board/addAjax")
                 .flashAttr("post", post))
-                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+                .andExpect(jsonPath("$.responseCode").value(ResultCode.INVALID_PARAMETER.toString()));
 
     }
 
@@ -104,7 +104,7 @@ public class MemberControllerTest {
         // 게시물 추가
         mockMvc.perform(post("/board/addAjax")
                 .flashAttr("post", post))
-                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+                .andExpect(jsonPath("$.responseCode").value(ResultCode.INVALID_PARAMETER.toString()));
 
     }
 
@@ -122,7 +122,7 @@ public class MemberControllerTest {
         // 게시물 추가
         mockMvc.perform(post("/board/addAjax")
                 .flashAttr("post", post))
-                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()));
+                .andExpect(jsonPath("$.responseCode").value(ResultCode.INVALID_PARAMETER.toString()));
 
     }
 
@@ -141,7 +141,7 @@ public class MemberControllerTest {
         mockMvc.perform(post("/board/addAjax")
                 .flashAttr("post", post))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.responseCode").value(ResponseCode.INVALID_PARAMETER.toString()))
+                .andExpect(jsonPath("$.responseCode").value(ResultCode.INVALID_PARAMETER.toString()))
                 .andDo(MockMvcResultHandlers.print());
 
     }
