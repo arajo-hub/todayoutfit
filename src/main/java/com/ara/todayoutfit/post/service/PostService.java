@@ -82,18 +82,12 @@ public class PostService {
         return new ObjectResponse<PostShow>(save.toPostShow());
     }
 
-    public BaseResult cancelDeclare(Long seq) {
-        //결과
-        BaseResult result = new BaseResult(ResultCode.SUCCESS);
-        postRepository.cancelDeclare(seq);
-        return result;
-    }
-
-    public BaseResult saveAll(List<Post> posts) {
-        List<Post> saveAll = postRepository.saveAll(posts);
-        return posts.equals(saveAll) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.FAIL);
-    }
-
+    /**
+     * 게시글 추천
+     * @param seq
+     * @param ip
+     * @return
+     */
     public BaseResult recommend(Long seq, String ip) {
         //결과
         BaseResult result = new BaseResult(ResultCode.SUCCESS);
@@ -111,12 +105,23 @@ public class PostService {
         return result;
     }
 
+    /**
+     * 게시글 추천 취소
+     * @param seq
+     * @param ip
+     * @return
+     */
     public BaseResult cancelRecommend(Long seq, String ip) {
         postLikeService.deleteSamePostSeqAdnIp(seq, ip);
         postRepository.cancelRecommend(seq);
         return new BaseResult(ResultCode.SUCCESS);
     }
 
+    /**
+     * 게시글 신고
+     * @param seq
+     * @return
+     */
     public BaseResult declare(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResultCode.SUCCESS);
@@ -124,11 +129,32 @@ public class PostService {
         return result;
     }
 
+    /**
+     * 게시글 신고 취소
+     * @param seq
+     * @return
+     */
+    public BaseResult cancelDeclare(Long seq) {
+        //결과
+        BaseResult result = new BaseResult(ResultCode.SUCCESS);
+        postRepository.cancelDeclare(seq);
+        return result;
+    }
+
+    /**
+     * 게시글 삭제
+     * @param seq
+     * @return
+     */
     public BaseResult delete(Long seq) {
         postRepository.deleteBySeq(seq);
         return new BaseResult(ResultCode.SUCCESS);
     }
 
+    /**
+     * 게시글 전체 삭제
+     * @return
+     */
     public BaseResult deleteAll() {
         postRepository.deleteAll();
         return new BaseResult(ResultCode.SUCCESS);
