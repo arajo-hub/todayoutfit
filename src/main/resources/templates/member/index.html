@@ -18,7 +18,7 @@
                     <p>최고기온 <span id="maxTemp">-</span>도 / 최저기온 <span id="minTemp">-</span>도</p>
                 </div>
                 <div class="uk-margin">
-                    <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/board/list">
+                    <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/post/list">
                         <a onclick="document.getElementById('searchForm').submit();" class="uk-search-icon-flip" uk-search-icon></a>
                         <input class="uk-search-input" type="search" id="location" name="location" placeholder="원하는 지역명으로 검색"  maxlength="15">
                     </form>
@@ -52,7 +52,7 @@
                 success: function(data) {
                     $("#currentLocation").html(data.documents[0].address["region_2depth_name"]);
                     $('#searchByMyLocation').click(function(){
-                        location.href="/board/list?location="+data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"];
+                        location.href="/post/list?location="+data.documents[0].address["region_1depth_name"] + data.documents[0].address["region_2depth_name"];
                     });
                 }
             });
