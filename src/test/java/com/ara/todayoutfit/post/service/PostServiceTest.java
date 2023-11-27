@@ -1,11 +1,13 @@
 package com.ara.todayoutfit.post.service;
 
+import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.post.domain.Post;
 import com.ara.todayoutfit.post.repository.PostLikeRepository;
 import com.ara.todayoutfit.post.repository.PostRepository;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
 import com.ara.todayoutfit.post.request.PostSearch;
 import com.ara.todayoutfit.common.PageResponse;
+import com.ara.todayoutfit.post.response.PostShow;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -285,19 +287,14 @@ class PostServiceTest {
                 .content("삭제테스트")
                 .location("광진구")
                 .build();
-        postService.savePost(request);
+        ObjectResponse<PostShow> saveResponse = postService.savePost(request);
+        PostShow savedPost = saveResponse.getObject();
 
-        postService.declare(1L);
+        postService.declare(savedPost.getPostId());
 
-        Optional<Post> bySeq = postRepository.findBySeq(1L);
-        if (bySeq.isPresent()) {
-            Post post = bySeq.get();
-            assertTrue(post.isDeclaredYn());
-        }
-
+        Optional<Post> bySeq = postRepository.findBySeq(savedPost.getPostId());
         assertTrue(bySeq.isPresent());
         assertTrue(bySeq.get().isDeclaredYn());
-
     }
 
     @Test
