@@ -6,6 +6,7 @@ import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.user.domain.User;
 import com.ara.todayoutfit.user.repository.UserRepository;
+import com.ara.todayoutfit.user.request.UserSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,12 +65,12 @@ public class AdminControllerTest {
                 .isAdmin(true)
                 .build();
         userRepository.save(successAdmin);
-        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch memberSearch = UserSearch.builder()
                         .id(successAdmin.getId())
                         .pw(pwd)
                         .build();
         //로그인 시도
-        mockMvc.perform(post("/admin/loginAjax")
+        mockMvc.perform(post("/login")
                 .flashAttr("memberSearch", memberSearch))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResultCode.SUCCESS.toString()))
@@ -79,12 +80,12 @@ public class AdminControllerTest {
     @Test
     @DisplayName("DB에 존재하지 않는 관리자로 로그인")
     void adminLoginTest() throws Exception {
-        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch memberSearch = UserSearch.builder()
                 .id("admin")
                 .pw("1234")
                 .build();
         // 로그인 시도
-        mockMvc.perform(post("/admin/loginAjax")
+        mockMvc.perform(post("/login")
                 .flashAttr("memberSearch", memberSearch))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseCode").value(ResultCode.DB_NOT_FOUND_DATA.toString()))
@@ -101,13 +102,13 @@ public class AdminControllerTest {
                 .build();
         userRepository.save(admin);
 
-        com.ara.todayoutfit.user.service.request.UserSearch memberSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch memberSearch = UserSearch.builder()
                         .id(admin.getId())
                         .pw(String.format("1{}", admin.getPw()))
                         .build();
 
         // 로그인 시도
-        mockMvc.perform(post("/admin/loginAjax")
+        mockMvc.perform(post("/login")
                 .flashAttr("memberSearch", memberSearch))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
@@ -129,7 +130,7 @@ public class AdminControllerTest {
         session.setAttribute("id", "admin");
 
         // 삭제 시도
-        mockMvc.perform(post("/admin/board/deletePostAjax")
+        mockMvc.perform(post("/posts/" + savedPost.getPostId() + "/delete")
                 .session(session)
                 .param("id", Long.toString(savedPost.getPostId())))
                 .andExpect(status().isOk())

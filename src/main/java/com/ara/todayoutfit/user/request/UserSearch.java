@@ -1,4 +1,4 @@
-package com.ara.todayoutfit.user.service.request;
+package com.ara.todayoutfit.user.request;
 
 import lombok.*;
 

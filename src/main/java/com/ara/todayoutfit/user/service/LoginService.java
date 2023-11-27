@@ -3,6 +3,7 @@ package com.ara.todayoutfit.user.service;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.user.domain.User;
+import com.ara.todayoutfit.user.request.UserSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class LoginService {
     @Autowired
     private UserService userService;
 
-    public BaseResult login(HttpSession session, com.ara.todayoutfit.user.service.request.UserSearch admin) {
+    public BaseResult login(HttpSession session, UserSearch admin) {
         BaseResult result = new BaseResult(ResultCode.SUCCESS);
         Optional<User> userFindById = userService.findById(admin.getId());
 
