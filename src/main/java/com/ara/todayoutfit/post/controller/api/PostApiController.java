@@ -20,14 +20,24 @@ public class PostApiController {
     private final PostService postService;
 
     /**
-     * 게시글 목록 조회
+     * 기온에 따라 게시글 목록 조회
      * @param request
      * @param search
      * @return
      */
     @GetMapping("/posts")
-    public PageResponse<PostShow> boards(HttpServletRequest request, PostSearch search) {
+    public PageResponse<PostShow> posts(HttpServletRequest request, PostSearch search) {
         return postService.findPostByLocation(search, request.getRemoteAddr());
+    }
+
+    /**
+     * 관리자용 게시글 목록 조회
+     * @param search
+     * @return
+     */
+    @GetMapping("/admin/posts")
+    public PageResponse<PostShow> postsForAdmin(PostSearch search) {
+        return postService.findAll(search);
     }
 
     /**
