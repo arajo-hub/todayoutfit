@@ -15,4 +15,9 @@ public class PageResponse<T> extends BaseResult {
     public PageResponse(ResultCode responseCode) {
         super(responseCode);
     }
+
+    public PageResponse(Page<T> list) {
+        super(ResultCode.SUCCESS);
+        this.list = list;
+    }
 }

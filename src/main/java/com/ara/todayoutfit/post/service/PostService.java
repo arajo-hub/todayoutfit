@@ -13,10 +13,16 @@ import com.ara.todayoutfit.common.ResultCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ara.todayoutfit.post.domain.QPost.post;
 
 @Slf4j
 @Service
@@ -48,12 +54,16 @@ public class PostService {
      * @param ip
      * @return
      */
-    public ObjectResponse<Page<PostShow>> findPostByLocation(PostSearch postSearch, String ip) {
-        Page<PostShow> all = postRepository.findPostByLocation(postSearch);
-        all.getContent().stream().forEach(postShow -> {
-//            postShow.setRecommended(postLikeService.isAlreadyLiked(postShow.getPostId(), ip));
-        });
-        return new ObjectResponse<Page<PostShow>>(all);
+    public PageResponse<PostShow> findPostByLocation(PostSearch postSearch, String ip) {
+        Pageable pageable = PageRequest.of(postSearch.getPage(), postSearch.getSize());
+        List<Post> allPosts = postRepository.findPostByLocation(postSearch, pageable);
+        Long count = postRepository.getCount(postSearch.getLocation());
+
+        List<PostShow> postShows = new ArrayList<PostShow>();
+        allPosts.forEach(p -> postShows.add(p.toPostShow()));
+
+        Page<PostShow> postShowPages = new PageImpl<>(postShows, pageable, count);
+        return new PageResponse<PostShow>(postShowPages);
     }
 
     /**

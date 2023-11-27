@@ -26,7 +26,7 @@ public class PostApiController {
      * @return
      */
     @GetMapping("/posts")
-    public ObjectResponse<Page<PostShow>> boards(HttpServletRequest request, PostSearch search) {
+    public PageResponse<PostShow> boards(HttpServletRequest request, PostSearch search) {
         return postService.findPostByLocation(search, request.getRemoteAddr());
     }
 
