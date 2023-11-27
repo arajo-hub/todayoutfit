@@ -120,7 +120,7 @@
             };
 
             $.ajax({
-                url 		: "/posts/",
+                url 		: "/posts",
                 type 		: "GET",
                 data 		: requestParam,
                 dataType 	: "JSON",
@@ -198,9 +198,8 @@
             var that = this;
             $(document).on('click', '#recommend', function(e) {
                 $.ajax({
-                    url         : "/board/recommendAjax",
+                    url         : "/posts/" + e.currentTarget.dataset.seq + "/recommend",
                     type 		: "POST",
-                    data        : {id: e.currentTarget.dataset.seq},
                     dataType 	: "JSON",
                 })
                 .done(function (result) {

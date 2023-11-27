@@ -85,7 +85,8 @@
 
                 // 기온에 따라 옷차림 추천해주는 ajax
                 $.ajax({
-                    url:"/recommend",
+                    url:"/recommendInfos",
+                    type:'GET',
                     data: {temp: temp},
                     dataType: "json",
                     success: function(data) {
