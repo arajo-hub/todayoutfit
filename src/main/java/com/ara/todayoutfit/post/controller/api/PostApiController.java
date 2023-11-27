@@ -63,4 +63,20 @@ public class PostApiController {
         return postService.cancelDeclare(postId);
     }
 
+    /**
+     * 게시글 추천
+     */
+    @PostMapping("/posts/{postId}/recommend")
+    public BaseResult recommendPost(HttpServletRequest request, @PathVariable Long postId) {
+        return postService.recommend(postId, request.getRemoteAddr());
+    }
+
+    /**
+     * 게시글 추천 취소
+     */
+    @PostMapping("/posts/{postId}/recommend/cancel")
+    public BaseResult cancelRecommendPost(HttpServletRequest request, @PathVariable Long postId) {
+        return postService.cancelRecommend(postId, request.getRemoteAddr());
+    }
+
 }
