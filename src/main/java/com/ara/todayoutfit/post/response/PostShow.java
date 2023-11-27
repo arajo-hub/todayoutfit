@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Builder
@@ -16,6 +17,9 @@ public class PostShow {
     private boolean isRecommended;
     private boolean declaredYn;
     private LocalDateTime writeDate;
-    private String writeDateStr;
 
+    public String getWriteDateToString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return writeDate.format(formatter);
+    }
 }

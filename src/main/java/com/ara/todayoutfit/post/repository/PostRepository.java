@@ -39,21 +39,16 @@ public class PostRepository {
         return Optional.ofNullable(post);
     }
 
-    public Page<PostShow> findPostByLocation(PostSearch postSearch) {
-        Pageable pageable = PageRequest.of(postSearch.getPage(), postSearch.getSize());
-        List<Post> posts = queryFactory.selectFrom(post)
+    public List<Post> findPostByLocation(PostSearch postSearch, Pageable pageable) {
+        return queryFactory.selectFrom(post)
                 .where(likeLocation(postSearch.getLocation()), writeToday(), notDeclared())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(post.writeDate.desc())
                 .fetch();
-        Long count = getCount(postSearch.getLocation());
-        List<PostShow> postShows = new ArrayList<PostShow>();
-        posts.forEach(p -> postShows.add(p.toPostShow()));
-        return new PageImpl<>(postShows, pageable, count);
     }
 
-    private Long getCount(String location) {
+    public Long getCount(String location) {
         return queryFactory.select(post.count())
                 .from(post)
                 .where(likeLocation(location), writeToday(), notDeclared())

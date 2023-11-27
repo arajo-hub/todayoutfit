@@ -78,7 +78,7 @@
             };
 
             $.ajax({
-                url 		: "/admin/board/listAjax",
+                url 		: "/posts",
                 type 		: "POST",
                 data 		: requestParam,
                 dataType 	: "JSON",
@@ -89,11 +89,12 @@
                     row = '<tr><td colspan="6" class="uk-text-center">게시글이 없습니다.</td></tr>';
                 } else {
                     result.list.content.forEach((element, index, array) => {
+                        console.log(element.writeDateToString);
                         row += '<tr><td>' + (index + 1) + '</td>'
                             + '<td>' + element.content + '</td>'
                             + '<td>' + element.location + '</td>'
                             + '<td>' + element.recommendCnt + '</td>'
-                            + '<td>' + element.writeDateStr + '</td>'
+                            + '<td>' + element.writeDateToString + '</td>'
                             + '<td><div id="btns">'
                             + '<button class="uk-button uk-button-default uk-button-small uk-width-1-1" type="button" id="delBtn" data-toggle="modal" data-target="#delModal" data-seq="' + element.postSeq + '">삭제</button>';
 
@@ -135,7 +136,7 @@
                 }
 
                 $.ajax({
-                    url 		: "/admin/board/cancelDeclareAjax",
+                    url 		: "/posts/" + $(this).data('seq') + "/cancelDeclare",
                     type 		: "POST",
                     data 		: requestParam,
                     dataType 	: "JSON",

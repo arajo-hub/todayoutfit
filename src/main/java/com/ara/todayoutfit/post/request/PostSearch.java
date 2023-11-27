@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class PostSearch {
 
     private int page = 1;
-    private int size = 20;
+    private int size = 10;
     private String location;
 
     @Builder

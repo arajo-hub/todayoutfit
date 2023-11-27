@@ -148,7 +148,7 @@
             <div class="uk-grid-medium uk-flex-middle" uk-grid>
                 <div class="uk-width-expand">
                     <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
-                        <li>` + element.writeDateStr + `</li>
+                        <li>` + element.writeDateToString + `</li>
                         <li><span class="uk-margin-small-right">` + element.recommendCnt + `</span><a href="#" id="recommend" data-seq="` + element.postSeq + `">`;
                         if (element.recommended) {
                             row += `<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -253,7 +253,8 @@
                 $.ajax({
                     url         : "/posts",
                     type 		: "POST",
-                    data        : requestParam,
+                    data        : JSON.stringify(requestParam),
+                    contentType : "application/json",
                     dataType 	: "JSON",
                 })
                 .done(function (result) {
