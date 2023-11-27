@@ -1,6 +1,6 @@
 package com.ara.todayoutfit.recommendInfo.service;
 
-import com.ara.todayoutfit.common.SingleResult;
+import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
 import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
 import com.ara.todayoutfit.recommendInfo.repository.RecommendInfoRepository;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,7 +57,7 @@ public class RecommendInfoServiceTest {
                 .message("추천정보1입니다.").build();
         recommendInfoRepository.saveRecommendInfo(recommendInfo);
         int temp = 37;
-        SingleResult recommendInfoByTemp = recommendInfoService.findRecommendInfoByTemperature(temp);
+        ObjectResponse recommendInfoByTemp = recommendInfoService.findRecommendInfoByTemperature(temp);
         assertNotNull(recommendInfoByTemp.getObject());
     }
 

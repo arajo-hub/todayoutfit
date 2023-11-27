@@ -1,7 +1,7 @@
 package com.ara.todayoutfit.config.advice;
 
 import com.ara.todayoutfit.common.BaseResult;
-import com.ara.todayoutfit.common.ResponseCode;
+import com.ara.todayoutfit.common.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -18,7 +18,7 @@ public class ValidationAdvice {
     @ResponseStatus(code = HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     public BaseResult validationFail(BindException exception) {
-        return new BaseResult(ResponseCode.INVALID_PARAMETER);
+        return new BaseResult(ResultCode.INVALID_PARAMETER);
     }
 
 }
