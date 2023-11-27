@@ -36,7 +36,7 @@ public class PostApiController {
      * @return
      */
     @PostMapping("/posts")
-    public BaseResult savePost(PostCreateRequest request) {
+    public BaseResult savePost(@RequestBody PostCreateRequest request) {
         return postService.savePost(request);
     }
 

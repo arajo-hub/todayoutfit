@@ -51,9 +51,10 @@
                 };
 
                 $.ajax({
-                    url 		: "/admin/loginAjax",
+                    url 		: "/login",
                     type 		: "POST",
-                    data 		: requestParam,
+                    data 		: JSON.stringify(requestParam),
+                    contentType : "application/json",
                     dataType 	: "JSON",
                 })
                 .done(function(result) {

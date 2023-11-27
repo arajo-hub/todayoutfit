@@ -24,7 +24,7 @@
     <section>
         <article class="uk-width-2xlarge uk-margin-auto uk-margin-medium-bottom">
             <p class="uk-margin-auto" id="searchLocation" th:text="|${location}의 옷차림|"></p>
-            <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/board/list">
+            <form class="uk-search uk-search-default" name="searchForm" id="searchForm" action="/post/list">
                 <a onclick="document.getElementById('searchForm').submit();" class="uk-search-icon-flip" uk-search-icon></a>
                 <input class="uk-search-input" type="search" id="location" name="location" placeholder="원하는 지역명으로 검색">
             </form>

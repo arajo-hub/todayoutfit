@@ -5,6 +5,7 @@ import com.ara.todayoutfit.common.PwdEncryption;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.user.domain.User;
 import com.ara.todayoutfit.user.repository.UserRepository;
+import com.ara.todayoutfit.user.request.UserSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,7 @@ public class AdminServiceTest {
                 .build();
         userService.save(admin);
 
-        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch userSearch = UserSearch.builder()
                 .id(admin.getId())
                 .pw(admin.getPw())
                 .build();
@@ -57,7 +58,7 @@ public class AdminServiceTest {
     @Test
     @DisplayName("존재하지 않는 아이디로 로그인 시도")
     void loginNotExistId() {
-        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch userSearch = UserSearch.builder()
                 .id("admin")
                 .pw(PwdEncryption.encrypt("1234"))
                 .build();
@@ -76,7 +77,7 @@ public class AdminServiceTest {
                 .build();
         userService.save(admin);
 
-        com.ara.todayoutfit.user.service.request.UserSearch userSearch = com.ara.todayoutfit.user.service.request.UserSearch.builder()
+        UserSearch userSearch = UserSearch.builder()
                 .id(admin.getId())
                 .pw(PwdEncryption.encrypt("564654"))
                 .build();
