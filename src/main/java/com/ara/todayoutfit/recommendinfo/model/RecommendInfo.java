@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.recommendInfo.model;
+package com.ara.todayoutfit.recommendinfo.model;
 
-import com.ara.todayoutfit.recommendInfo.response.RecommendInfoShow;
+import com.ara.todayoutfit.recommendinfo.response.RecommendInfoShow;
 import lombok.*;
 
 import javax.persistence.*;

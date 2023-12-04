@@ -1,7 +1,7 @@
-package com.ara.todayoutfit.recommendInfo.repository;
+package com.ara.todayoutfit.recommendinfo.repository;
 
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfoUpdate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ara.todayoutfit.recommendInfo.model.QRecommendInfo.recommendInfo;
+import static com.ara.todayoutfit.recommendinfo.model.QRecommendInfo.recommendInfo;
 
 @Slf4j
 @Repository
