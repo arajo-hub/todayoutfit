@@ -24,11 +24,9 @@ public class Post {
     private Long postId;
 
     @Column
-    @Size(min = 1, max = 50)
     private String content;
 
     @Column
-    @Size(min = 1, max = 15)
     private String location;
 
     @Column(name="like_cnt")

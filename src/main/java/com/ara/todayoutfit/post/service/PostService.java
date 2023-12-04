@@ -91,7 +91,7 @@ public class PostService {
     public BaseResult savePost(PostCreateRequest request) {
         Post post = request.toPost();
         Post save = postRepository.save(post);
-        return post.equals(save) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.FAIL);
+        return post.equals(save) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.INTERNAL_SERVER_ERROR);
     }
 
     public BaseResult cancelDeclare(Long seq) {
@@ -103,7 +103,7 @@ public class PostService {
 
     public BaseResult saveAll(List<Post> posts) {
         List<Post> saveAll = postRepository.saveAll(posts);
-        return posts.equals(saveAll) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.FAIL);
+        return posts.equals(saveAll) ? new BaseResult(ResultCode.SUCCESS) : new BaseResult(ResultCode.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -136,7 +136,7 @@ public class PostService {
             }
         }
         if (!isExecuted) {
-            result = new BaseResult(ResultCode.FAIL);
+            result = new BaseResult(ResultCode.INTERNAL_SERVER_ERROR);
         }
         return result;
     }
@@ -147,14 +147,14 @@ public class PostService {
         return new BaseResult(ResultCode.SUCCESS);
     }
 
-    public BaseResult declare(Long seq) {
+    public BaseResult declarePost(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResultCode.SUCCESS);
         postRepository.declare(seq);
         return result;
     }
 
-    public BaseResult delete(Long seq) {
+    public BaseResult deletePost(Long seq) {
         postRepository.deleteBySeq(seq);
         return new BaseResult(ResultCode.SUCCESS);
     }

@@ -1,6 +1,5 @@
 package com.ara.todayoutfit.post.controller.api;
 
-import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.post.request.PostSearch;
 import com.ara.todayoutfit.post.request.PostCreateRequest;
 import com.ara.todayoutfit.post.response.PostShow;
@@ -8,10 +7,10 @@ import com.ara.todayoutfit.post.service.PostService;
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,7 +45,7 @@ public class PostApiController {
      * @return
      */
     @PostMapping("/posts")
-    public BaseResult savePost(@RequestBody PostCreateRequest request) {
+    public BaseResult savePost(@RequestBody @Valid PostCreateRequest request) {
         return postService.savePost(request);
     }
 
@@ -55,7 +54,7 @@ public class PostApiController {
      */
     @DeleteMapping("/posts/{postId}")
     public BaseResult deletePost(Long postId) {
-        return postService.delete(postId);
+        return postService.deletePost(postId);
     }
 
     /**
@@ -63,7 +62,7 @@ public class PostApiController {
      */
     @PostMapping("/posts/{postId}/declare")
     public BaseResult declarePost(@PathVariable Long postId) {
-        return postService.declare(postId);
+        return postService.declarePost(postId);
     }
 
     /**
