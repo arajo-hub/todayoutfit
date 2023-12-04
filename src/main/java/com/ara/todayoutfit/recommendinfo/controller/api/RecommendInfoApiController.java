@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class RecommendInfoController {
+public class RecommendInfoApiController {
 
     private final RecommendInfoService recommendInfoService;
 
