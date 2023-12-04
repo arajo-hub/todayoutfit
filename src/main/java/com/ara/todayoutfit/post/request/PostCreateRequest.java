@@ -1,11 +1,11 @@
 package com.ara.todayoutfit.post.request;
 
 import com.ara.todayoutfit.post.domain.Post;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 public class PostCreateRequest {
 
     private String content;
