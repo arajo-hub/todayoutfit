@@ -36,7 +36,7 @@ class PostServiceTest {
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
-        postLikeRepository.deleteAll();
+//        postLikeRepository.deleteAll();
     }
 
     @Test
