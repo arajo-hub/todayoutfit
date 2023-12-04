@@ -1,25 +1,16 @@
-package com.ara.todayoutfit.recommendInfo.controller.api;
+package com.ara.todayoutfit.recommendinfo.controller.api;
 
 import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ObjectResponse;
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
-import com.ara.todayoutfit.recommendInfo.request.RecommendInfoCreateRequest;
-import com.ara.todayoutfit.recommendInfo.service.RecommendInfoService;
-import com.google.gson.Gson;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommendinfo.request.RecommendInfoCreateRequest;
+import com.ara.todayoutfit.recommendinfo.service.RecommendInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController

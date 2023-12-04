@@ -1,6 +1,6 @@
-package com.ara.todayoutfit.recommendInfo.request;
+package com.ara.todayoutfit.recommendinfo.request;
 
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfo;
 import lombok.Builder;
 import lombok.Getter;
 

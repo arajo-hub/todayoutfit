@@ -141,12 +141,6 @@ public class PostService {
         return result;
     }
 
-    public BaseResult cancelRecommend(Long seq, String ip) {
-//        postRepository.deleteSamePostSeqAdnIp(seq, ip);
-//        postRepository.cancelRecommend(seq);
-        return new BaseResult(ResultCode.SUCCESS);
-    }
-
     public BaseResult declarePost(Long seq) {
         //결과
         BaseResult result = new BaseResult(ResultCode.SUCCESS);

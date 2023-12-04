@@ -4,6 +4,7 @@ import com.ara.todayoutfit.common.BaseResult;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.user.domain.User;
 import com.ara.todayoutfit.user.request.UserSearch;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,10 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     public BaseResult login(HttpSession session, UserSearch admin) {
         BaseResult result = new BaseResult(ResultCode.SUCCESS);

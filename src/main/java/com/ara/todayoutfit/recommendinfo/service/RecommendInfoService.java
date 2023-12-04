@@ -1,14 +1,13 @@
-package com.ara.todayoutfit.recommendInfo.service;
+package com.ara.todayoutfit.recommendinfo.service;
 
 import com.ara.todayoutfit.common.BaseResult;
-import com.ara.todayoutfit.common.PageResponse;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.common.ObjectResponse;
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
-import com.ara.todayoutfit.recommendInfo.model.RecommendInfoUpdate;
-import com.ara.todayoutfit.recommendInfo.repository.RecommendInfoRepository;
-import com.ara.todayoutfit.recommendInfo.request.RecommendInfoCreateRequest;
-import com.ara.todayoutfit.recommendInfo.response.RecommendInfoShow;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfo;
+import com.ara.todayoutfit.recommendinfo.model.RecommendInfoUpdate;
+import com.ara.todayoutfit.recommendinfo.repository.RecommendInfoRepository;
+import com.ara.todayoutfit.recommendinfo.request.RecommendInfoCreateRequest;
+import com.ara.todayoutfit.recommendinfo.response.RecommendInfoShow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,16 +27,16 @@ public class RecommendInfoService {
     }
 
 //    @Cacheable(cacheNames = "getRecommendInfoCache", key = "#temp")
-    public ObjectResponse findRecommendInfoByTemperature(int temperature) {
+    public ObjectResponse<RecommendInfoShow> findRecommendInfoByTemperature(int temperature) {
         RecommendInfo recommendInfo = recommendInfoRepository.findRecommendInfoByTemperature(temperature);
         RecommendInfoShow recommendInfoShow = recommendInfo.toRecommendInfoShow();
-        return ObjectResponse.builder().object(recommendInfoShow).build();
+        return ObjectResponse.<RecommendInfoShow>builder().object(recommendInfoShow).build();
     }
 
-    public BaseResult saveRecommendInfo(RecommendInfoCreateRequest request) {
+    public ObjectResponse<RecommendInfoShow> saveRecommendInfo(RecommendInfoCreateRequest request) {
         RecommendInfo recommendInfo = request.toRecommendInfo();
         RecommendInfo savedInfo = recommendInfoRepository.saveRecommendInfo(recommendInfo);
-        return new ObjectResponse(savedInfo);
+        return ObjectResponse.<RecommendInfoShow>builder().object(savedInfo.toRecommendInfoShow()).build();
     }
 
     public BaseResult delete(Long seq) {
