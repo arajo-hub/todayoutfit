@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ResultCode {
 
     SUCCESS(HttpStatus.OK.value(), "Success"),
-    FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail"),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "internal server error"),
 
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST.value(), "invalid parameter"),
     DB_NOT_FOUND_DATA(HttpStatus.NOT_FOUND.value(), "db_not_found_data"),

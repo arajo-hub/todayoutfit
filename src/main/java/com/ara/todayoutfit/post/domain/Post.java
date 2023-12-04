@@ -24,15 +24,13 @@ public class Post {
     private Long postId;
 
     @Column
-    @Size(min = 1, max = 50)
     private String content;
 
     @Column
-    @Size(min = 1, max = 15)
     private String location;
 
-    @Column(name="recommend_cnt")
-    private Long recommendCnt;
+    @Column(name="like_cnt")
+    private Long likeCount;
 
     @Column(name="declared_yn")
     private boolean declaredYn;
@@ -42,10 +40,10 @@ public class Post {
     private LocalDateTime writeDate;
 
     @Builder
-    public Post(String content, String location, long recommendCnt, boolean declaredYn, LocalDateTime writeDate) {
+    public Post(String content, String location, long likeCount, boolean declaredYn, LocalDateTime writeDate) {
         this.content = content;
         this.location = location;
-        this.recommendCnt = recommendCnt;
+        this.likeCount = likeCount;
         this.declaredYn = declaredYn;
         this.writeDate = writeDate;
     }
@@ -55,10 +53,17 @@ public class Post {
                 .postId(postId)
                 .content(content)
                 .location(location)
-                .recommendCnt(recommendCnt)
+                .recommendCnt(likeCount)
                 .declaredYn(declaredYn)
                 .writeDate(writeDate)
                 .build();
     }
 
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
 }

@@ -1,6 +1,7 @@
 package com.ara.todayoutfit.recommendInfo.service;
 
 import com.ara.todayoutfit.common.BaseResult;
+import com.ara.todayoutfit.common.PageResponse;
 import com.ara.todayoutfit.common.ResultCode;
 import com.ara.todayoutfit.common.ObjectResponse;
 import com.ara.todayoutfit.recommendInfo.model.RecommendInfo;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -46,5 +48,20 @@ public class RecommendInfoService {
     public BaseResult update(Long seq, RecommendInfoUpdate recommendInfoUpdate) {
         recommendInfoRepository.update(seq, recommendInfoUpdate);
         return new BaseResult(ResultCode.SUCCESS);
+    }
+
+    public ObjectResponse<List<RecommendInfo>> findAllRecommendInfo() {
+        List<RecommendInfo> recommendInfoList = recommendInfoRepository.findAll();
+        return new ObjectResponse<List<RecommendInfo>>(recommendInfoList);
+    }
+
+    public ObjectResponse<RecommendInfo> findRecommendInfoBySeq(Long recommendInfoSeq) {
+        Optional<RecommendInfo> recommendInfo = recommendInfoRepository.findBySeq(recommendInfoSeq);
+
+        if (!recommendInfo.isPresent()) {
+            return new ObjectResponse(ResultCode.DB_NOT_FOUND_DATA);
+        }
+
+        return new ObjectResponse<>(recommendInfo.get());
     }
 }

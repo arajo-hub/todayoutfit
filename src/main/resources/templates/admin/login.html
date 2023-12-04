@@ -58,11 +58,11 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    if (result.responseCode == "SUCCESS") {
-                        window.location = "/admin/board/list";
-                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                    if (result.resultCode == "SUCCESS") {
+                        window.location = "/admin/post/list";
+                    } else if (result.resultCode == "DB_NOT_FOUND_DATA") {
                         alert("존재하지 않는 사용자입니다.");
-                    } else if (result.responseCode == "WRONG_PASSWORD") {
+                    } else if (result.resultCode == "WRONG_PASSWORD") {
                         alert("잘못된 비밀번호입니다.");
                     } else {
                         alert("알 수 없는 오류가 발생했습니다.");

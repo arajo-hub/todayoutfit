@@ -1,7 +1,7 @@
 package com.ara.todayoutfit.user.repository;
 
-import com.ara.todayoutfit.user.domain.QUser;
 import com.ara.todayoutfit.user.domain.User;
+import com.ara.todayoutfit.user.request.UserCreateRequest;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -25,7 +25,7 @@ public class UserRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public User save(User user) {
+    public User saveUser(User user) {
         em.persist(user);
         return user;
     }
@@ -55,4 +55,12 @@ public class UserRepository {
                 .fetch();
     }
 
+    public void updateUser(String id, UserCreateRequest request) {
+        queryFactory.update(user)
+                .where(equalsId(id))
+                .set(user.id, request.getId())
+                .set(user.pw, request.getPw())
+                .set(user.isAdmin, request.getIsAdmin().equals(true))
+                .execute();
+    }
 }

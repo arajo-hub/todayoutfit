@@ -12,7 +12,7 @@
                 <div class="uk-offcanvas-bar">
                     <ul class="uk-nav uk-nav-default">
                         <li class="uk-active">관리자 님</li>
-                        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: happy"></span>추천정보 관리</a></li>
+                        <li><a href="/recommendInfos"><span class="uk-margin-small-right" uk-icon="icon: happy"></span>추천정보 관리</a></li>
                         <li><a href="/"><span class="uk-margin-small-right" uk-icon="icon: home"></span>메인으로</a></li>
                         <li class="uk-nav-divider"></li>
                         <li><a href="/admin/logout"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span>로그아웃</a></li>
@@ -78,9 +78,9 @@
             };
 
             $.ajax({
-                url 		: "/admin/board/listAjax",
-                type 		: "POST",
-                data 		: requestParam,
+                url 		: "/admin/posts",
+                type 		: "GET",
+                data        : requestParam,
                 dataType 	: "JSON",
             })
             .done(function(result) {
@@ -89,11 +89,12 @@
                     row = '<tr><td colspan="6" class="uk-text-center">게시글이 없습니다.</td></tr>';
                 } else {
                     result.list.content.forEach((element, index, array) => {
+                        console.log(element.writeDateToString);
                         row += '<tr><td>' + (index + 1) + '</td>'
                             + '<td>' + element.content + '</td>'
                             + '<td>' + element.location + '</td>'
                             + '<td>' + element.recommendCnt + '</td>'
-                            + '<td>' + element.writeDateStr + '</td>'
+                            + '<td>' + element.writeDateToString + '</td>'
                             + '<td><div id="btns">'
                             + '<button class="uk-button uk-button-default uk-button-small uk-width-1-1" type="button" id="delBtn" data-toggle="modal" data-target="#delModal" data-seq="' + element.postSeq + '">삭제</button>';
 
@@ -135,15 +136,15 @@
                 }
 
                 $.ajax({
-                    url 		: "/admin/board/cancelDeclareAjax",
+                    url 		: "/posts/" + $(this).data('seq') + "/cancelDeclare",
                     type 		: "POST",
                     data 		: requestParam,
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    if (result.responseCode == "SUCCESS") {
+                    if (result.resultCode == "SUCCESS") {
                         that.listInit();
-                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                    } else if (result.resultCode == "DB_NOT_FOUND_DATA") {
                         alert("신고 취소할 게시물이 없습니다.");
                     } else {
                         alert("알 수 없는 오류가 발생했습니다.");
@@ -175,9 +176,9 @@
                     dataType 	: "JSON",
                 })
                 .done(function(result) {
-                    if (result.responseCode == "SUCCESS") {
+                    if (result.resultCode == "SUCCESS") {
                         that.listInit();
-                    } else if (result.responseCode == "DB_NOT_FOUND_DATA") {
+                    } else if (result.resultCode == "DB_NOT_FOUND_DATA") {
                         alert("삭제할 게시물이 없습니다.");
                     } else {
                         alert("알 수 없는 오류가 발생했습니다.");
