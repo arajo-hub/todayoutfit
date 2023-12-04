@@ -1,5 +1,6 @@
 package com.ara.todayoutfit.user.domain;
 
+import com.ara.todayoutfit.user.response.UserShow;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -32,6 +33,13 @@ public class User {
         this.id = id;
         this.pw = pw;
         this.isAdmin = isAdmin;
+    }
+
+    public UserShow toUserShow() {
+        return UserShow.builder()
+            .id(id)
+            .isAdmin(isAdmin)
+            .build();
     }
 
 }

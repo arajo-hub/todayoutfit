@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @EnableCaching
 @EnableJpaAuditing
@@ -16,4 +18,5 @@ public class TodayOutfitApplication {
         log.info("TodayOutfitApplication.main");
         SpringApplication.run(TodayOutfitApplication.class, args);
     }
+
 }
