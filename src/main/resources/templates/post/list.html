@@ -158,7 +158,7 @@
                             row += `<span uk-icon="heart"></span>`;
                         }
                         row += `</a></li>
-                        <li><a href="#" id="declare" data-seq="`+ element.postSeq +`"><span uk-icon="ban"></span></a></li>
+                        <li><a href="#" id="declare" data-seq="`+ element.postId +`"><span uk-icon="ban"></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -222,10 +222,10 @@
         memberListView.declare = function() {
             var that = this;
             $(document).on('click', '#declare', function(e) {
+                console.log(e.currentTarget.dataset.seq);
                 $.ajax({
-                    url         : "/board/declareAjax",
+                    url         : "/posts/" + e.currentTarget.dataset.seq + "/declare",
                     type 		: "POST",
-                    data        : {id: e.currentTarget.dataset.seq},
                     dataType 	: "JSON",
                 })
                 .done(function (result) {

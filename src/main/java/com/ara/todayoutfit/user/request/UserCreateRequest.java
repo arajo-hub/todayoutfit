@@ -1,9 +1,11 @@
 package com.ara.todayoutfit.user.request;
 
 import com.ara.todayoutfit.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class UserCreateRequest {
 
     private String id;
